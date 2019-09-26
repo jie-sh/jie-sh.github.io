@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>顺序队列的操作 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">顺序队列的操作</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 26, 2019&nbsp;&nbsp;21:25:03</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>队列是特殊的线性表，其所有插入均限定在表的一端，而所有的删除则限定在表的另一端。允许插入的一端称队尾，允许删除的一端称队首</p>
+<p>特点：<strong>先进先出（FIFO）</strong></p>
+<p>在队列的实现中，最常见的就是循环队列，循环队列实质上是顺序存储结构。循环队列是把顺序队列首尾相连，把存储队列元素的表从逻辑上看成一个环，成为循环队列。</p>
+<p>当添加一个元素时，rear = (rear + 1) % MAXSIZE;</p>
+<p>当删除一个元素时，front = (front + 1) % MAXSIZE;</p>
+<p>当 front = rear 时，队列可能满，也可能空</p>
+<ul>
+<li>满，当队列添加元素到 rear 的下一个元素是 front 的时候，也就是转圈子要碰头了，我们就认为队列满了，(rear + 1) % MAXSIZE = front</li>
+<li>空，当队列删除元素到 front = rear 的时候，我们认为队列空了</li>
+</ul>
+<p>​    </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//循环列表的类定义</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> ElemType;<span class="comment">//假设栈元素为整型</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXSIZE = <span class="number">100</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CSeQueue</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	ElemType elem[MAXSIZE];</span><br><span class="line">	<span class="keyword">int</span> front;<span class="comment">//头指针指向队列头元素的前一位置</span></span><br><span class="line">	<span class="keyword">int</span> rear;<span class="comment">//尾指针指向队尾元素</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CSeQueue() &#123; front = <span class="number">0</span>; rear = <span class="number">0</span>; &#125;<span class="comment">//初始化空队列</span></span><br><span class="line">	~CSeQueue() &#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">Empty</span><span class="params">()</span></span>;<span class="comment">//判断循环队列是否为空</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Display</span><span class="params">()</span></span>;<span class="comment">//输出队列</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">AddlQ</span><span class="params">(ElemType x)</span></span>;<span class="comment">//入队</span></span><br><span class="line">	<span class="function">ElemType <span class="title">DelQ</span><span class="params">()</span></span>;<span class="comment">//出队</span></span><br><span class="line">	<span class="function">ElemType <span class="title">GetFront</span><span class="params">()</span></span>;<span class="comment">//取队首元素，不出队</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//************************************</span></span><br><span class="line"><span class="comment">// Method:    Empty</span></span><br><span class="line"><span class="comment">// FullName:  CSeQueue::Empty</span></span><br><span class="line"><span class="comment">// Access:    public </span></span><br><span class="line"><span class="comment">// Returns:   int</span></span><br><span class="line"><span class="comment">// Function: 判断循环队列是否为空</span></span><br><span class="line"><span class="comment">//************************************</span></span><br><span class="line"><span class="keyword">int</span> CSeQueue::Empty() &#123;</span><br><span class="line">	<span class="keyword">if</span> (rear == front)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//************************************</span></span><br><span class="line"><span class="comment">// Method:    AddlQ</span></span><br><span class="line"><span class="comment">// FullName:  CSeQueue::AddlQ</span></span><br><span class="line"><span class="comment">// Access:    public </span></span><br><span class="line"><span class="comment">// Returns:   void</span></span><br><span class="line"><span class="comment">// Function: 入队操作</span></span><br><span class="line"><span class="comment">// Parameter: ElemType x</span></span><br><span class="line"><span class="comment">//************************************</span></span><br><span class="line"><span class="keyword">void</span> CSeQueue::AddlQ(ElemType x) &#123;</span><br><span class="line">	<span class="comment">//判断是否队满</span></span><br><span class="line">	<span class="keyword">if</span> ((rear + <span class="number">1</span>) % MAXSIZE == front)</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"Queue is full"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		rear = (rear + <span class="number">1</span>) % MAXSIZE;<span class="comment">//尾指针加1，添加一个元素</span></span><br><span class="line">		elem[rear] = x;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//************************************</span></span><br><span class="line"><span class="comment">// Method:    DelQ</span></span><br><span class="line"><span class="comment">// FullName:  CSeQueue::DelQ</span></span><br><span class="line"><span class="comment">// Access:    public </span></span><br><span class="line"><span class="comment">// Returns:   ElemType</span></span><br><span class="line"><span class="comment">// Function: 出队操作</span></span><br><span class="line"><span class="comment">//************************************</span></span><br><span class="line">ElemType CSeQueue::DelQ() &#123;</span><br><span class="line">	<span class="keyword">if</span> (front == rear) &#123;<span class="comment">//判断队列是否为空</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"Queue is empty"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		front = (front + <span class="number">1</span>) % MAXSIZE;<span class="comment">//删除一个元素</span></span><br><span class="line">		<span class="keyword">return</span> elem[front];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> CSeQueue::Display() &#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"PrintOut Data:"</span>;</span><br><span class="line">	<span class="keyword">if</span> (front == rear) &#123;<span class="comment">//判断队列是否为空</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"Queue is empty"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> k = front + <span class="number">1</span>; k &lt;= rear; k++)</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; setw(<span class="number">6</span>) &lt;&lt; elem[k];</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//************************************</span></span><br><span class="line"><span class="comment">// Method:    GetFront</span></span><br><span class="line"><span class="comment">// FullName:  CSeQueue::GetFront</span></span><br><span class="line"><span class="comment">// Access:    public </span></span><br><span class="line"><span class="comment">// Returns:   ElemType</span></span><br><span class="line"><span class="comment">// Function: 取队首元素，不出队</span></span><br><span class="line"><span class="comment">//************************************</span></span><br><span class="line">ElemType CSeQueue::GetFront() &#123;</span><br><span class="line">	ElemType x;</span><br><span class="line">	<span class="keyword">if</span> (front == rear) &#123;<span class="comment">//判断队列是否为空</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"Queue is empty"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		x = <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		x = elem[(front + <span class="number">1</span>) % MAXSIZE];</span><br><span class="line">	<span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ElemType x = <span class="number">0</span>;</span><br><span class="line">	CSeQueue CQueue;</span><br><span class="line">	CQueue.AddlQ(<span class="number">1</span>);</span><br><span class="line">	CQueue.AddlQ(<span class="number">2</span>);</span><br><span class="line">	CQueue.AddlQ(<span class="number">3</span>);</span><br><span class="line">	CQueue.AddlQ(<span class="number">4</span>);</span><br><span class="line">	CQueue.AddlQ(<span class="number">5</span>);</span><br><span class="line">	x = CQueue.GetFront();</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; x &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	CQueue.Display();</span><br><span class="line">	CQueue.DelQ();</span><br><span class="line">	CQueue.DelQ();</span><br><span class="line">	CQueue.DelQ();</span><br><span class="line">	CQueue.DelQ();</span><br><span class="line">	x = CQueue.GetFront();</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; x &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	CQueue.Display();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/09/26/2019-09-26-顺序栈的操作/">顺序栈的操作</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
