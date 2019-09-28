@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>STL的使用 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">STL的使用</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 28, 2019&nbsp;&nbsp;10:52:34</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>[TOC]</p>
+<h3 id="1-STL的介绍"><a href="#1-STL的介绍" class="headerlink" title="1.STL的介绍"></a>1.STL的介绍</h3><p>STL，标准模板库，有惠普实验室开发的一系列标准化组件，目前是 C++ 的一部分，内建在编译器中。STL 一个重要特点是数据结构与算法的分离，这使得 STL 变得非常通用。</p>
+<p>STL 具有高可重用性、高性能、高移植性、跨平台的优点。</p>
+<p>STL 代码广义上分为三类：container（容器）、iterator（迭代器）和 algorithm（算法），容器和算法通过迭代器进行无缝连接。</p>
+<h3 id="2-容器概览"><a href="#2-容器概览" class="headerlink" title="2.容器概览"></a>2.容器概览</h3><p>一个容器就是一些特定类型对象的集合，标准库中容器根据逻辑结构不同分为两大类，顺序容器和关联容器。</p>
+<ol>
+<li><p>顺序容器主要有以下几种：</p>
+<table>
+<thead>
+<tr>
+<th align="center">容器类</th>
+<th align="center">解释</th>
+<th align="center">特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">vector</td>
+<td align="center">可变大小数组</td>
+<td align="center">支持快速随机访问，在尾部之外的位置插入或删除元素可能较慢</td>
+</tr>
+<tr>
+<td align="center">deque</td>
+<td align="center">双端队列</td>
+<td align="center">支持快速随机访问，在头尾位置插入/删除速度较快</td>
+</tr>
+<tr>
+<td align="center">list</td>
+<td align="center">双向链表</td>
+<td align="center">只支持双向顺序访问，在任何位置插入/删除速度较快</td>
+</tr>
+<tr>
+<td align="center">forward_list</td>
+<td align="center">单向链表</td>
+<td align="center">只支持单向顺序访问，在任何位置插入/删除速度较快</td>
+</tr>
+<tr>
+<td align="center">array</td>
+<td align="center">固定大小数组</td>
+<td align="center">支持快速随机访问，不能添加/删除元素</td>
+</tr>
+<tr>
+<td align="center">string</td>
+<td align="center">与 vector 类似</td>
+<td align="center">专门用于保存字符，随机访问快，在尾部插入/删除快</td>
+</tr>
+</tbody></table>
+<p>顺序容器中，通常 vector 是最好的选择，除非有更好的理由选择其他容器。</p>
+</li>
+</ol>
+<ol start="2">
+<li><p>关联容器中元素是按关键字来保存和访问的，分为两类，有序关联容器和无序关联容器。</p>
+<p>其中有序关联容器主要有以下几种：</p>
+<table>
+<thead>
+<tr>
+<th align="center">容器类</th>
+<th align="center">解释与特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">map</td>
+<td align="center">关联数组：保存关键字 – 值对</td>
+</tr>
+<tr>
+<td align="center">set</td>
+<td align="center">关键字即值，即只保存关键字的容器</td>
+</tr>
+<tr>
+<td align="center">multimap</td>
+<td align="center">关键字可重复出现的 map</td>
+</tr>
+<tr>
+<td align="center">multset</td>
+<td align="center">关键字可重复出现的 set</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<h3 id="3-vector-容器"><a href="#3-vector-容器" class="headerlink" title="3.vector 容器"></a>3.vector 容器</h3><ol>
+<li><p>使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">// 1. 包含容器对应的头文件，并使用名称空间</span><br><span class="line">#include &lt;vector&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	// 2. 因为是一个模板，所以需要在实例化时指定类型</span><br><span class="line">	vector&lt;int&gt; vec1(10);					// 初始化 10 个元素大小</span><br><span class="line">	vector&lt;int&gt; vec2(10, 2);				// 初始化 10 个 2 </span><br><span class="line">	vector&lt;int&gt; vec3 = &#123; 1, 2, 3, 4, 5 &#125;;	// 使用后面的值进行初始化</span><br><span class="line">	vector&lt;int&gt; vec4(vec3);					// 拷贝构造函数</span><br><span class="line"></span><br><span class="line">	// 3. 增加容器的元素</span><br><span class="line">	vec3.push_back(10);						// 在末尾添加元素</span><br><span class="line">	vec3.insert(vec3.begin(), 1);			// 在开头位置添加元素</span><br><span class="line"></span><br><span class="line">	// 4. 删除元素</span><br><span class="line">	vec3.pop_back();						// 删除结尾的元素</span><br><span class="line">	vec3.erase(vec3.begin() + 3);			// 删除第二个元素</span><br><span class="line"></span><br><span class="line">	// 5. 查看和修改元素</span><br><span class="line">	vec3[0] = 100;							// 使用下标修改</span><br><span class="line">	vec3.front() = 200;						// 修改首元素的值</span><br><span class="line">	vec3.back() = 300;						// 修改尾元素的值</span><br><span class="line">	vec3.at(1) = 400;						// 获取对应位置的元素，但是会判断是否越界</span><br><span class="line"></span><br><span class="line">	// 6. 遍历容器的几种方式</span><br><span class="line">	// 6.1. 常规遍历，用下标</span><br><span class="line">	// 这个方式一般只用于显示和修改元素数据(不增加或删除)</span><br><span class="line">	for (int i = 0; i &lt; vec3.size(); ++i)</span><br><span class="line">		printf(&quot;%d &quot;, vec3[i]);</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line"></span><br><span class="line">	// 6.2. 常规遍历，用迭代器 auto 自动类型识别</span><br><span class="line">	//根据 begin 函数返回值类型推测变量类型</span><br><span class="line">	for (auto i = vec3.begin(); i != vec3.end(); ++i)</span><br><span class="line">		printf(&quot;%d &quot;, *i);</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line"></span><br><span class="line">	// 6.3. 使用列表循环，将 vec3 的所有元素依次赋值给 i</span><br><span class="line">	// 不添加引用就是值拷贝，不能修改原来的数据</span><br><span class="line">	// 这个方式一般只用于显示和修改元素数据(不增加或删除)</span><br><span class="line">	for (auto &amp; i : vec3)</span><br><span class="line">		printf(&quot;%d &quot;, i);</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line"></span><br><span class="line">	// 6.4. 使用 while 的方式进行遍历</span><br><span class="line">	auto begin = vec3.begin();</span><br><span class="line">	while (begin != vec3.end())</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;%d &quot;, *begin);</span><br><span class="line">		++begin;</span><br><span class="line">	&#125;</span><br><span class="line">	printf(&quot;\n&quot;);</span><br><span class="line"></span><br><span class="line">	// 在循环的过程中，不能随意的增加和删除元素</span><br><span class="line">	// 会导致迭代器无效，使程序崩溃</span><br><span class="line">	for (auto i = vec3.begin(); i != vec3.end(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		// 删除时需要接收返回的新迭代器</span><br><span class="line">		i = vec3.insert(vec3.begin(), 10);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// 1 2 3 4 5 6 7</span><br><span class="line">	// b             e</span><br><span class="line">	// end 迭代器不能用于解引用</span><br><span class="line"></span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>其他方法</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法名</th>
+<th align="center">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">vec.clear()</td>
+<td align="center">清空所有元素</td>
+</tr>
+<tr>
+<td align="center">vec.reserve()</td>
+<td align="center">改变容量大小</td>
+</tr>
+<tr>
+<td align="center">vec.resize()</td>
+<td align="center">改变元素个数</td>
+</tr>
+<tr>
+<td align="center">vec.rbegin()</td>
+<td align="center">返回一个反向 iterator，指向最尾端元素</td>
+</tr>
+<tr>
+<td align="center">vec.rend()</td>
+<td align="center">返回一个 iterator，指向第一个元素</td>
+</tr>
+<tr>
+<td align="center">……</td>
+<td align="center">……</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<h3 id="4-list-容器"><a href="#4-list-容器" class="headerlink" title="4. list 容器"></a>4. list 容器</h3><ol>
+<li><p>使用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 002_容器的使用_list.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; listNum;</span><br><span class="line">	<span class="comment">// 增</span></span><br><span class="line">	listNum.push_back(<span class="number">100</span>);</span><br><span class="line">	listNum.push_back(<span class="number">300</span>);</span><br><span class="line">	listNum.insert(listNum.begin(), <span class="number">200</span>);</span><br><span class="line">	listNum.push_front(<span class="number">0</span>);</span><br><span class="line">	<span class="comment">// **注意** : list迭代器只能使用++,或--, 不能使用+运算符</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 删</span></span><br><span class="line">	<span class="comment">// 只能用迭代器, 但如果要删除第2个元素</span></span><br><span class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator itr = listNum.begin();</span><br><span class="line">	<span class="comment">// itr = itr + 3;list迭代器只能使用++,或--, 不能使用+运算符</span></span><br><span class="line">	++++itr; <span class="comment">// 自增2次指向第2个元素</span></span><br><span class="line">	<span class="comment">// 所有容器的erase都会删除迭代器指向的元素</span></span><br><span class="line">	<span class="comment">// 然后删除之后itr指向就无效了, 因此就变成了一个无效迭代器</span></span><br><span class="line">	<span class="comment">// erase会通过返回值返回一个有效的迭代器(一般是删除位置的下一个元素的迭代器)</span></span><br><span class="line">	itr = listNum.erase(itr);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 改</span></span><br><span class="line">	<span class="comment">// 只能通过迭代器去修改</span></span><br><span class="line">	<span class="comment">// 例如:修改第1个元素</span></span><br><span class="line">	itr = listNum.begin();</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"第1个元素: "</span> &lt;&lt; *itr &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	*itr = <span class="number">111111</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"第1个元素: "</span> &lt;&lt; *itr &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// 例如:修改第2个元素</span></span><br><span class="line">	++itr; <span class="comment">// 自增找到第二个元素</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"第2个元素: "</span> &lt;&lt; *itr &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	*itr = <span class="number">111111</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"第2个元素: "</span> &lt;&lt; *itr &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查</span></span><br><span class="line">	<span class="comment">// 通过迭代器来遍历</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span> i = listNum.begin(); i != listNum.end(); ++i) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; *i &lt;&lt; <span class="string">','</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// 通过新式循环来遍历</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span>&amp; d : listNum) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; d &lt;&lt; <span class="string">','</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//访问元素</span></span><br><span class="line">	<span class="comment">//分别取出第一个元素和最后一个元素</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; listNum.front() &lt;&lt; <span class="string">" "</span> &lt;&lt; listNum.back() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//获取元素个数</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; listNum.size() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h3 id="5-map-容器"><a href="#5-map-容器" class="headerlink" title="5. map 容器"></a>5. map 容器</h3><ol>
+<li><p>使用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 003_容器的基本使用_map.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 什么是键值对?</span></span><br><span class="line">	<span class="comment">// 键 : 相当于一个索引.相当于目录中的一下.</span></span><br><span class="line">	<span class="comment">// 值 : 就是一堆真正要保存的数据. 键相当于值的摘要.用于代表这个值.</span></span><br><span class="line">	<span class="comment">// 例如 , 姓名:小明. 姓名:小红, 其中姓名就是键,小明就是值</span></span><br><span class="line">	<span class="comment">//		 年龄: 18 , 年龄就是键,18就是值.</span></span><br><span class="line">	<span class="comment">//		 4544545 : 小名</span></span><br><span class="line">	<span class="comment">//		4544545就是键,小名值.</span></span><br><span class="line">	<span class="comment">// 总是用键来索引值.</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// &lt;string, string&gt; </span></span><br><span class="line">	<span class="comment">// 第一个string指的是键的类型</span></span><br><span class="line">	<span class="comment">// 第二个string指的是值的类型</span></span><br><span class="line">	<span class="comment">// 当需要将数据保存到map容器中时,</span></span><br><span class="line">	<span class="comment">//   保存的数据的键值对必须都是string类型.</span></span><br><span class="line">	<span class="built_in">map</span>&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt; m1;</span><br><span class="line">	<span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt; m2;</span><br><span class="line">	<span class="comment">// 增</span></span><br><span class="line">	<span class="comment">// pair是一个键值对类</span></span><br><span class="line">	<span class="comment">// map就是用于保存键值对类的平衡二叉树.</span></span><br><span class="line">	<span class="comment">// map是一个平衡二叉树(红黑树)</span></span><br><span class="line">	<span class="comment">// 树中节点的数据类型是 std::pair&lt;typename,typename&gt;</span></span><br><span class="line">	<span class="comment">// 插入数据到map中的时候, 必须先给出键值对来初始化一个pair对象</span></span><br><span class="line">	<span class="comment">// 然后再pair对象插入到map中.</span></span><br><span class="line">	pair&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt; p1(<span class="string">"姓名"</span>, <span class="string">"小明"</span>);</span><br><span class="line">	m1.insert(p1);</span><br><span class="line">	<span class="comment">//p1是一个键值对对象</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"p1.first="</span> &lt;&lt; p1.first &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 键值对中的键</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"p1.second="</span> &lt;&lt; p1.second &lt;&lt; <span class="built_in">endl</span>;<span class="comment">// 键值对中的值</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 也可以直接在实参中调用pair的构造函数来构造一个pair对象</span></span><br><span class="line">	m1.insert(pair&lt;<span class="built_in">string</span>, <span class="built_in">string</span>&gt;(<span class="string">"年龄"</span>, <span class="string">"18"</span>));</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 第三种方法,直接使用`[]`运算符来插入</span></span><br><span class="line">	<span class="comment">// 实际上[]运算符会在二叉树中以"性别"作为键来搜索pair对象</span></span><br><span class="line">	<span class="comment">// 如果没有搜索到, 函数会自动在树中插入一个用"性别"作为键</span></span><br><span class="line">	<span class="comment">// 的pair对象, 然后再将新pair对象值赋值成"男"</span></span><br><span class="line">	m1[<span class="string">"性别"</span>] = <span class="string">"男"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// m1["姓名"]运算符会在树中以"姓名"作为键找到对应的pair</span></span><br><span class="line">	<span class="comment">// 对象, 然后将pair对象的值返回.</span></span><br><span class="line">	<span class="built_in">string</span> str = m1[<span class="string">"姓名"</span>]; <span class="comment">// str被赋值成"小明"</span></span><br><span class="line">	str = m1[<span class="string">"aaa"</span>]; <span class="comment">// 如果获取一个不存在的键的时候,就会插入一个,值有可能会随机(取决于值的类型有无构造函数)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 删</span></span><br><span class="line">	<span class="comment">// 直接传入一个键就行了. 对应的键值对就会被删除.</span></span><br><span class="line">	m1.erase(<span class="string">"姓名"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 改</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"性别:"</span> &lt;&lt; m1[<span class="string">"性别"</span>] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	m1[<span class="string">"性别"</span>] = <span class="string">"女"</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"性别:"</span> &lt;&lt; m1[<span class="string">"性别"</span>] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查</span></span><br><span class="line">	<span class="comment">// map保存的节点是pair对象</span></span><br><span class="line">	<span class="comment">// 所以map的迭代器指向的元素都是pair对象.</span></span><br><span class="line">	<span class="comment">// </span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"遍历map\n"</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span> itr = m1.begin();</span><br><span class="line">		itr != m1.end();</span><br><span class="line">		++itr)</span><br><span class="line">	&#123;</span><br><span class="line">		itr-&gt;first; <span class="comment">//(*itr).first</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; itr-&gt;first &lt;&lt; <span class="string">"="</span></span><br><span class="line">			&lt;&lt; itr-&gt;second &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// &lt;int, string&gt; </span></span><br><span class="line">	<span class="comment">// 第一个int指的是键的类型</span></span><br><span class="line">	<span class="comment">// 第二个string指的是值的类型</span></span><br><span class="line">	m2.insert(pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;(<span class="number">1</span>, <span class="string">"123456"</span>));</span><br><span class="line">	m2.insert(pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;(<span class="number">2</span>, <span class="string">"456789"</span>));</span><br><span class="line">	m2[<span class="number">100</span>] = <span class="string">"1111"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"遍历map\n"</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span> itr = m2.begin();</span><br><span class="line">		itr != m2.end();</span><br><span class="line">		++itr)</span><br><span class="line">	&#123;</span><br><span class="line">		itr-&gt;first; <span class="comment">//(*itr).first</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; itr-&gt;first &lt;&lt; <span class="string">"="</span></span><br><span class="line">			&lt;&lt; itr-&gt;second &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/09/27/2019-09-27-平衡二叉树/">平衡二叉树</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
