@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>C++学习笔记 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">C++学习笔记</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 7, 2019&nbsp;&nbsp;10:56:31</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="基础知识复习"><a href="#基础知识复习" class="headerlink" title="基础知识复习"></a>基础知识复习</h2><ul>
+<li><p>宏</p>
+<ol>
+<li><p>无参宏</p>
+</li>
+<li><p>有参宏：有参宏中使用自增运算符时，导致逻辑上的错误，且无法避免</p>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX(a,b) a&gt;b?a:b</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n1 = <span class="number">1</span>, n2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> n3 = MAX(n1, n2);<span class="comment">//n3 = 1</span></span><br><span class="line">    <span class="keyword">int</span> n4 = MAX(n1++, n2++);<span class="comment">//n4=2,n1=3,n2=1，替换后再运算</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>内联函数 <code>inline</code></p>
+<p>成为内联函数标准：</p>
+<ol>
+<li>函数体足够小（代码行数少）</li>
+<li>函数内部不能有复杂的逻辑，</li>
+<li>用法和函数一样</li>
+<li>功能和有参宏差不多</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a &gt; b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n1 = <span class="number">1</span>, n2 = <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//编译后这里的函数调用会替换成函数体，类似有参宏在预编译后直接替换</span></span><br><span class="line">    <span class="comment">//但实参是表达式时，会先计算出表达式值，再替换（而有参宏是直接拿表达式来替换）</span></span><br><span class="line">    <span class="keyword">int</span> n3 = max(n1++, n2++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p><code>const</code></p>
+<p>​    <code>const</code> 是常量修饰符：<strong>左定值，右定向</strong></p>
+<ol>
+<li><p>常量必须被初始化</p>
+</li>
+<li><p>使用常量时，编译器会直接将常量名用它的初始值来替换（和无参宏一样，在原码中使用宏名时，经预处理后会被替换成宏的内容）</p>
+</li>
+<li><p>使用场合</p>
+<ol>
+<li><p>修饰指针</p>
+<p>定义指针时，<code>*</code> 在 <code>const</code> 左边，指针是一个指针常量；<code>*</code> 在 <code>const</code> 右边，指针是一个常量指针</p>
+<ul>
+<li><p>常量指针：将指针指向的内容修饰为常量</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> szBuff[<span class="number">100</span>] = &#123;<span class="string">"hello"</span>&#125;;</span><br><span class="line"> szBuff[<span class="number">0</span>] = <span class="string">'A'</span>;<span class="comment">//可以修改</span></span><br><span class="line"><span class="comment">//p就是常量指针</span></span><br><span class="line"> <span class="comment">//1. 指向的内容被修饰为常量，不能通过p去修改内容</span></span><br><span class="line"><span class="comment">//2. p自身可被修改</span></span><br><span class="line"> <span class="comment">//3. const只是在语法层面上限制一个指针不能修改它指向的内容，至于指针指向的内容能不能被修改</span></span><br><span class="line"> <span class="comment">//是不受const的拘束</span></span><br><span class="line"> <span class="keyword">const</span> <span class="keyword">char</span>* p;<span class="comment">//可以不用初始化</span></span><br><span class="line"> p = szBuff;</span><br><span class="line"> <span class="keyword">const</span> <span class="keyword">char</span>* p1 = <span class="string">"world"</span>;</span><br><span class="line"> szBuff[<span class="number">0</span>] = <span class="string">'B'</span>;<span class="comment">//仍然可以被修改</span></span><br><span class="line">p[<span class="number">0</span>] = <span class="string">'A'</span>;<span class="comment">//语法报错</span></span><br><span class="line"> p1[<span class="number">0</span>] = <span class="string">'A'</span>;<span class="comment">//语法报错</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code>   - 指针常量：将指针自身修饰为常量
+
+     <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> szBuff[<span class="number">100</span>] = &#123;<span class="string">"hello"</span>&#125;;</span><br><span class="line"><span class="comment">//定义一个指针常量必须要被初始化</span></span><br><span class="line"><span class="keyword">char</span>* p <span class="keyword">const</span> = szBuff;</span><br><span class="line"><span class="comment">//指针不能再指向其他内存</span></span><br><span class="line">p = <span class="string">"hello"</span>;<span class="comment">//错误，p只能指向szBuff的值</span></span><br><span class="line">p[<span class="number">0</span>] = <span class="string">'A'</span>;<span class="comment">//语法上可以修改,正确，因为修改的是数组元素</span></span><br><span class="line"><span class="keyword">char</span>* p2 <span class="keyword">const</span> = <span class="string">"world"</span>;</span><br><span class="line">p2[<span class="number">0</span>] = <span class="string">'A'</span>;<span class="comment">//语法上是可通过的，运行时错误，p2保存的是常量字符串的地址，常量字符串</span></span><br><span class="line">            <span class="comment">//不能修改</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+2. 修饰引用
+
+   <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">100</span>;</span><br><span class="line"><span class="comment">//定义一个引用</span></span><br><span class="line"><span class="keyword">int</span>&amp; rNum = n;</span><br><span class="line">rNum = <span class="number">10</span>;<span class="comment">//实际上修改的是变量n</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//定义一个常量引用</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span>&amp; rNum2 = n;</span><br><span class="line">rNum2 = <span class="number">20</span>;<span class="comment">//报语法错误，不能修改</span></span><br><span class="line">n = <span class="number">20</span>;<span class="comment">//正确，可以修改</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+3. 修饰成员函数：实际修饰的是 `this` 指针，也就是将 `this` 指针修饰成常量的指针
+
+   <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> m_nNUm;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">        m_nNum = <span class="number">100</span>;</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">const</span> MyClass* pObj)</span></span>&#123;</span><br><span class="line">    pObj-&gt;fun();<span class="comment">//语法报错</span></span><br><span class="line">    <span class="comment">//pObj是一个常量指针</span></span><br><span class="line">    <span class="comment">//成员函数有条件修改自身的成员变量，这样相当于通过指针调用了成员函数，成员函数在内部</span></span><br><span class="line">    <span class="comment">//修改了成员，实际上相当于间接通过指针修改了指针指向的内存，这是常量指针不允许的  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+   修改：
+
+   <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> m_nNum;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// const 修饰的是this指针.</span></span><br><span class="line">    <span class="comment">// this 就相当于 const MyClass* this;</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="comment">//this-&gt;m_nNum = 100; // 此处会报语法错误，因为m_nNum不可修改</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">const</span> MyClass* pObj)</span></span>&#123;</span><br><span class="line">    pObj-&gt;fun(); <span class="comment">// 不会报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+   总结：
+
+   1. 在成员函数后加 `const`，成员函数就是一个**常量成员函数**，在这样的函数内部不能修改自身的成员变量，也不能调用其他的非常量成员函数
+   2. 通过**常量对象指针** `const MyClass* pObj` 只能调用常量成员函数</code></pre><ul>
+<li><p>引用</p>
+<p>性质：</p>
+<ol>
+<li><p>引用类型的变量不占用内存空间，其内存空间来自被引用的变量</p>
+<ul>
+<li>定义时必须初始化</li>
+<li>不能再引用其他变量</li>
+<li>修改自身，被引用的变量也会被修改，被引用的变量修改了，引用类型的变量也会被修改，因为它们共用同一块内存空间</li>
+</ul>
+</li>
+<li><p>使用场合</p>
+<ul>
+<li><p>传参</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>&amp; a, <span class="keyword">int</span>&amp; b)</span></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> t = a;</span><br><span class="line">  a = b;</span><br><span class="line">     b = t;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> n1 = <span class="number">10</span>, n2 = <span class="number">20</span>;</span><br><span class="line">     swap(n1, n2);<span class="comment">//执行后，n1 = 20，n2 = 10</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code>- 传递函数返回值
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">int</span> &amp;<span class="title">fun</span><span class="params">(<span class="keyword">int</span> &amp;n)</span></span>&#123;</span><br><span class="line">     <span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> nNum = <span class="number">100</span>;</span><br><span class="line">     fun(nNum) = <span class="number">200</span>;<span class="comment">//修改了nNum</span></span><br><span class="line">     <span class="keyword">int</span> n2 = fun(nNum);</span><br><span class="line">     n2 = <span class="number">10</span>;<span class="comment">//nNum未被修改，因为n2不是引用类型的变量，它拥有自己的内存空间，</span></span><br><span class="line">     		<span class="comment">//不会影响nNum</span></span><br><span class="line">     <span class="keyword">int</span> &amp;rNum = fun(nNum);</span><br><span class="line">   rNum = <span class="number">10</span>;<span class="comment">//修改了nNum，因为rNum是一个引用，无独立的内存空间，与nNum共用内存</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></code></pre><ul>
+<li><p>类型转换</p>
+<ol>
+<li><p><code>const_cast</code>：常量类型转换，去除常量类型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pStr)</span></span>&#123;</span><br><span class="line">    pStr[<span class="number">0</span>] = <span class="string">'A'</span>;<span class="comment">//语法报错</span></span><br><span class="line">    <span class="comment">//C语言风格，强转</span></span><br><span class="line">    <span class="keyword">char</span>* p = (<span class="keyword">char</span>*)pStr;</span><br><span class="line">    p[<span class="number">0</span>] = <span class="string">'A'</span>;</span><br><span class="line">    <span class="comment">//C++风格</span></span><br><span class="line">    <span class="keyword">char</span>* p2 = <span class="keyword">const_cast</span>&lt;<span class="keyword">char</span>*&gt;(pStr);<span class="comment">//类似于(char*)pStr</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buff[<span class="number">100</span>];</span><br><span class="line">    fun(buff);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ol>
+</li>
+</ul>
+<ol start="2">
+<li><p><code>static_cast</code>：静态类型转换，编译器认可</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//隐式转换，编译器将double类型的3.14转为int型再传参</span></span><br><span class="line">    fun(<span class="number">3.14</span>);<span class="comment">//语法能通过，但会报一个警告：精度丢失...</span></span><br><span class="line">    fun((<span class="keyword">int</span>)<span class="number">3.14</span>);<span class="comment">//C</span></span><br><span class="line">    fun(<span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">3.14</span>));    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p><code>reinterpret_cast</code>：强制类型转换，编译器不认可，用于编译器无法进行隐式转换时的类型转换</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>* p = <span class="number">0x403000</span>;<span class="comment">//语法报错，类型不匹配</span></span><br><span class="line">    p = (<span class="keyword">int</span>*)<span class="number">0x403000</span>;<span class="comment">//C</span></span><br><span class="line">    p = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">int</span>*&gt;(<span class="number">0x403000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p><code>dynamic_cast</code>：动态类型转换，用于将父类和子类的指针或引用进行转换（继承时会用到，能将基类转换为派生类）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>&#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> :</span> <span class="keyword">public</span> Base&#123;</span><br><span class="line">    <span class="keyword">int</span> nNum[<span class="number">100</span>];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> :</span> <span class="keyword">public</span> Base&#123;</span><br><span class="line">    <span class="keyword">int</span> m_nNum;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Base* obj = <span class="keyword">new</span> B;<span class="comment">//new出来的类型是B*，再转换成Base*</span></span><br><span class="line">    MyClass* pObj = obj;<span class="comment">//语法报错</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//语法上可通过，但运行时会出严重问题</span></span><br><span class="line">    <span class="comment">//因为obj本质上并非MyClass类型</span></span><br><span class="line">    pObj = (MyClass*)obj;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//dynamic_cast可检测出是否能够转换，若不能则返回nullptr</span></span><br><span class="line">    pObj = <span class="keyword">dynamic_cast</span>&lt;MyClass*&gt;(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="面向对象-类"><a href="#面向对象-类" class="headerlink" title="面向对象-类"></a>面向对象-类</h2><ul>
+<li><p>成员变量</p>
+<ol>
+<li><p>一个对象的数据组成，对象的内存空间就是由成员变量组成；成员在类中的声明顺序决定了成员变量在内存中的顺序</p>
+</li>
+<li><p>成员变量的使用</p>
+<ul>
+<li><p>需要提供一个对象才能使用成员变量</p>
+</li>
+<li><p>在成员函数内，<code>this</code> 指针来表示当前对象</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> m_nNum;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//this可省略</span></span><br><span class="line">        <span class="keyword">this</span>-&gt;m_nNum = <span class="number">10</span>;</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code>- 在类外部，只能通过对象变量来访问公有成员变量
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass obj;</span><br><span class="line">    obj.m_num = <span class="number">20</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre><ul>
+<li><p>成员函数</p>
+<ol>
+<li><p>成员函数内自带一个 <code>this</code> 指针，通过对象调用函数时 c++ 自动将对象内存首地址赋给 <code>this</code> 指针，这样，成员函数被调用后 <code>this</code> 指针就保存着调用了这个成员函数的对象变量</p>
+</li>
+<li><p>普通成员函数</p>
+<ul>
+<li><p>需要对象才能调用</p>
+</li>
+<li><p>通过 <code>this</code> 指针也能调用</p>
+</li>
+<li><p>其他情况和普通函数一样，可以设置默认参数，也可以进行函数重载</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<ol start="3">
+<li><p>构造函数</p>
+<p>1.构造函数是一个特殊的成员函数，作用是构造一个对象，无返回值，因为返回值默认就是一个类对象</p>
+<p>2.构造函数自动调用</p>
+<ul>
+<li><p>定义变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MyClass g_obj;<span class="comment">//调用构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass obj;<span class="comment">//调用构造函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- 堆空间申请对象：
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass* pObj = <span class="keyword">new</span> MyClass;<span class="comment">//调用构造函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+- 函数形参：
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(MyClass obj)</span></span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass obj;<span class="comment">//调用了构造函数</span></span><br><span class="line">    fun(obj);<span class="comment">//会为形参obj调用构造函数.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+- 函数返回值：
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">MyClass <span class="title">fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">    MyClass obj;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass obj;<span class="comment">//调用构造函数                                              </span></span><br><span class="line">    obj = fun();<span class="comment">//调用构造函数    </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+3.构造函数可以进行重载
+
+- 当构造函数没有进行重载的时候，只能调用无参的构造函数，无参构造函数是 C++ 编译器默认提供的一个构造函数，但如果定义了其它版本的构造函数，编译器就不再提供无参构造
+
+- 在进行构造函数重载后，构造对象时，就可通过传参来决定调用哪个重载版本
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	MyClass()&#123;&#125;</span><br><span class="line">    MyClass(<span class="keyword">int</span> n)&#123;&#125;</span><br><span class="line">    MyClass(<span class="keyword">double</span> d)&#123;&#125;</span><br><span class="line">    MyClass(<span class="keyword">int</span> n, <span class="keyword">double</span> d)&#123;&#125;</span><br><span class="line">    MyClass(MyClass&amp; obj)&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(MyClass obj)</span></span>&#123;&#125;</span><br><span class="line"><span class="function">MyClass <span class="title">fun2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass obj = fun2();<span class="comment">//调用转换构造函数，相当于 MyClass obj(2);</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//隐式转换：</span></span><br><span class="line">    <span class="comment">//c++编译器会尝试将整型实参5转换成MyClass类型的形参，但这不是无依据地转换，规则：</span></span><br><span class="line">    <span class="comment">//形参是类类型，且有一个构造函数刚好可将实参传递进去，此时编译器就可将实参传给形参</span></span><br><span class="line">    <span class="comment">//的构造函数，直接构造出形参，而不是直接将实参赋给形参</span></span><br><span class="line">    fun(<span class="number">5</span>);<span class="comment">//会给形参obj调用构造函数 MyClass(int n)</span></span><br><span class="line">    </span><br><span class="line">    <span class="function">MyClass <span class="title">obj1</span><span class="params">(<span class="number">5</span>)</span></span>;<span class="comment">//MyClass(int n)</span></span><br><span class="line">    fun(obj1);<span class="comment">//给形参obj调用了构造函数 MyClass(MyClass&amp; obj )</span></span><br><span class="line">    MyClass* p = <span class="keyword">new</span> MyClass(<span class="number">5</span>,<span class="number">1</span>);<span class="comment">//MyClass(int n , double d)</span></span><br><span class="line">    <span class="function">MyClass <span class="title">obj2</span><span class="params">(obj1)</span></span>;<span class="comment">//MyClass(MyClass&amp; obj )   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre><ol start="4">
+<li><p>构造函数的一些术语：</p>
+<ul>
+<li><p>默认构造：指的是没有形参的构造函数，由编译器默认提供，在某些场合编译器需要自动调用一个类对象的构造函数时，只能调用默认构造，例如：子类继承了父类，当子类对象被构造的时，父类的构造也会被自动调用，此时就只能自动调用父类的默认构造</p>
+</li>
+<li><p>转换构造：指的是那些只有一个形参，且参数类型是非本类类型的构造函数们，一般能够显式调用（例如 <code>MyClass obj(5)</code>），也能隐式调用： <code>fun(5)</code></p>
+</li>
+<li><p>拷贝构造：指的是只有一个形参，且参数类型是本类类型的引用，一般是在定义一个对象时，将另一个对象作为初始值时，就会自动调用这个版本的构造函数，一般编译器会默认提供一个拷贝构造，默认提供的拷贝构造会将对象的内存空间进行拷贝</p>
+<p>类中包含有指针成员的时候，一般就需要自己编写拷贝构造，实现对指针指向的内存进行拷贝的功能，而默认拷贝构造是不会去拷贝指针指向的内容(深拷贝和浅拷贝的区别)</p>
+</li>
+<li><p>带参构造：含有两个以上的形参的构造函数统称带参构造</p>
+</li>
+</ul>
+<p>​    </p>
+</li>
+<li><p>析构函数</p>
+<p>作用和构造函数相反，当一个对象被销毁的时候，就会调用析构函数</p>
+</li>
+<li><p>运算符重载函数</p>
+<p>除三目运算符、<code>sizeof</code>、<code>.</code>、<code>::</code> 运算符外，其他运算符都能重载</p>
+<ol>
+<li><p>在C++中有很多会被自动调用的代码</p>
+<ul>
+<li><p>构造一个对象, 构造函数被调用了</p>
+</li>
+<li><p>当一个对象被销毁的时候, 析构函数被调用</p>
+</li>
+<li><p>当编译器需要进行隐式转换时, 转换构造被调用了.</p>
+</li>
+<li><p>当一个对象被使用了运算符（<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>、<code>%</code> …）时，运算符重载函数被调用</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code>2. 无论在 C 还是在 C++ 中，能够直接使用运算符进行运算的数据类型一般只有基本数据类型
+
+   - 意思就是，无法直接对一个数组使用 `+`、`-`、`*` 等运算符，结构体变量，类对象同样如此
+   - 如果想将非基本数据类型的变量使用运算符，一般需要通过另一些运算符来得到基本数据类型，然后再直接使用运算符，例如一个结构体变量，不能直接使用 `+` 运算符，但是通过 `.` 或 `-&gt;` 可以从结构体变量中得到一个字段（基本数据类型），这个基本数据类型就能使用运算符了
+
+3. 在 C++ 中，提供一种特殊的成员函数，这些成员函数的名字都有一个相同的前缀，叫 `operator`，他们一般都有一个不同的后缀，不同的后缀就是运算符，例如：`operator+`， `operator-` 等，这些函数在使用的时候，一般有两种形式：
+
+   - 对象.operator+(5)
+   - 对象 + 5
+
+   <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> strobj;</span><br><span class="line">strobj.<span class="keyword">operator</span>+=(<span class="string">"123"</span>);</span><br><span class="line">strobj += <span class="string">"123"</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+4. 运算符重载的意义：让子对象直接使用运算符
+
+5. 运算符重载的本质：
+
+   - 一个运算符就是一个函数调用，若运算符是一个单目运算符，这个函数调用就不需要传递参数，若运算符是双目运算符，那么运算符的左操作数就是对象自身，右操作数就是函数中的形参1
+
+   - 当对一个类对象使用运算符时，c++ 编译器在类中查找一个函数（以 `operator` 开头的函数），若没有，就报错，若找到了就调用该函数
+
+     调用函数传参的方法：
+
+     - 单目运算符：不传参，对象自身就是操作数
+     - 双目运算符：
+       1. 成员函数版：对象默认为左操作数，参数作为右操作数，如 `obj+5` 会被转换成 `obj.operator+(5)`，而 `5+obj` 就无法转换
+       2. 友元函数版：形参1为左操作数，形参2为右操作数，如 `obj+5` 转换成 `operator+(obj,5)`，`5+obj` 转换成 `operator+(5,obj)`
+
+6. 运算符重载的使用：
+
+   - 单目运算符的重载
+
+     <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Number</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> m_nNum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//前置++</span></span><br><span class="line">    Number&amp; <span class="keyword">operator</span>++()&#123;</span><br><span class="line">        ++m_nNum;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//后置++</span></span><br><span class="line">    Number <span class="keyword">operator</span>++(<span class="keyword">int</span>)&#123;</span><br><span class="line">        <span class="comment">//先保存原值</span></span><br><span class="line">        Number t;</span><br><span class="line">        t.m_nNum = <span class="keyword">this</span>-&gt;m_nNum;</span><br><span class="line">        <span class="comment">//自增</span></span><br><span class="line">        ++m_nNum;</span><br><span class="line">        <span class="keyword">return</span> t;<span class="comment">//返回自增前的值</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 前置--</span></span><br><span class="line">	<span class="keyword">void</span> <span class="keyword">operator</span>--() &#123;&#125;</span><br><span class="line">	<span class="comment">// 后置--</span></span><br><span class="line">	<span class="keyword">void</span> <span class="keyword">operator</span>--(<span class="keyword">int</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Number obj;</span><br><span class="line">    Number obj2 = obj++;<span class="comment">//转换成运算符重载函数 obj.operator++()</span></span><br><span class="line">    obj.<span class="keyword">operator</span>++();</span><br><span class="line">    <span class="comment">//若是后置++，编译器只会找operator++(int)的成员函数</span></span><br><span class="line">    <span class="comment">//形参int只是为了区分前置和后置</span></span><br><span class="line">    obj++;<span class="comment">//obj.operator++(int)</span></span><br><span class="line">    ++++++obj;<span class="comment">//obj.operator++().operator++().operator++()</span></span><br><span class="line">    <span class="comment">//需调用三次重载函数，故函数的返回值是类的引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+   - 双目运算符重载
+
+     <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Number</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> m_nNum;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Number():m_nNum()&#123;&#125;</span><br><span class="line">    Number(<span class="keyword">int</span> n):m_nNum(n)&#123;&#125;<span class="comment">//转换构造函数</span></span><br><span class="line">    Number(<span class="keyword">const</span> <span class="keyword">char</span>* pStr)&#123;</span><br><span class="line">        sscanf_s(pStr, <span class="string">"%d"</span>, &amp;m_nNum);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//成员函数版，只能在形参中指定右操作数</span></span><br><span class="line">    Number <span class="keyword">operator</span>+(<span class="keyword">const</span> Number&amp; n)&#123;</span><br><span class="line">        <span class="comment">//自身拷贝到t</span></span><br><span class="line">        <span class="function">Number <span class="title">t</span><span class="params">(*<span class="keyword">this</span>)</span></span>;</span><br><span class="line">        t.m_nNum = <span class="keyword">this</span>-&gt;m_nNum + n.m_nNum;</span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//友元函数版，必须在形参中指定运算符的两个操作数</span></span><br><span class="line">    <span class="keyword">friend</span> Number <span class="keyword">operator</span>+(<span class="keyword">const</span> Number&amp; left, <span class="keyword">const</span> Number&amp; right)&#123;</span><br><span class="line">        <span class="function">Number <span class="title">t</span><span class="params">(left)</span></span>;</span><br><span class="line">        t.m_nNum += right.m_nNum;</span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Number obj;</span><br><span class="line">    obj = obj + <span class="string">"123"</span>;<span class="comment">//obj.operator+(Numer("123456"))</span></span><br><span class="line">    obj = <span class="number">123</span> + obj;<span class="comment">//operator+(Number(123) , obj3)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre><ul>
+<li><p>访问控制</p>
+<ol>
+<li><p>public：类内类外都能访问</p>
+</li>
+<li><p>protected：控制在子类内部能访问，在类外不能访问</p>
+</li>
+<li><p>private：在子类和类外都不能访问</p>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><p>静态成员</p>
+<ol>
+<li><p>静态成员变量：静态局部变量就是带作用域的全局变量</p>
+<p>C++ 中的作用域：</p>
+<ul>
+<li>复合语句</li>
+<li>函数作用域</li>
+<li>文件作用域 = 全局作用域</li>
+<li>类作用域</li>
+<li>命名空间</li>
+</ul>
+<p>静态成员变量是类内定义的，但本质上属于全局变量，作用域是类域</p>
+<ul>
+<li><p>静态成员变量的<strong>生存周期</strong>和全局变量相同，从程序运行到程序结束（类内成员变量的生存周期是和对象一起，随对象的构造而拥有内存，随对象的析构而失去内存，对象又分为局部对象，全局对象，堆空间对象），因此静态成员变量不属于对象的一部分（即对象的内存中不包含静态成员变量）</p>
+</li>
+<li><p>静态成员变量的<strong>作用域</strong>属于类域，当需要在类外使用静态成员变量时，可通过两种方法来访问：</p>
+<ol>
+<li>通过类名：<code>类名::静态成员变量名</code></li>
+<li>通过对象：<code>对象.静态成员变量名</code></li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">//声明静态成员变量</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> m_nNum;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//必须在类外定义静态成员变量</span></span><br><span class="line"><span class="comment">//若无定义，则报错：无法解析的外部符号m_nNum</span></span><br><span class="line"><span class="keyword">int</span> MyClass::m_nNum;</span><br><span class="line"><span class="keyword">int</span> g_nNum;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass::m_nNUm = <span class="number">10</span>;<span class="comment">//使用静态成员变量</span></span><br><span class="line">    <span class="comment">//比较两者地址，会发现内存中位置相近</span></span><br><span class="line">    <span class="comment">//静态成员变量存储在全局数据区</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"g_nNum=%p m_nNum=%p\n"</span>, &amp;g_nNUm, &amp;MyClass::m_nNum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre><ol start="2">
+<li><p>静态成员函数</p>
+<p>静态成员函数与一般成员函数的唯一区别就是无 <code>this</code> 指针，因此不能直接访问非静态数据成员，静态函数放在代码区</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> m_nNum1;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> m_nNum;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">staticFun</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//this-&gt;m_nNum1 = 0;//静态成员函数无this指针</span></span><br><span class="line">        MyClass obj;</span><br><span class="line">        obj.m_nNum1 = <span class="number">0</span>;<span class="comment">//通过对象可以访问私有成员</span></span><br><span class="line">        m_nNum = <span class="number">10</span>;<span class="comment">//可以直接访问静态成员变量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> MyClass::m_nNum = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass::staticFun();<span class="comment">//调用静态成员函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ul>
+<li><p>友元</p>
+<ol>
+<li><p>C++ 提供了三大访问控制权限用于控制类外，类内，子类内成员的访问控制</p>
+</li>
+<li><p>友元就是一个类对某个对象授予所有的访问控制权限</p>
+<p>例如某个类的私有成员变量在主函数中不能直接通过对象来访问，但通过友元授权，主函数也能直接通过对象来访问这个类的所有成员</p>
+</li>
+<li><p>友元能够授权的对象：</p>
+<ul>
+<li><p>普通友元函数：将类的访问权限全部授予一个普通的函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> m_nNum;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> m_staticNum;</span><br><span class="line">    <span class="comment">//使用friend关键字将某个普通函数的函数头放在类内声明</span></span><br><span class="line">    <span class="comment">//这个普通函数就能成为本类友元函数</span></span><br><span class="line">    <span class="function"><span class="keyword">friend</span> <span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> MyClass::m_staticNum;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass obj;</span><br><span class="line">    obj.m_staticNum = <span class="number">0</span>;<span class="comment">//成为友元之后可以访问私有成员</span></span><br><span class="line">    MyClass::m_staticNum = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code>- 友元类：将本类的访问权限全部授予给另一个类（在另一个类的所有成员函数中都能直接访问到授权类的所有成员）
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line">  	<span class="keyword">int</span> m_nNum;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> m_staticNum;</span><br><span class="line">    <span class="comment">//声明一个友元类: friend class 类名;</span></span><br><span class="line">    <span class="comment">//作用: 该类所有成员函数都能访问本类的私有成员</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> <span class="title">Class2</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> MyClass::m_staticNum;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Class2</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(MyClass&amp; obj)</span></span>&#123;</span><br><span class="line">        <span class="comment">//声明友元类之后, 就能在成员函数中</span></span><br><span class="line">        <span class="comment">//去访问MyClass类的私有变量</span></span><br><span class="line">        obj.m_nNum = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+- 友元成员函数：将本类的访问权限全部授予给另一个类的某个成员函数（只有被授权的成员函数能够访问所有成员，没有被授权的成员函数访问不了）
+
+  互相引用的问题：在A类中使用了B类，B类又使用了A类，类就无法正常声明了
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass2</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">fun1</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">fun2</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass1</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> m_nNum;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// 声明fun1()为友元成员函数</span></span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">void</span> MyClass2::fun1();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> MyClass2::fun1() &#123;</span><br><span class="line">	MyClass1 obj;</span><br><span class="line">    <span class="comment">// 访问私有成员变量</span></span><br><span class="line">	obj.m_nNum = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">void</span> MyClass2::fun2() &#123;</span><br><span class="line">	MyClass1 obj;</span><br><span class="line">    <span class="comment">// 访问私有成员变量, 但fun2并没有被声明成友元成员函数. 因此访问失败.</span></span><br><span class="line">	obj.m_nNum = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/03/2019-10-08-运算符重载/">运算符重载</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

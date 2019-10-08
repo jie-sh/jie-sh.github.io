@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>运算符重载 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">运算符重载</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 3, 2019&nbsp;&nbsp;14:45:32</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <ul>
+<li><p>运算符重载实际上是通过定义一个函数来实现的</p>
+<p>运算符重载归根结底是函数的重载，编译器选择重载的运算符是遵循函数重载的选择原则，即按不同类型或个数的参数来选择不同的重载运算符。</p>
+</li>
+<li><p>运算符重载应符合使用习惯，便于理解</p>
+</li>
+<li><p>运算符重载不能创造新的运算符号</p>
+</li>
+<li><p>运算符重载要保持原运算符的下述特性不变</p>
+<ul>
+<li><p>优先级和结合性不变</p>
+</li>
+<li><p>操作个数不变</p>
+</li>
+<li><p>语法结构不变</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>C++ 中，运算符重载是通过运算符重载函数实现的，运算符重载函数一般采用以下两种形式之一</p>
+<ul>
+<li><p>成员函数形式</p>
+</li>
+<li><p>友元函数形式</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">成员函数形式</th>
+<th align="left">友元函数形式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">单目运算</td>
+<td align="left">隐式：对象                                                         显式：对象.operator()</td>
+<td align="left">隐式：对象                                                          显式：operator(对象)</td>
+</tr>
+<tr>
+<td align="center">双目运算</td>
+<td align="left">隐式：对象A#对象B                                        显式：对象A.operator(对象B)</td>
+<td align="left">隐式：对象A#对象B                                          显式：operator(对象A, 对象B)</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<ol>
+<li><p><strong>成员函数形式运算符操作</strong> </p>
+<p>参考语法形式</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;函数类型&gt; &lt;类名&gt;::<span class="keyword">operator</span>&lt;符号&gt;(参数表) &#123;</span><br><span class="line">	<span class="comment">//相对该类而定义的操作（运算符重载函数体）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参数表列出该运算符需要的操作数。<strong>单目运算</strong>参数表中无参数，调用该函数的对象为操作数。<strong>双目运算</strong>参数表中有一个参数，调用该函数的对象为第一操作数，参数表中的参数为第二操作数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CCounter</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CCounter() &#123;</span><br><span class="line">		m_nValue = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">void</span> <span class="keyword">operator</span>++() &#123;</span><br><span class="line">		<span class="keyword">if</span> (m_nValue &lt; <span class="number">65535</span>)</span><br><span class="line">			m_nValue++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> <span class="keyword">operator</span>*() &#123;</span><br><span class="line">		<span class="keyword">return</span> m_nValue;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> m_nValue;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CCounter objCounter;</span><br><span class="line">	++objCounter;</span><br><span class="line">	objCounter.<span class="keyword">operator</span>++();<span class="comment">//单目运算符</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; *objCounter &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	objCounter.<span class="keyword">operator</span>*();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CCounter</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> m_nValue;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CCounter(<span class="keyword">int</span> nNum) &#123;</span><br><span class="line">		m_nValue = nNum;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">void</span> <span class="keyword">operator</span>+(CCounter &amp;obj) &#123;</span><br><span class="line">		m_nValue += obj.m_nValue;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> <span class="keyword">operator</span>*() &#123;</span><br><span class="line">		<span class="keyword">return</span> m_nValue;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CCounter objCounterA(5), objCounterB(5);</span><br><span class="line">	objCounterA + objCounterB;</span><br><span class="line">	objCounterA.<span class="keyword">operator</span>+(objCounterB);<span class="comment">//双目运算符</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; *objCounterA &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//输出objCounterA的值</span></span><br><span class="line">	objCounterA.<span class="keyword">operator</span>*();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; *objCounterB &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//输出objCounterB的值</span></span><br><span class="line">	objCounterB.<span class="keyword">operator</span>*();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>友元函数形式运算符重载</strong></p>
+<p>单目运算符：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CCounter</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CCounter() &#123;</span><br><span class="line">		m_nValue = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">void</span> <span class="keyword">operator</span>++(CCounter &amp;obj) &#123;</span><br><span class="line">		<span class="keyword">if</span> (obj.m_nValue &lt; <span class="number">65535</span>)</span><br><span class="line">			obj.m_nValue++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> <span class="keyword">operator</span>*() &#123;</span><br><span class="line">		<span class="keyword">return</span> m_nValue;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> m_nValue;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CCounter objCounter;</span><br><span class="line">	++objCounter;</span><br><span class="line">	<span class="keyword">operator</span>++(objCounter);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; *objCounter &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	objCounter.<span class="keyword">operator</span>*();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>双目运算符：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CCounter</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> m_nValue;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CCounter(<span class="keyword">int</span> nNum) &#123;</span><br><span class="line">		m_nValue = nNum;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">void</span> <span class="keyword">operator</span>+(CCounter &amp;objA, CCounter objB) &#123;</span><br><span class="line">		objA.m_nValue += objB.m_nValue;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">int</span> <span class="keyword">operator</span>*(CCounter obj) &#123;</span><br><span class="line">		<span class="keyword">return</span> obj.m_nValue;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CCounter objCounterA(5), objCounterB(5);</span><br><span class="line">	objCounterA + objCounterB;</span><br><span class="line">	<span class="keyword">operator</span>+(objCounterA, objCounterB);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; *objCounterA &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//输出objCounterA的值</span></span><br><span class="line">	<span class="keyword">operator</span>*(objCounterA);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; *objCounterB &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//输出objCounterB的值</span></span><br><span class="line">	<span class="keyword">operator</span>*(objCounterB);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>特殊符号的重载</strong></p>
+<p>等号的重载：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CCounter</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> m_nValue;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CCounter(<span class="keyword">int</span> nNum) &#123;</span><br><span class="line">		m_nValue = nNum;</span><br><span class="line">	&#125;</span><br><span class="line">	CCounter(CCounter &amp;obj) &#123;</span><br><span class="line">		m_nValue = obj.m_nValue;</span><br><span class="line">	&#125;</span><br><span class="line">	CCounter&amp; <span class="keyword">operator</span>=(CCounter &amp;obj) &#123;</span><br><span class="line">		m_nValue = obj.m_nValue;</span><br><span class="line">		<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> <span class="keyword">operator</span>*() &#123;</span><br><span class="line">		<span class="keyword">return</span> m_nValue;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CCounter objA(15), objB(5);</span><br><span class="line">	objA = objB;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; *objA &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	objA.<span class="keyword">operator</span>*();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数组的重载：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CCounter</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> m_nValue[<span class="number">15</span>];</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CCounter() &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">15</span>; i++)</span><br><span class="line">			m_nValue[i] = i;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> <span class="keyword">operator</span>[](<span class="keyword">int</span> nCount) &#123;</span><br><span class="line">		<span class="keyword">return</span> m_nValue[nCount];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CCounter objA;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">15</span>; i++)</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; objA[i] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输入输出的重载</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CCounter</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">char</span> m_szStr[<span class="number">15</span>];<span class="comment">//输入的字符最后一个是0</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CCounter() &#123;</span><br><span class="line">		<span class="built_in">memset</span>(m_szStr, <span class="number">0</span>, <span class="keyword">sizeof</span>(m_szStr));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">friend</span> ostream&amp; <span class="keyword">operator</span>&lt;&lt;(ostream&amp; output, CCounter &amp;obj) &#123;<span class="comment">//输出</span></span><br><span class="line">		output &lt;&lt; obj.m_szStr;</span><br><span class="line">		<span class="keyword">return</span> output;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">friend</span> istream&amp; <span class="keyword">operator</span>&gt;&gt;(istream&amp; input, CCounter &amp;obj) &#123;<span class="comment">//输入</span></span><br><span class="line">		input.getline(obj.m_szStr, <span class="number">15</span>);</span><br><span class="line">		<span class="keyword">return</span> input;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CCounter obj;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; obj;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; obj;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/10/07/2019-10-08-C++学习笔记/">C++学习笔记</a>
+            
+            
+            <a class="next" rel="next" href="/2019/09/29/2019-09-29-控制台鼠标事件/">控制台鼠标事件</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
