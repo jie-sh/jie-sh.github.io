@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>C++学习笔记2 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">C++学习笔记2</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 9, 2019&nbsp;&nbsp;8:06:48</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> m_nNum;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"MyClass::fun\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//MyClass2以公有方式继承MyClass</span></span><br><span class="line"><span class="comment">//MyClass就是MyClass2的父类，MyClass2就是MyClass的子类</span></span><br><span class="line"><span class="comment">//继承方式可以是: </span></span><br><span class="line"><span class="comment">//1.public</span></span><br><span class="line"><span class="comment">//2.protected</span></span><br><span class="line"><span class="comment">//3.private</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass2</span> :</span> <span class="keyword">public</span> MyClass&#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="继承后的影响"><a href="#继承后的影响" class="headerlink" title="继承后的影响"></a>继承后的影响</h2><ol>
+<li><p>子类成员数量的变化</p>
+<p>子类自动拥有父类的全部成员，通过子类对象也能访问到父类定义的成员函数和成员变量</p>
+<ul>
+<li>父类中所有私有成员在子类内部和子类外部都无法直接访问，一般只能通过父类提供的公有接口</li>
+<li>父类中的保护成员和公有成员都能在子类中进行访问</li>
+<li>父类中公有成员都能在子类内部和外部进行访问</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> m_nNum = <span class="number">0x11111111</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;m_nNum = <span class="number">10</span>;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"MyClass::fun\n"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass2</span> :</span> <span class="keyword">public</span> MyClass&#123;</span><br><span class="line">    <span class="keyword">int</span> m_nNum2 = <span class="number">0x22222222</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass2 obj;</span><br><span class="line">    <span class="comment">//在MyClass2中并没有直接定义fun函数，但是这个函数在父类中定义了</span></span><br><span class="line">    <span class="comment">//通过继承，MyClass2自动拥有该函数，通过子类对象就能调用</span></span><br><span class="line">    obj.fun();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//子类也自动继承了所有的成员变量，但是受到访问控制的影响， </span></span><br><span class="line">    <span class="comment">//一些成员变量并不能直接访问到</span></span><br><span class="line">    obj.m_nNum=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>内存布局</p>
+<ul>
+<li>子类成员，父类成员在内存中的顺序</li>
+<li>继承后，成员变量在内存中的顺序是：1. 父类成员  2. 子类自身的成员</li>
+</ul>
+</li>
+<li><p>继承方式的影响</p>
+<p>继承方式的不同，决定了那些从父类中继承下来的成员在子类中访问方式的不同</p>
+<ul>
+<li>公有继承：父类成员的访问方式在子类中不变</li>
+<li>保护继承：父类中的所有公有成员在子类中变成了保护成员，其它成员保持不变</li>
+<li>私有继承：父类中所有保护成员和公有成员在父类中变成私有成员</li>
+</ul>
+</li>
+<li><p>构造和析构的调用顺序</p>
+<ul>
+<li>构造：先父类后子类</li>
+<li>析构：先子类后父类</li>
+<li>父类没有默认构造函数的解决方法：在子类构造函数的初始化列表中显示调用父类的其它版本的构造函数（直接用类名调用构造）</li>
+</ul>
+</li>
+<li><p>成员重名冲突</p>
+<ol>
+<li><p>成员变量重名冲突</p>
+<ul>
+<li>即使重名了，内存空间依然独立存在</li>
+<li>根据就近原则（最近的作用域），在子类的作用域使用的就是子类的成员变量，在父类的作用域使用的就是父类的成员变量</li>
+</ul>
+</li>
+<li><p>成员函数重名冲突</p>
+<p>使用时，也会根据就近原则来选择调用不同的成员函数</p>
+<ul>
+<li>通过子类对象调用的同名函数，调用的就是子类的版本</li>
+<li>通过父类指针指向子类对象，父类指针调用的同名函数就是父类的版本（父类指针指向子类对象，若调用虚函数则是子类的虚函数，注意区别）</li>
+</ul>
+</li>
+<li><p>若想在子类作用域中使用父类的同名成员，就需加上作用域描述：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> m_nNum = <span class="number">0x11111111</span>;</span><br><span class="line">    MyClass(<span class="keyword">int</span> n) : m_nNum(n)&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"MyClass\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>-&gt;m_nNum = <span class="number">10</span>;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"MyClass::fun\n"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass2</span> :</span> <span class="keyword">public</span> MyClass &#123;</span><br><span class="line">	<span class="keyword">int</span> m_nNum = <span class="number">0x22222222</span>;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">( )</span></span>&#123;<span class="built_in">cout</span>&lt;&lt;<span class="string">"Myclass2\n"</span>;&#125;</span><br><span class="line">	MyClass2() : MyClass( <span class="number">0</span> ) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"MyClass2\n"</span>;</span><br><span class="line">		m_nNum = <span class="number">100</span>;</span><br><span class="line">        MyClass::m_nNum = <span class="number">100</span>;<span class="comment">// 访问到就是父类成员</span></span><br><span class="line">        fun(); <span class="comment">// 默认调用的是子类版本</span></span><br><span class="line">        MyClass::fun();<span class="comment">// 通过作用域指定调用父类的同名函数.</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="多继承"><a href="#多继承" class="headerlink" title="多继承"></a>多继承</h1><h2 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h2><p>在继承时可以同时继承多个类</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Myclass1</span>&#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Myclass2</span>&#123;</span>&#125;;</span><br><span class="line"><span class="comment">//同时继承多个类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass4</span> :</span> <span class="keyword">public</span> MyClass1 ,<span class="keyword">public</span> MyClass2</span><br><span class="line">&#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="影响"><a href="#影响" class="headerlink" title="影响"></a>影响</h2><ol>
+<li><p>成员：子类拥有所有父类的成员函数和成员变量</p>
+</li>
+<li><p>内存布局：</p>
+<p>在内存中是先父类再子类，有多个父类时，按照继承顺序来排序</p>
+<p>多继承时，由于有多个父类，且父类成员在内存中的顺序是依次排列的，因此通过父类指针保存子类对象的首地址时，指针保存的并非子类对象的首地址，而是该父类成员在子类对象内存中的首地址</p>
+</li>
+<li><p>成员同名</p>
+<ul>
+<li>函数重名（会造成二义性的编译错误）：通过作用域选择就能调用确切的函数</li>
+<li>成员变量重名：通过虚继承解决菱形继承带来的祖父类成员重名问题</li>
+</ul>
+</li>
+<li><p>虚继承的影响</p>
+<p>虚继承后，祖父类成员在孙子类中只有一份，但这样一来，使用父类指针指向子类对象时，就无法正确在子类对象的内存布局中找到父类/祖父类成员</p>
+<ul>
+<li><p>非虚继承下菱形继承的内存布局：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1570627805832.png" alt="1570627805832"></p>
+</li>
+<li><p>虚继承下菱形继承的内存布局：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1570628700588.png" alt="1570628700588"></p>
+</li>
+</ul>
+<p>虚继承后，子类对象的内存布局中依次是以下内容：</p>
+<ul>
+<li>所有父类成员（不包含父类的父类）：虚基表指针，本父类成员</li>
+<li>子类自身成员</li>
+<li>祖父类成员</li>
+</ul>
+<p>虚基表保存的是两个偏移量，第1个偏移量是父类成员变量在子类对象的内存布局中的偏移（基于父类在子类对象中的首地址的偏移），第2个偏移是祖父类成员变量在子类对象的内存布局中的偏移（基于父类在子类对象中的首地址的偏移）</p>
+</li>
+</ol>
+<h2 id="继承应用"><a href="#继承应用" class="headerlink" title="继承应用"></a>继承应用</h2><p>继承的最大作用：<strong>代码重用</strong></p>
+<p>什么时候用继承：当两个类符合一定的逻辑时才用，当xxx类是yyy类的其中一种的时候，就用继承</p>
+<p>什么时候用组合：当xxx类是yyy类的其中一部分的时候</p>
+<ol>
+<li><p>扩展旧类的功能</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mystring</span> :</span> <span class="keyword">public</span> <span class="built_in">string</span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    mystring() :<span class="built_in">string</span>() &#123;&#125;</span><br><span class="line">    mystring(<span class="keyword">const</span> <span class="keyword">char</span>* pStr) :<span class="built_in">string</span>(pStr) &#123;&#125;</span><br><span class="line">    <span class="comment">//变参函数(可变长参数)</span></span><br><span class="line">	<span class="comment">//... : 表示省略的参数</span></span><br><span class="line">	<span class="comment">//可以接收无限个参数</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sprintf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pszformat, ...)</span></span>&#123;</span><br><span class="line">        va_list pArgs = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="comment">//根据被省略参数的前一个参数来找到被省略参数在内存中的首地址</span></span><br><span class="line">        va_start(pArgs, pszformat);</span><br><span class="line">        <span class="keyword">char</span> buff[<span class="number">1000</span>];</span><br><span class="line">        <span class="comment">//根据格式化控制字符串和参数列表(pArgs)来自动找到那些被...省略的参数</span></span><br><span class="line">		<span class="comment">//自动根据格式化控制字符pszformat来输出到buff中</span></span><br><span class="line">        <span class="keyword">int</span> count = vsprintf_s(buff, pszformat, pArgs);</span><br><span class="line">		va_end(pArgs);</span><br><span class="line">		<span class="comment">// 对string对象赋值: strObj = buff</span></span><br><span class="line">		*<span class="keyword">this</span> = buff;</span><br><span class="line">		<span class="keyword">return</span> count;     </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    mystring strObj;</span><br><span class="line">	strObj = <span class="string">"23456"</span>;</span><br><span class="line">	strObj += <span class="string">"456"</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; strObj&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	strObj.<span class="built_in">sprintf</span>(<span class="string">"参数内容: %d %lf %s"</span>, </span><br><span class="line">				   <span class="number">0x123</span>,</span><br><span class="line">				   <span class="number">6.13</span>,</span><br><span class="line">				   <span class="string">"456"</span>);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; strObj&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>代码重构</p>
+<p>当程序中出现一些功能重合（性质相同）的代码的时候，就可以使用继承来重构代码</p>
+<ul>
+<li>将多个类中那些功能重合（性质相同）的代码提取到一个类中，作为基类</li>
+<li>哪些类需要用到这些功能（或者哪些类有这样的性质）就可以继承这个基类</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GameObject</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> m_x;</span><br><span class="line">	<span class="keyword">int</span> m_y;</span><br><span class="line">	<span class="keyword">int</span> m_dir;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">move</span><span class="params">(<span class="keyword">int</span> dir)</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tank</span> :</span> <span class="keyword">public</span> GameObject&#123;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bullset</span> :</span> <span class="keyword">public</span> GameObject&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// 子类可以重定义父类的功能</span></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">move</span><span class="params">(<span class="keyword">int</span> dir)</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>组合多个类的功能形成新功能</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Date</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> m_nYear, m_nMon, m_nDay;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Time</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> m_nHour, m_nMin, m_nSec;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Datetime</span> :</span> <span class="keyword">public</span> Date, <span class="keyword">public</span> Time &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h1 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h1><ol>
+<li><p>如何在一个数组中保存不同类型的对象</p>
+<ul>
+<li>数组的元素必须是指针</li>
+<li>所有对象都必须拥有一个相同的父类</li>
+<li>数组的类型使用父类类型</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span> &#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Myclass1</span> :</span> <span class="keyword">public</span> Base &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Myclass2</span> :</span> <span class="keyword">public</span> Base &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Myclass3</span> :</span> <span class="keyword">public</span> Base &#123;&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Base* pArr[ <span class="number">3</span> ] = &#123; </span><br><span class="line">		<span class="keyword">new</span> Myclass1,</span><br><span class="line">		<span class="keyword">new</span> Myclass2,</span><br><span class="line">		<span class="keyword">new</span> Myclass3 </span><br><span class="line">	&#125;;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello World!\n"</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多态原理:</p>
+<ol>
+<li>通过父类指针指向子类对象的时候，调用的不是虚函数时，一般函数的地址根据就近原则来定死的，若调用的是一个虚函数，那么将会使用动态联编的方式来调用虚函数<ul>
+<li>先从对象的内存中取出前4个字节作为虚函数表首地址</li>
+<li>再根据虚函数在类中的定义顺序作为下标在虚函数表中得到这个虚函数的地址</li>
+<li>根据虚函数的地址调用函数</li>
+</ul>
+</li>
+<li>动态联编机制就是通过父类指针指向子类对象，然后调用虚函数时，就能够调用子类的虚函数</li>
+</ol>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/07/2019-10-08-C++学习笔记/">C++学习笔记</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
