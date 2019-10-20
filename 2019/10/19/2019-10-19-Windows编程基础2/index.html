@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>Windows编程基础2 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Windows编程基础2</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 19, 2019&nbsp;&nbsp;10:11:07</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <ol>
+<li><p>窗口的三大风格</p>
+<p>窗口风格分为两大类：标准风格，扩展风格</p>
+<p>重叠窗口：<code>WS_OVERLAPPEDWINDOW</code>，一般作为主窗口，拥有一个窗口的素偶有元素</p>
+<p>弹出窗口：<code>WS_POPUPWINDOW</code>，一般是程序运行时的提示窗口，操作面板</p>
+<p>子窗口：<code>WS_CHILD</code>，一般是控件</p>
+</li>
+<li><p>控件</p>
+<p>创建控件使用的还是 <code>CreateWindow</code> 函数</p>
+<ol>
+<li><p><strong>标准控件</strong>：简单的一些控件，包括：按钮、单选框、文本框、下拉框、静态文本等</p>
+<p>当点击标准控件时，给父窗口发送 <code>WM_COMMAD</code></p>
+<p> <code>ID:LOWORD(wParam)</code>， <code>Code:HWORD(wParam)</code>，控件句柄 <code>IParam</code></p>
+</li>
+<li><p><strong>通用控件</strong>：扩展的控件，有的比较复杂，包括：树、列表、选项卡</p>
+<p>当点击控件时，给父窗口发送：<code>WM_NOTIFY</code></p>
+</li>
+</ol>
+<p>创建控件示例代码：在回调函数中创建</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">static</span> HWND hText1 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> HWND hButton1 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> HWND hButton2 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> HWND hButton3 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> HWND hButton4 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">switch</span> (uMessage) &#123;</span><br><span class="line"><span class="keyword">case</span> WM_CREATE: &#123;<span class="comment">//一般进行一些初始化操作</span></span><br><span class="line">	<span class="comment">//WM_CREATE的lParam参数携带的是创建窗口时的信息</span></span><br><span class="line">	LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;</span><br><span class="line">	<span class="comment">//1创建按钮</span></span><br><span class="line">	hButton1 = CreateWindow(_T(<span class="string">"button"</span>), _T(<span class="string">"点击"</span>),</span><br><span class="line">		BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE,</span><br><span class="line">		<span class="number">100</span>, <span class="number">100</span>, <span class="number">80</span>, <span class="number">30</span>,</span><br><span class="line">		hWnd, (HMENU)<span class="number">0x1001</span>, <span class="comment">//子窗口无菜单，故当创建时此参数代表ID</span></span><br><span class="line">           pcs-&gt;hInstance, <span class="number">0</span>);</span><br><span class="line">   </span><br><span class="line">	hButton2 = CreateWindow(_T(<span class="string">"button"</span>), _T(<span class="string">"别点击"</span>),</span><br><span class="line">		BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE,</span><br><span class="line">		<span class="number">190</span>, <span class="number">100</span>, <span class="number">80</span>, <span class="number">30</span>,</span><br><span class="line">		hWnd, (HMENU)<span class="number">0x1002</span>, pcs-&gt;hInstance, <span class="number">0</span>);</span><br><span class="line">   </span><br><span class="line">	hButton3 = CreateWindow(_T(<span class="string">"button"</span>), _T(<span class="string">"获取文本"</span>),</span><br><span class="line">		BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE,</span><br><span class="line">		<span class="number">100</span>, <span class="number">140</span>, <span class="number">80</span>, <span class="number">30</span>,</span><br><span class="line">		hWnd, (HMENU)<span class="number">0x1003</span>, pcs-&gt;hInstance, <span class="number">0</span>);</span><br><span class="line">	</span><br><span class="line">	hButton4 = CreateWindow(_T(<span class="string">"button"</span>), _T(<span class="string">"设置文本"</span>),</span><br><span class="line">		BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE,</span><br><span class="line">		<span class="number">190</span>, <span class="number">140</span>, <span class="number">80</span>, <span class="number">30</span>,</span><br><span class="line">		hWnd, (HMENU)<span class="number">0x1004</span>, pcs-&gt;hInstance, <span class="number">0</span>);</span><br><span class="line">	<span class="comment">//2.创建文本框</span></span><br><span class="line">	hText1 = CreateWindow(_T(<span class="string">"edit"</span>), _T(<span class="string">""</span>),</span><br><span class="line">		WS_CHILD | WS_VISIBLE | WS_BORDER,</span><br><span class="line">		<span class="number">100</span>, <span class="number">180</span>, <span class="number">200</span>, <span class="number">40</span>,</span><br><span class="line">		hWnd, (HMENU)<span class="number">0x2001</span>,</span><br><span class="line">		<span class="comment">/*g_hInstance*/</span>pcs-&gt;hInstance,</span><br><span class="line">		<span class="literal">NULL</span>);</span><br><span class="line">&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<p>   控件响应示例代码：</p>
+   <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//窗口上的标准控件被操作了，就会给父窗口发这个消息</span></span><br><span class="line">	<span class="keyword">case</span> WM_COMMAND: &#123;</span><br><span class="line">		<span class="keyword">int</span> nCode = HIWORD(wParam);<span class="comment">//控件的通知码</span></span><br><span class="line">		<span class="keyword">int</span> nId = LOWORD(wParam);  <span class="comment">//控件的ID</span></span><br><span class="line">		<span class="keyword">switch</span> (nId) &#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0x1001</span>:<span class="comment">//点击button1会弹出文本并移动button2</span></span><br><span class="line">			<span class="keyword">if</span> (nCode == BN_CLICKED) &#123;</span><br><span class="line">				MessageBox(<span class="number">0</span>, <span class="string">L"111"</span>, <span class="string">L"000"</span>, <span class="number">0</span>);</span><br><span class="line">				MoveWindow(hButton2, <span class="number">300</span>, <span class="number">100</span>, <span class="number">80</span>, <span class="number">80</span>, TRUE);</span><br><span class="line">			&#125;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0x1002</span>: &#123;</span><br><span class="line">			MessageBox(<span class="number">0</span>, <span class="string">L"别点我"</span>, <span class="string">L"222"</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">static</span> <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span> (n == <span class="number">0</span>) &#123;<span class="comment">//显示文本窗口</span></span><br><span class="line">				ShowWindow((HWND)<span class="number">0x000100CE</span>, SW_SHOW);</span><br><span class="line">				n = <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;<span class="comment">//隐藏窗口</span></span><br><span class="line">				ShowWindow((HWND)<span class="number">0x000100CE</span>, SW_HIDE);</span><br><span class="line">				n = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0x1003</span>: &#123;<span class="comment">//获取文本框文本</span></span><br><span class="line">			TCHAR buf[<span class="number">100</span>] = &#123;&#125;;</span><br><span class="line">			GetWindowText(hText1, buf, <span class="number">100</span>);</span><br><span class="line">			MessageBox(<span class="number">0</span>, buf, _T(<span class="string">"提示"</span>), <span class="number">0</span>);</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0x1004</span>: &#123;<span class="comment">//获取到文本并加1，再设置回去</span></span><br><span class="line">			TCHAR buf[<span class="number">100</span>] = &#123;&#125;;</span><br><span class="line">			<span class="keyword">int</span> nNum = <span class="number">0</span>;</span><br><span class="line">			<span class="comment">//1获取文本，转为数字</span></span><br><span class="line">			GetWindowText(hText1, buf, <span class="number">100</span>);</span><br><span class="line">			_stscanf_s(buf, _T(<span class="string">"%d"</span>), &amp;nNum);</span><br><span class="line">			<span class="comment">//2自增后转为文本并设置到文本框中</span></span><br><span class="line">			++nNum;</span><br><span class="line">			_stprintf_s(buf, _T(<span class="string">"%d"</span>), nNum);</span><br><span class="line">			SetWindowText(hText1, buf);</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="3">
+<li><p>资源</p>
+<ol>
+<li><p>图标</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571467736931.png" alt="1571467736931"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571467767681.png" alt="1571467767681"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571467802852.png" alt="1571467802852"></p>
+<p><code>IDI_ICON1</code> 就是次图标资源的 <code>ID</code></p>
+<p>也可以导入光标资源</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));<span class="comment">//窗口图标光标</span></span><br><span class="line">wc.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR1));<span class="comment">//设置光标</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+</li>
+</ol>
+<ol start="2">
+<li><p>菜单</p>
+<ul>
+<li>顶级菜单：用于弹出下拉菜单</li>
+<li>下拉菜单：有具体的消息产生</li>
+</ul>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571468200769.png" alt="1571468200769"></p>
+</li>
+</ol>
+<ol start="3">
+<li><p>窗口类</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wc.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//3 创建窗口</span></span><br><span class="line">	HMENU hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MENU1));</span><br><span class="line">	HWND hWnd = CreateWindow(</span><br><span class="line">		<span class="string">L"15PB"</span>,            <span class="comment">//类名</span></span><br><span class="line">		<span class="string">L"第一个窗口"</span>,      <span class="comment">//窗口名</span></span><br><span class="line">		WS_OVERLAPPEDWINDOW,<span class="comment">//重叠窗口风格</span></span><br><span class="line">		<span class="number">100</span>, <span class="number">100</span>, <span class="number">400</span>, <span class="number">600</span>, <span class="comment">//位置和大小</span></span><br><span class="line">		<span class="literal">NULL</span>,               <span class="comment">//父窗口句柄</span></span><br><span class="line">		hMenu,               <span class="comment">//菜单句柄</span></span><br><span class="line">		hInstance,          <span class="comment">//实例句柄</span></span><br><span class="line">		<span class="literal">NULL</span>                <span class="comment">//附加信息</span></span><br><span class="line">	);</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p>弹出菜单</p>
+<p> 主要需要使用： <code>TrackPopupMenu</code></p>
+<p> 主要需要注意的2个点： </p>
+<ol>
+<li>坐标要使用屏幕坐标 </li>
+<li>弹出的菜单，需要是下拉菜单，最好不是顶级菜单 </li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> WM_RBUTTONDOWN:<span class="comment">//鼠标右键单击</span></span><br><span class="line"> &#123;</span><br><span class="line">	 <span class="comment">//这个坐标是相对于窗口的坐标</span></span><br><span class="line">	 <span class="keyword">int</span> x = LOWORD(lParam);</span><br><span class="line">	 <span class="keyword">int</span> y = HIWORD(lParam);</span><br><span class="line">	 <span class="comment">//弹出的时候，使用是相对于屏幕的坐标</span></span><br><span class="line">	 <span class="comment">//需要做一个转换</span></span><br><span class="line">	 POINT pt = &#123; x,y &#125;;</span><br><span class="line">	 ClientToScreen(hWnd, &amp;pt);</span><br><span class="line">      </span><br><span class="line">	 <span class="comment">//弹出菜单</span></span><br><span class="line">	 HMENU hMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_MENU1));</span><br><span class="line">	 <span class="comment">//获取下拉菜单的句柄</span></span><br><span class="line">	 HMENU hSubMenu0 =GetSubMenu(hMenu, <span class="number">0</span>);</span><br><span class="line">	 HMENU hSubMenu1 = GetSubMenu(hMenu, <span class="number">1</span>);</span><br><span class="line">	 TrackPopupMenu(</span><br><span class="line">		 hSubMenu1,        <span class="comment">//要弹出的菜单的句柄 </span></span><br><span class="line">		 TPM_LEFTALIGN,<span class="comment">//对齐方式等属性</span></span><br><span class="line">		 pt.x, pt.y,         <span class="comment">//弹出的坐标</span></span><br><span class="line">		 <span class="number">0</span>,            <span class="comment">//保留的参数 ，没有用</span></span><br><span class="line">		 hWnd,         <span class="comment">//菜单的响应窗口是谁</span></span><br><span class="line">		 <span class="literal">NULL</span></span><br><span class="line">	 );</span><br><span class="line"> &#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="5">
+<li><p>对话框编辑</p>
+<p>添加一个 <code>Dlg</code> 资源</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571472387986.png" alt="1571472387986"></p>
+<p>​    </p>
+</li>
+</ol>
+<pre><code><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个非模态对话框，不阻塞父窗口，需自己编写消息循环，真正的函数是CreateDialogParamW</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CreateDialog</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    hInstance,    <span class="comment">//实例句柄</span></span></span></span><br><span class="line"><span class="function"><span class="params">    lpName,       <span class="comment">//资源ID</span></span></span></span><br><span class="line"><span class="function"><span class="params">    hWndParent,   <span class="comment">//父窗口句柄</span></span></span></span><br><span class="line"><span class="function"><span class="params">    lpDialogFunc  <span class="comment">//消息回调函数</span></span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建一个模态对话框，会阻塞父窗口，只有在窗口关闭后才会返回，自带消息循环，这是一个宏，真正的函数是DialogBoxParamW</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DialogBox</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    hInstance,    </span></span></span><br><span class="line"><span class="function"><span class="params">    lpName,       </span></span></span><br><span class="line"><span class="function"><span class="params">    hWndParent,   </span></span></span><br><span class="line"><span class="function"><span class="params">    lpDialogFunc  </span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;tchar.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"resource.h"</span></span></span><br><span class="line"><span class="comment">//创建模态对话框</span></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">DlgBoxProc</span><span class="params">(HWND hwnd, UINT uMessage, </span></span></span><br><span class="line"><span class="function"><span class="params">	WPARAM wparam, LPARAM lparam)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">switch</span> (uMessage) &#123;</span><br><span class="line">	<span class="keyword">case</span> WM_INITDIALOG:<span class="comment">//对话框的初始化函数，不是WM_CREATE</span></span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> WM_CLOSE:</span><br><span class="line">		EndDialog(hwnd, <span class="number">0</span>);<span class="comment">//关闭对话框使用的函数</span></span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">default</span>: <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//对话框不使用DefWndProc返回，默认处理直接返回0就行</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//创建非模态对话框</span></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">CreateDlgProc</span><span class="params">(HWND hwnd, UINT uMessage,</span></span></span><br><span class="line"><span class="function"><span class="params">	WPARAM wparam, LPARAM lparam)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">switch</span> (uMessage) &#123;</span><br><span class="line">	<span class="keyword">case</span> WM_INITDIALOG:<span class="comment">//对话框的初始化函数，不是WM_CREATE</span></span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> WM_CLOSE:</span><br><span class="line">		EndDialog(hwnd, <span class="number">0</span>);<span class="comment">//关闭对话框使用的函数</span></span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">default</span>: <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> APIENTRY _tWinMain(HINSTANCE hInstance,</span><br><span class="line">	HINSTANCE hPreInstance, LPTSTR lpCmdLine,</span><br><span class="line">	<span class="keyword">int</span> nCmdShow)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//创建模态对话框</span></span><br><span class="line">	DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), <span class="literal">NULL</span>, DlgBoxProc);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//创建非模态对话框，自己编写消息循环</span></span><br><span class="line">	HWND hWnd = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), <span class="literal">NULL</span>, CreateDlgProc);</span><br><span class="line">	<span class="comment">//更新显示</span></span><br><span class="line">	UpdateWindow(hWnd);</span><br><span class="line">	ShowWindow(hWnd, SW_SHOW);</span><br><span class="line">	MSG msg = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="keyword">while</span> (GetMessage(&amp;msg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)) &#123;</span><br><span class="line">		TranslateMessage(&amp;msg);</span><br><span class="line">		DispatchMessage(&amp;msg);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/18/2019-10-18-Windows编程基础/">Windows编程基础</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
