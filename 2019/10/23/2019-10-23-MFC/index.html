@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>MFC | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">MFC</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 23, 2019&nbsp;&nbsp;8:02:52</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="复习"><a href="#复习" class="headerlink" title="复习"></a>复习</h2><ol>
+<li><p>C++</p>
+<ol>
+<li><p>三大特性：封装、继承、多态</p>
+</li>
+<li><p>类构造函数：</p>
+<ul>
+<li>调用顺序：先父类再子类，可在初始化列表中调用父类构造</li>
+<li>析构顺序：先子类再父类</li>
+<li>转换构造：有且仅有一个非本类类型的参数</li>
+<li>默认构造：无参</li>
+<li>拷贝构造：有且仅有一个本类类型引用的参数</li>
+</ul>
+</li>
+<li><p>在 <code>main</code> 函数前执行其他代码，比如打印 <code>Hello World</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Hello World\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> g_nNum = fun();<span class="comment">//函数将返回值1赋给全局变量g_nNum</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    MyClass()&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Hello World\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">MyClass g_obj;<span class="comment">//调用构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+</li>
+</ol>
+<ol start="2">
+<li><p>SDK</p>
+<ol>
+<li>窗口创建流程<ol>
+<li>设计窗口类：绑定类名；绑定窗口回调函数</li>
+<li>注册窗口类</li>
+<li>创建窗口：提供一个已注册的窗口类名</li>
+<li>更新显示窗口</li>
+<li>消息泵：<code>GetMessage</code> 获取消息，<code>DispatchMessage</code> 将消息分发给窗口，<code>TranslateMessage</code> 转换消息</li>
+</ol>
+</li>
+<li>消息处理过程<ol>
+<li><code>WM_XXX</code>：窗口消息，处理窗口创建，窗口关闭等消息（<code>WM_KEYDOWN</code>，<code>WM_LBUTTONDOWN</code>）</li>
+<li><code>WM_COMMAND</code>：基本控件消息</li>
+<li><code>WM_NOTIFY</code>：通用控件的通知消息，处理列表、树、鼠标等消息</li>
+</ol>
+</li>
+<li>控件使用<ol>
+<li>创建控件：通过 <code>CreateWindowEx</code> 来创建，通过不同的窗口类名来创建不同的空间</li>
+<li>操作控件：通过 <code>SendMessage</code> 来操作</li>
+<li>响应控件消息：一般在 <code>WM_COMMAND</code> 消息中，<code>wParam</code> 的低16位保存触发消息的控件 ID</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="MFC"><a href="#MFC" class="headerlink" title="MFC"></a>MFC</h2><ol>
+<li><p>MFC 的入口在 <code>CWinApp</code> 的 <code>InitInstance</code> 函数里，编写 MFC 程序，需要实现一个 <code>CWinApp</code> 的派生类，然后实现 <code>InitInstance</code> 这个虚函数，在此函数中创建一个窗口，将窗口对象的指针赋给 <code>m_pMainWnd</code> 这个指针</p>
+</li>
+<li><p>MFC 有3种编程模型：单文档、多文档、对话框</p>
+</li>
+<li><p>创建对话框：</p>
+<ol>
+<li><p>要有一个对话框资源</p>
+</li>
+<li><p>要有一个 <code>CDialog</code> 类对象 <code>objDlg</code></p>
+</li>
+<li><p>调用 <code>objDlg</code> 的 <code>DoModal</code> 函数创建模态对话框，不能和程序的其他窗口交互</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;afxwin.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;afxdialogex.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"resource.h"</span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CMyApp</span>:</span><span class="keyword">public</span> CWinApp &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> BOOL <span class="title">InitInstance</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line">BOOL CMyApp::InitInstance()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 在此添加专用代码和/或调用基类</span></span><br><span class="line">	<span class="function">CDialog <span class="title">obj</span><span class="params">(IDD_DIALOG1)</span></span>;</span><br><span class="line">	obj.DoModal();</span><br><span class="line">	<span class="keyword">return</span> CWinApp::InitInstance();</span><br><span class="line">&#125;</span><br><span class="line">CMyApp OBJ;</span><br></pre></td></tr></table></figure>
+
+<p>调用 <code>objDlg</code> 的 <code>Create</code> 函数创建非模态对话框，可以和程序的其他窗口交互</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CMyApp</span>:</span><span class="keyword">public</span> CWinApp &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> BOOL <span class="title">InitInstance</span><span class="params">()</span></span>;</span><br><span class="line">	CDialogEx *m_pobj;</span><br><span class="line">&#125;;</span><br><span class="line">BOOL CMyApp::InitInstance()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 在此添加专用代码和/或调用基类</span></span><br><span class="line">	<span class="comment">//CDialog obj;//这是局部对象，创建了对话框，但没显示出来，</span></span><br><span class="line">	<span class="comment">//当离开此函数后，对象就被销毁</span></span><br><span class="line">	m_pobj = <span class="keyword">new</span> CDialogEx();</span><br><span class="line">	m_pobj-&gt;Create(IDD_DIALOG1);</span><br><span class="line">	m_pobj-&gt;ShowWindow(SW_SHOW);</span><br><span class="line">	<span class="comment">//需要将主窗口对象的地址赋给m_pMainWnd</span></span><br><span class="line">	m_pMainWnd = m_pobj;</span><br><span class="line">	<span class="keyword">return</span> CWinApp::InitInstance();</span><br><span class="line">&#125;</span><br><span class="line">CMyApp OBJ;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+</li>
+</ol>
+<ol start="4">
+<li><p>MFC 是通过消息映射机制去处理消息的</p>
+<p>消息是程序员自己写代码处理的，实现窗口处理消息，实际上就是在给 <code>CDialogEx</code> 添加功能，应该使用继承。假设已有一个继承自 <code>CDialogEx</code> 的类，去实现消息映射</p>
+<ol>
+<li><p>在类的声明中加 <code>DECLARE_MESSAGE_MAP()</code> </p>
+</li>
+<li><p>在类外加</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">BEGIN_MESSAGE_MAP(本类类名, 父类名)</span><br><span class="line">........    <span class="comment">//添加对应消息的处理宏</span></span><br><span class="line">END_MESSAGE_MAP()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>绑定变量：使 MFC 在控件使用方面更具便捷性</p>
+<p>控件的主要功能是和用户进行交互，那么控件的便捷性主要体现在获取用户数据的便捷及将用户的数据显示的便捷，通过控件和变量进行绑定，可以方便地交互数据。控件都是窗口，进行便捷的窗口操作也是一个重要的需求</p>
+<p>绑定变量说的是控件和变量的绑定，有2种方式：</p>
+<ol>
+<li><p>绑定基本数据类型的变量，如 <code>int</code>，<code>CString</code> 等通过 <code>UpdateData</code> 进行数据交互，<code>UpdateData(TRUE)</code> 会将控件数据更新到变量中，<code>UpdateData(FALSE)</code> 会将变量数据显示在控件上</p>
+<p>文本框：<code>CString</code>    单选框：<code>int</code>，在每组的第一个单选框去绑定    复选框：<code>int</code>    下拉框：<code>CString</code>    </p>
+</li>
+<li><p>绑定相应的控件类对象，就可以进行窗口方面的操作，以及控件独有的一些函数</p>
+<ul>
+<li>绑定 MFC 默认的类对象，使用 MFC 控件类的函数</li>
+<li>绑定 MFC 控件类的派生类（自己实现）的对象，增强控件类的功能</li>
+</ul>
+</li>
+</ol>
+<p>控件和变量的绑定是在 <code>DoDataExchange</code> 函数中实现的</p>
+<p>若通过界面操作绑定变量，添加的代码和之前双击或通过类向导添加的是一样的</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571834329625.png" alt="1571834329625"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571834350667.png" alt="1571834350667"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571834370023.png" alt="1571834370023"></p>
+</li>
+</ol>
+<p>MFC 程序：</p>
+<ol>
+<li>继承 <code>CWinApp</code> 得到一个自定义的子类</li>
+<li>使用 <code>CWinApp</code> 的子类定义一个全局对象</li>
+<li>在 <code>CWinApp</code> 的子类中重写虚函数：<code>BOOL InitInstance()</code></li>
+<li>虚函数就是 MFC 的程序入口</li>
+</ol>
+<p>MFC 窗口：使用 <code>CDialogEx</code> 来操作对话框</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;afxwin.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"resource.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;afxdialogex.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyDialog</span> :</span> <span class="keyword">public</span> CDialogEx &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	MyDialog(UINT uIdTemplate, CWnd* parent = <span class="literal">nullptr</span>)</span><br><span class="line">		: CDialogEx(uIdTemplate, parent)<span class="comment">/*调用父类构造*/</span></span><br><span class="line">	&#123;&#125;</span><br><span class="line">	<span class="comment">// 在类内定义按钮点击函数</span></span><br><span class="line">	<span class="comment">// 需要将这个函数放在消息映射表</span></span><br><span class="line">	<span class="comment">// 中注册</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">onButtonClicked</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		MessageBox(_T(<span class="string">"按钮被点击"</span>));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 在类内声明消息映射表</span></span><br><span class="line">	DECLARE_MESSAGE_MAP()</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 在类外定义消息映射表</span></span><br><span class="line">BEGIN_MESSAGE_MAP(MyDialog, CDialogEx)</span><br><span class="line">	<span class="comment">// 响应按钮的点击事件,需要在消息映射表中编写</span></span><br><span class="line">	ON_COMMAND(IDC_BUTTON1, &amp;MyDialog::onButtonClicked)</span><br><span class="line">END_MESSAGE_MAP()</span><br><span class="line"></span><br><span class="line"><span class="comment">//CWinApp 是MFC的应用程序类</span></span><br><span class="line"><span class="comment">//用于表示整个窗口应用程序.</span></span><br><span class="line"><span class="comment">//CWinApp类或它的子类只能定义一个对象</span></span><br><span class="line"><span class="comment">//且一个MFC的应用程序必须使用这个类或它的</span></span><br><span class="line"><span class="comment">//子类来定义一个全局对象来启动MFC程序框架.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> :</span> <span class="keyword">public</span> CWinApp &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> BOOL <span class="title">InitInstance</span><span class="params">()</span>override</span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="comment">// 这个虚函数相当于程序入口</span></span><br><span class="line">		<span class="function">MyDialog <span class="title">dlg</span><span class="params">(IDD_DIALOG1)</span></span>;</span><br><span class="line">		<span class="comment">// DoModal : 运行一个模态对话框</span></span><br><span class="line">		dlg.DoModal();</span><br><span class="line">		<span class="keyword">return</span> TRUE;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line">MyApp g_app;<span class="comment">// 全局对象</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应消息和类向导"><a href="#响应消息和类向导" class="headerlink" title="响应消息和类向导"></a>响应消息和类向导</h2><ol>
+<li>窗口消息<ol>
+<li>对话框初始化消息</li>
+<li><code>WM_SIZE</code>，<code>WM_LBUTTONDOWN</code></li>
+<li>需要类向导</li>
+</ol>
+</li>
+<li>控件消息<ol>
+<li>按钮点击：直接在对话框视图上双击</li>
+<li>其他控件的消息响应需要类向导</li>
+</ol>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/22/2019-10-22-Windows编程基础4/">Windows编程基础4</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

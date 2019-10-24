@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>Windows编程基础3 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Windows编程基础3</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 21, 2019&nbsp;&nbsp;8:24:30</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="复习"><a href="#复习" class="headerlink" title="复习"></a>复习</h2><ol>
+<li><p>描述窗口间关系的属性有三大类：重叠窗口、弹出窗口、子窗口</p>
+</li>
+<li><p>操作窗口的函数：</p>
+<p><code>MoveWindow</code> 将窗口移动到指定位置</p>
+<p><code>ShowWindow</code> 显示或隐藏窗口</p>
+<p><code>GetWindowText</code> 获取窗口标题（若是控件，则获取控件内容）</p>
+<p><code>SetWindowText</code> 设置窗口标题</p>
+<p><code>FindWindow</code> 根据窗口名获取其句柄</p>
+<p><code>GetParent</code> 获取窗口的父句柄</p>
+<p>……</p>
+</li>
+<li><p>创建一个控件使用 <code>CreateWindow</code> 函数，一般使用以下两个属性：</p>
+<p><code>WS_CHILD</code>    <code>WS_VISIABLE</code></p>
+</li>
+<li><p>控件目前分为2类：</p>
+<p>标准控件：被操作时会给父窗口发送 <code>WM_COMMAD</code>，包括：按钮、单选框、复选框、编辑框、静态文本、静态图片、下拉框</p>
+<p>通用控件，包括：树、列表、选项卡</p>
+</li>
+<li><p>资源：图标、光标、菜单</p>
+<p>基本使用方式：通过<code>LoadIcon</code>、<code>LoadCursor</code>、<code>LoadMenu</code> 得到句柄，填到窗口类相应字段上</p>
+<p>菜单相关的注意点：菜单可以将句柄填到 <code>CreateWindow</code> 相应参数上；菜单项在程序运行期间可以动态添加选项或删除选项；菜单可以弹出来，<code>TrackPopupMenu</code> 函数，弹出的菜单句柄需要一个下拉菜单的句柄</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TrackPopupMenu(</span><br><span class="line">	 hSubMenu1,        <span class="comment">//要弹出的菜单的句柄 </span></span><br><span class="line">	 TPM_LEFTALIGN,    <span class="comment">//对齐方式等属性</span></span><br><span class="line">	 pt.x, pt.y,       <span class="comment">//弹出的坐标，这个坐标是相对于屏幕的</span></span><br><span class="line">	 <span class="number">0</span>,                <span class="comment">//保留的参数 ，没有用</span></span><br><span class="line">	 hWnd,             <span class="comment">//菜单的响应窗口是谁（重要）</span></span><br><span class="line">	 <span class="literal">NULL</span></span><br><span class="line"> );</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="6">
+<li><p>对话框的创建，使用 <code>Dlg</code> 类型的资源去创建对话框，有两大类对话框：</p>
+<p>模态对话框 <code>DialogBox</code> ：函数会阻塞住父窗口，自带消息循环，对话框被关闭函数返回</p>
+<p>非模态对话框 <code>CreateDialog</code> ：不会阻塞父窗口，调用时直接返回，自己写消息循环</p>
+</li>
+</ol>
+<h2 id="今日内容"><a href="#今日内容" class="headerlink" title="今日内容"></a>今日内容</h2><p><strong>标准控件：</strong></p>
+<ol>
+<li><p>复选框</p>
+<p><code>BM_GETCHECK</code> 获取单选框或复选框的检查状态，</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">INT_PTR CALLBACK <span class="title">DlgProc</span><span class="params">(HWND hWnd, UINT uMessage, </span></span></span><br><span class="line"><span class="function"><span class="params">	WPARAM wParam, LPARAM lParam)</span></span>&#123;<span class="comment">//回调函数</span></span><br><span class="line">    <span class="keyword">switch</span> (uMessage)&#123;</span><br><span class="line">    <span class="keyword">case</span> WM_CLOSE:<span class="comment">//关闭窗口</span></span><br><span class="line">		EndDialog(hWnd, <span class="number">0</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> WM_INITDIALOG:<span class="comment">//对话框程序的初始化消息</span></span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> WM_COMMAND:&#123;</span><br><span class="line">        <span class="keyword">int</span> nCode = HIWORD(wParam);<span class="comment">//控件的响应码</span></span><br><span class="line">		<span class="keyword">int</span> nId = LOWORD(wParam);<span class="comment">//控件的ID</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//复选框的使用</span></span><br><span class="line">		<span class="keyword">case</span> IDC_B_CLEAN:<span class="comment">//选择某项进行清除的按钮</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//1 检测复选框，哪些被选中</span></span><br><span class="line">			<span class="comment">//  获取复选框的句柄</span></span><br><span class="line">			HWND hCheck1 = GetDlgItem(hWnd, IDC_CHECK1);</span><br><span class="line">			HWND hCheck2 = GetDlgItem(hWnd, IDC_CHECK2);</span><br><span class="line">			HWND hCheck3 = GetDlgItem(hWnd, IDC_CHECK3);</span><br><span class="line">			<span class="comment">//2 获取状态，去清理磁盘</span></span><br><span class="line">			BOOL bCheck = <span class="number">0</span>;</span><br><span class="line">			bCheck = SendMessage(hCheck1, BM_GETCHECK, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">if</span> (bCheck==TRUE)</span><br><span class="line">			&#123;</span><br><span class="line">				MessageBox(<span class="number">0</span>, <span class="string">L"开始清理C盘"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			bCheck = SendMessage(hCheck2, BM_GETCHECK, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">if</span> (bCheck == TRUE)</span><br><span class="line">			&#123;</span><br><span class="line">				MessageBox(<span class="number">0</span>, <span class="string">L"开始清理D盘"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			bCheck = SendMessage(hCheck3, BM_GETCHECK, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">if</span> (bCheck == TRUE)</span><br><span class="line">			&#123;</span><br><span class="line">				MessageBox(<span class="number">0</span>, <span class="string">L"开始清理E盘"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> IDC_B_ALLSEL:<span class="comment">//全选按钮</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//1 检测复选框，哪些被选中</span></span><br><span class="line">			<span class="comment">//  获取复选框的句柄</span></span><br><span class="line">			HWND hCheck1 = GetDlgItem(hWnd, IDC_CHECK1);</span><br><span class="line">			HWND hCheck2 = GetDlgItem(hWnd, IDC_CHECK2);</span><br><span class="line">			HWND hCheck3 = GetDlgItem(hWnd, IDC_CHECK3);</span><br><span class="line">			SendMessage(hCheck1, BM_SETCHECK, <span class="number">1</span>, <span class="number">0</span>);<span class="comment">//第3个参数表示是否被选中</span></span><br><span class="line">			SendMessage(hCheck2, BM_SETCHECK, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">			SendMessage(hCheck3, BM_SETCHECK, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">		&#125;      </span><br><span class="line">    &#125;<span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571638048355.png" alt="1571638048355"></p>
+</li>
+</ol>
+<ol start="2">
+<li><p>单选框</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_B_LOGIN:</span><br><span class="line">		&#123;</span><br><span class="line">			HWND hRadio1 = GetDlgItem(hWnd, IDC_RADIO1);</span><br><span class="line">			HWND hRadio2 = GetDlgItem(hWnd, IDC_RADIO2);</span><br><span class="line">			HWND hRadio3 = GetDlgItem(hWnd, IDC_RADIO3);</span><br><span class="line">			HWND hRadio4 = GetDlgItem(hWnd, IDC_RADIO4);</span><br><span class="line">			BOOL bCheck = <span class="number">0</span>;</span><br><span class="line">			bCheck = SendMessage(hRadio1, BM_GETCHECK, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">if</span> (bCheck ==TRUE )</span><br><span class="line">			&#123;</span><br><span class="line">				MessageBox(<span class="number">0</span>, <span class="string">L"登录联通服务器"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			bCheck = SendMessage(hRadio2, BM_GETCHECK, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">if</span> (bCheck == TRUE)</span><br><span class="line">			&#123;</span><br><span class="line">				MessageBox(<span class="number">0</span>, <span class="string">L"登录电信服务器"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			bCheck = SendMessage(hRadio3, BM_GETCHECK, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">if</span> (bCheck == TRUE)</span><br><span class="line">			&#123;</span><br><span class="line">				MessageBox(<span class="number">0</span>, <span class="string">L"登录移动服务器"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			bCheck = SendMessage(hRadio4, BM_GETCHECK, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">if</span> (bCheck == TRUE)</span><br><span class="line">			&#123;</span><br><span class="line">				MessageBox(<span class="number">0</span>, <span class="string">L"登录教育网服务器"</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571638524364.png" alt="1571638524364"></p>
+<p>所有的 <code>Radio</code> 选项只能选一个，若有2组就会出问题，故需要将 <code>Radio</code> 分组</p>
+<p><code>Ctr+D</code>，然后编辑，使同一组的 <code>Radio</code> 序号连续，再将每一组第一个 <code>Radio</code> 的  <code>Group</code> 属性设为 <code>True</code></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571639482735.png" alt="1571639482735"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571639493737.png" alt="1571639493737"></p>
+</li>
+</ol>
+<ol start="3">
+<li><p>静态文本：没什么操作，只是起到提示作用</p>
+</li>
+<li><p>静态图片</p>
+<p>拖拽一个图片控件</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571639634968.png" alt="1571639634968"></p>
+<p>将其类型修改为 <code>Bitmap</code></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571639687587.png" alt="1571639687587"></p>
+<p>然后找一张 <code>Bitmap</code> 图片，<code>bmp</code> 格式，导入进来</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571639756741.png" alt="1571639756741"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_B_SHIFT:<span class="comment">//变换图片的按钮</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">static</span> <span class="keyword">int</span> sel = <span class="number">0</span>;</span><br><span class="line">			<span class="comment">//1 获取图片控件的句柄</span></span><br><span class="line">			HWND hPic = GetDlgItem(hWnd, IDC_STATIC1);</span><br><span class="line">			<span class="comment">//2 获取位图资源的句柄</span></span><br><span class="line">			HINSTANCE hInstance = GetModuleHandle(<span class="literal">NULL</span>);<span class="comment">//实例句柄</span></span><br><span class="line">			HBITMAP Bit1 =  LoadBitmap(hInstance, MAKEINTRESOURCE(IDB_BITMAP1));<span class="comment">//图1句柄</span></span><br><span class="line">			HBITMAP Bit2 =  LoadBitmap(hInstance, MAKEINTRESOURCE(IDB_BITMAP2));<span class="comment">//图2句柄</span></span><br><span class="line">			<span class="comment">//3 给图片控件发消息，携带位图资源的句柄，然后就能显示出来了</span></span><br><span class="line">			<span class="keyword">if</span> (sel==<span class="number">0</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				SendMessage(hPic, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)Bit1);</span><br><span class="line">				sel = <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> </span><br><span class="line">			&#123;</span><br><span class="line">				SendMessage(hPic, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)Bit2);</span><br><span class="line">				sel = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="5">
+<li><p>下拉框（<code>ComboBox</code>）</p>
+<p>注意：下拉框的高度需要点击小三角才能调整</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571640076926.png" alt="1571640076926"></p>
+<p>添加选项：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_B_ADDCOMBO:</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">wchar_t</span> Buf[<span class="number">8</span>][<span class="number">10</span>] = </span><br><span class="line">			&#123; <span class="string">L"三里屯"</span>,<span class="string">L"南锣鼓巷"</span>,<span class="string">L"十三陵"</span>,<span class="string">L"五道口"</span>,<span class="string">L"十五派"</span> &#125;;</span><br><span class="line">			<span class="keyword">static</span> <span class="keyword">int</span> nIndex = <span class="number">0</span>;<span class="comment">//下标</span></span><br><span class="line">			<span class="comment">//1 获取ComboBox的句柄</span></span><br><span class="line">			HWND hCombo = GetDlgItem(hWnd, IDC_COMBO1);</span><br><span class="line">			<span class="comment">//2 添加一个选项</span></span><br><span class="line">			ComboBox_AddString(hCombo, Buf[nIndex]);</span><br><span class="line">			nIndex++;</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+<p>获取选项：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_B_GETCOMBO:</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//1 获取ComboBox的句柄</span></span><br><span class="line">			HWND hCombo = GetDlgItem(hWnd, IDC_COMBO1);</span><br><span class="line">			<span class="comment">//2 再获取选项</span></span><br><span class="line">			<span class="keyword">int</span> n = ComboBox_GetCurSel(hCombo);</span><br><span class="line">			<span class="comment">//3 获取选择的文本</span></span><br><span class="line">			WCHAR szText[<span class="number">64</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">			ComboBox_GetText(hCombo, szText, <span class="number">64</span>);</span><br><span class="line">			<span class="comment">//4 输出出来</span></span><br><span class="line">			_MyMessageBox(<span class="string">L"选择的是第%d项,内容为%s"</span>, n, szText);</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p><strong>通用控件</strong>：</p>
+<ol>
+<li><p>进度条</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_B_PROGINC:</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">static</span> <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line">			<span class="comment">//1 获取进度条控件的句柄</span></span><br><span class="line">			HWND hPro = GetDlgItem(hWnd, IDC_PROGRESS1);</span><br><span class="line">			<span class="comment">//2 设置进度</span></span><br><span class="line">			SendMessage(hPro, PBM_SETPOS, n, <span class="number">0</span>);</span><br><span class="line">			n += <span class="number">5</span>;</span><br><span class="line">			<span class="keyword">if</span> (n&gt;=<span class="number">100</span>)</span><br><span class="line">				n = <span class="number">0</span>;</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571640656409.png" alt="1571640656409"></p>
+</li>
+</ol>
+<ol start="2">
+<li><p>滑块</p>
+<p>滑块在拖动时会给父窗口发送 <code>WM_HSCROLL</code> 消息，以及 <code>WM_VSCROLL</code></p>
+<p>检测滑动：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> WM_HSCROLL:</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//1 获取滑块的句柄</span></span><br><span class="line">		HWND hSlider = GetDlgItem(hWnd, IDC_SLIDER1);</span><br><span class="line">		<span class="comment">//2 获取滑块的当前位置</span></span><br><span class="line">		<span class="keyword">int</span> nLoc = SendMessage(hSlider, TBM_GETPOS, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">		_trace(<span class="string">L"%d\n"</span>, nLoc);</span><br><span class="line">	&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+<p>设置滑块位置：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_B_SETSLIDER:</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//1 获取滑块的句柄</span></span><br><span class="line">			HWND hSlider = GetDlgItem(hWnd, IDC_SLIDER1);</span><br><span class="line">			<span class="comment">//2 获取滑块的当前位置</span></span><br><span class="line">			<span class="keyword">int</span> nLoc = SendMessage(hSlider, TBM_GETPOS, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="comment">//3 +5再设置上去</span></span><br><span class="line">			SendMessage(hSlider, TBM_SETPOS,TRUE , nLoc + <span class="number">5</span>);</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>列表框控件</p>
+<p><code>ListView</code> 的基本操作：添加列、添加行、删除行</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_B_INSERT_COL:<span class="comment">//给列表框添加列</span></span><br><span class="line">		&#123;</span><br><span class="line">			LVCOLUMN lc = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">			<span class="comment">// 姓名  年龄  性别  身高 		</span></span><br><span class="line">			<span class="comment">//1 获取控件的句柄</span></span><br><span class="line">			HWND hList = GetDlgItem(hWnd, IDC_LIST2);</span><br><span class="line">			<span class="comment">//2 添加</span></span><br><span class="line">			lc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;</span><br><span class="line">			lc.fmt = LVCFMT_LEFT;</span><br><span class="line">			lc.cx = <span class="number">100</span>;</span><br><span class="line">			lc.pszText = (LPWSTR)<span class="string">L"姓名"</span>;</span><br><span class="line">			ListView_InsertColumn(hList, <span class="number">0</span>, &amp;lc);</span><br><span class="line">			lc.pszText = (LPWSTR)<span class="string">L"年龄"</span>;</span><br><span class="line">			ListView_InsertColumn(hList, <span class="number">1</span>, &amp;lc);</span><br><span class="line">			lc.pszText = (LPWSTR)<span class="string">L"性别"</span>;</span><br><span class="line">			ListView_InsertColumn(hList, <span class="number">2</span>, &amp;lc);</span><br><span class="line">			lc.pszText = (LPWSTR)<span class="string">L"身高"</span>;</span><br><span class="line">			ListView_InsertColumn(hList, <span class="number">3</span>, &amp;lc);</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> IDC_B_INSERT_ITEM:<span class="comment">//给列表框添加行</span></span><br><span class="line">		&#123;</span><br><span class="line">			LVITEM li = &#123;&#125;;</span><br><span class="line">			<span class="comment">//1 获取控件的句柄</span></span><br><span class="line">			HWND hList = GetDlgItem(hWnd, IDC_LIST2);</span><br><span class="line">			<span class="comment">//2 添加一行</span></span><br><span class="line">			li.mask = LVIF_TEXT;</span><br><span class="line">			li.pszText = (LPWSTR)<span class="string">L"小芳"</span>;</span><br><span class="line">			li.iItem = <span class="number">0</span>;</span><br><span class="line">			ListView_InsertItem(hList, &amp;li);</span><br><span class="line">			<span class="comment">//3 给行内单元格设置文本</span></span><br><span class="line">			ListView_SetItemText(hList, <span class="number">0</span>, <span class="number">1</span>, (LPWSTR)<span class="string">L"20"</span>);</span><br><span class="line">			ListView_SetItemText(hList, <span class="number">0</span>, <span class="number">2</span>, (LPWSTR)<span class="string">L"女"</span>);</span><br><span class="line">			ListView_SetItemText(hList, <span class="number">0</span>, <span class="number">3</span>, (LPWSTR)<span class="string">L"170"</span>);</span><br><span class="line">			<span class="comment">//2 添加一行</span></span><br><span class="line">			li.mask = LVIF_TEXT;</span><br><span class="line">			li.pszText = (LPWSTR)<span class="string">L"小明"</span>;</span><br><span class="line">			li.iItem = <span class="number">1</span>;</span><br><span class="line">			ListView_InsertItem(hList, &amp;li);</span><br><span class="line">			<span class="comment">//3 给行内单元格设置文本</span></span><br><span class="line">			ListView_SetItemText(hList, <span class="number">1</span>, <span class="number">1</span>, (LPWSTR)<span class="string">L"20"</span>);</span><br><span class="line">			ListView_SetItemText(hList, <span class="number">1</span>, <span class="number">2</span>, (LPWSTR)<span class="string">L"男"</span>);</span><br><span class="line">			ListView_SetItemText(hList, <span class="number">1</span>, <span class="number">3</span>, (LPWSTR)<span class="string">L"170"</span>);</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> IDC_B_DELETE_ITEM:<span class="comment">//给列表框删除一行</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//1 获取控件的句柄</span></span><br><span class="line">			HWND hList = GetDlgItem(hWnd, IDC_LIST2);</span><br><span class="line">			<span class="comment">//2 删除一行</span></span><br><span class="line">			ListView_DeleteItem(hList, <span class="number">1</span>);</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571641398648.png" alt="1571641398648"></p>
+<p>将属性调整为报表模式</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571641437131.png" alt="1571641437131"></p>
+<p>高级用法：</p>
+<p>通过设置扩展属性，能够让列表框控件具有更多特性</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_B_SETLISTEX:</span><br><span class="line">		&#123;</span><br><span class="line">			HWND hList = GetDlgItem(hWnd, IDC_LIST2);</span><br><span class="line">			ListView_SetExtendedListViewStyle(hList,</span><br><span class="line">				LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+
+<p>处理列表框的 <code>WM_NOTIFY</code> 消息：</p>
+<p>其中 <code>wParam</code> 是发生 <code>WM_NOTIFY</code> 消息的控件ID，<code>lParam</code> 是 <code>NMHDR</code> 指针</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> WM_NOTIFY:<span class="comment">//我们在这里仅响应了一个列表框的右键点击</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">switch</span> (wParam)</span><br><span class="line">		&#123;</span><br><span class="line">		<span class="keyword">case</span> IDC_LIST2:</span><br><span class="line">		&#123;</span><br><span class="line">			NMHDR* pNm = (NMHDR*)lParam;</span><br><span class="line">			<span class="keyword">if</span> (pNm-&gt;code == NM_RCLICK)<span class="comment">//右键点击</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">wchar_t</span> buf[<span class="number">64</span>] = &#123;&#125;;</span><br><span class="line">				LPNMITEMACTIVATE lpnmitem = (LPNMITEMACTIVATE)lParam;</span><br><span class="line">				<span class="comment">//HWND hList = GetDlgItem(hWnd, IDC_LIST2);</span></span><br><span class="line">				HWND hList = lpnmitem-&gt;hdr.hwndFrom;<span class="comment">//发送消息的控件句柄</span></span><br><span class="line">				ListView_GetItemText(hList, lpnmitem-&gt;iItem,</span><br><span class="line">					lpnmitem-&gt;iSubItem, buf, <span class="number">64</span>);</span><br><span class="line">				MessageBox(<span class="number">0</span>, buf, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/10/22/2019-10-22-Windows编程基础4/">Windows编程基础4</a>
+            
+            
+            <a class="next" rel="next" href="/2019/10/19/2019-10-19-Windows编程基础2/">Windows编程基础2</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
