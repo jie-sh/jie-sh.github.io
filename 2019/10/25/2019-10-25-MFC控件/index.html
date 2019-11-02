@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>MFC控件 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">MFC控件</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 25, 2019&nbsp;&nbsp;8:05:00</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>[toc] </p>
+<h1 id="基础控件的使用"><a href="#基础控件的使用" class="headerlink" title="基础控件的使用"></a>基础控件的使用</h1><ol>
+<li>创建和初始化</li>
+<li>消息的响应</li>
+<li>控制函数</li>
+</ol>
+<h2 id="按钮"><a href="#按钮" class="headerlink" title="按钮"></a>按钮</h2><ol>
+<li>使用 <code>CButton</code> 来绑定按钮控件，一般不需初始化</li>
+<li>消息响应：只有按钮被单击的消息</li>
+<li>控制函数：<code>SetWindowText</code> 设置按钮的标题</li>
+</ol>
+<h2 id="单选框"><a href="#单选框" class="headerlink" title="单选框"></a>单选框</h2><p>单选框也是按钮的一种，也有被点击的消息，响应方式和按钮一样</p>
+<ol>
+<li>使用 <code>CButton</code> 绑定单选框控件</li>
+<li>初始化：<ol>
+<li>单选框一般都是分组，同一组单选框的选中状态是互斥的</li>
+<li>需要将每一组单选框第一个按钮的 <code>Group</code> 属性设置为 <code>True</code></li>
+</ol>
+</li>
+<li>操作函数：<ol>
+<li>若单选框控件绑定 <code>CButton</code> 类的变量，可以使用 <code>GetCheck</code> 和 <code>SetCheck</code> 来获取和设置单选框的选中状态</li>
+<li>若单选框控件绑定 <code>int</code> 类型的变量，<code>int</code> 变量的值是一个分组中的单选框的序号，使用 <code>UpdateData</code> 时，<code>int</code> 型变量的值是几，分组中的第几个单选框就会被选中</li>
+<li>只需将分组中第一个单选框添加 <code>int</code> 变量即可，修改 <code>int</code> 型变量的值在 <code>UpdateData</code> 时，MFC 会自动操作同一分组内其他的单选框</li>
+</ol>
+</li>
+</ol>
+<p>添加好单选框，设置好 <code>Group</code> 属性和添加变量后，再添加一个按钮1，双击按钮，自动生成 <code>OnBnClickedButton1()</code> 函数，就可以在其中编程</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnBnClickedButton1()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//修改第一组单选框的选中状态</span></span><br><span class="line">	UpdateData(TRUE);</span><br><span class="line">	CString buff;</span><br><span class="line">	buff.Format(<span class="string">L"选中%d"</span>, m_Radio1);</span><br><span class="line">	MessageBox(buff);</span><br><span class="line">	<span class="comment">//修改第二组单选框为随机选中</span></span><br><span class="line">	m_Radio2 = rand() % <span class="number">4</span>;</span><br><span class="line">	UpdateData(FALSE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="复选框"><a href="#复选框" class="headerlink" title="复选框"></a>复选框</h2><ol>
+<li>初始化</li>
+<li>消息：和按钮一样</li>
+<li>操作函数：<ol>
+<li>绑定 <code>CButton</code> 类型的变量，可以使用 <code>GetCheck</code> 和 <code>SetCheck</code></li>
+<li>绑定值类型的变量，可以使用 <code>UpdateData</code> 来获取和修改选中状态</li>
+</ol>
+</li>
+</ol>
+<p>同上，添加按钮2，双击，在函数内编程</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">void</span> CMFCApplication2Dlg::OnBnClickedButton2()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//对第一个复选框"aaa"添加的控件进行设置</span></span><br><span class="line">	<span class="keyword">if</span> (m_Check1.GetCheck()) &#123;</span><br><span class="line">		MessageBox(<span class="string">L"aaa"</span>);<span class="comment">//若选中"aaa"，则打印</span></span><br><span class="line">	&#125;</span><br><span class="line">	UpdateData(TRUE);</span><br><span class="line">	<span class="comment">//设置添加的值</span></span><br><span class="line">	CString buff;</span><br><span class="line">	<span class="keyword">if</span> (m_Check_Value1)</span><br><span class="line">		buff = <span class="string">L"aaa"</span>;</span><br><span class="line">	<span class="keyword">if</span> (m_Check_Value2)</span><br><span class="line">		buff += <span class="string">L" bbb"</span>;</span><br><span class="line">	<span class="keyword">if</span> (m_Check_Value3)</span><br><span class="line">		buff += <span class="string">L" ccc"</span>;</span><br><span class="line">	<span class="keyword">if</span> (!buff.IsEmpty())<span class="comment">//判断是否为空</span></span><br><span class="line">		MessageBox(buff);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="编辑框"><a href="#编辑框" class="headerlink" title="编辑框"></a>编辑框</h2><ol>
+<li><p>初始化：在资源编辑视图的属性栏中设置</p>
+</li>
+<li><p>消息：编辑框文本被修改：<code>EN_CHANGE</code></p>
+</li>
+<li><p>操作函数：可以在 <code>OnInitDialog</code> 函数中添加设置函数，也可在编辑框的属性中修改，初始化编辑框</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置编辑框的最大文本个数</span></span><br><span class="line">m_edit.SetLimitText(<span class="number">10000</span>);</span><br><span class="line"><span class="comment">//设置是否是只读</span></span><br><span class="line">m_edit.SetReadOnly(<span class="number">0</span>);</span><br><span class="line"><span class="comment">//密码风格，显示的字符默认是"*"</span></span><br><span class="line">m_edit.SetPasswordChar(<span class="string">'@'</span>);</span><br><span class="line"><span class="comment">//获取文本</span></span><br><span class="line">CString buff;</span><br><span class="line">m_edit.GetWindowText(buff);</span><br><span class="line"><span class="comment">//获取一共有几行</span></span><br><span class="line">DWORD dwLineCount = m_edit.GetLineCount();</span><br><span class="line"><span class="comment">//滚动到指定行</span></span><br><span class="line">m_edit.LineScroll(dwLineCount);</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571988410119.png" alt="1571988410119"></p>
+<p>按钮3设置编辑框文本</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnBnClickedButton3()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//获取文本</span></span><br><span class="line">	UpdateData(FALSE);</span><br><span class="line">	CString buff;</span><br><span class="line">	m_edit.GetWindowText(buff);</span><br><span class="line">	MessageBox(buff);</span><br><span class="line">	<span class="comment">//获取行数</span></span><br><span class="line">	DWORD dwLineCount = m_edit.GetLineCount();</span><br><span class="line">	buff.Format(<span class="string">L"%d"</span>, dwLineCount);</span><br><span class="line">	MessageBox(buff);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h2 id="列表框"><a href="#列表框" class="headerlink" title="列表框"></a>列表框</h2><ol>
+<li><p>初始化</p>
+</li>
+<li><p>消息：</p>
+<p><code>SEL_CHANGE</code>：当前选中项被修改</p>
+</li>
+<li><p>操作函数：控件类型绑定（<code>CListBox</code>）</p>
+<ol>
+<li><code>AddString</code>：将一行字符串添加到列表框</li>
+<li><code>ResetContent</code>：清空所有项</li>
+<li><code>GetCurSel</code>：获取当前选中项的下标</li>
+<li><code>GetText</code>：获取指定下标的文本</li>
+<li>更多函数可以 F1 <code>CListBox</code> 类查看帮助文档</li>
+</ol>
+</li>
+</ol>
+<p>在 <code>OnInitDialog()</code> 函数中初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">BOOL CMFCApplication2Dlg::OnInitDialog()</span><br><span class="line">&#123;</span><br><span class="line">    CDialogEx::OnInitDialog();</span><br><span class="line">    </span><br><span class="line">    m_ListBox1.AddString(<span class="string">L"AAA"</span>);</span><br><span class="line">	m_ListBox1.AddString(<span class="string">L"BBB"</span>);</span><br><span class="line">	m_ListBox1.AddString(<span class="string">L"CCC"</span>);</span><br><span class="line">	m_ListBox1.AddString(<span class="string">L"DDD"</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在类向导的命令中，根据控件类型找到函数进行编程实现功能</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571991287066.png" alt="1571991287066"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnSelchangeList1()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//获取当前选中项</span></span><br><span class="line">	<span class="keyword">int</span> nIndex = m_ListBox1.GetCurSel();<span class="comment">//获取下标</span></span><br><span class="line">	<span class="keyword">if</span> (nIndex == <span class="number">-1</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="comment">//获取列表框中指定行的文本</span></span><br><span class="line">	CString buff;</span><br><span class="line">	m_ListBox1.GetText(nIndex, buff);</span><br><span class="line">	MessageBox(buff);</span><br><span class="line">	<span class="comment">//根据列表框1的内容，在列表框2中显示其他内容</span></span><br><span class="line">	<span class="keyword">switch</span> (nIndex) &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">0</span>:<span class="comment">//清空所有选项</span></span><br><span class="line">		m_ListBox2.ResetContent();</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Aaaa"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Abbb"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Accc"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Addd"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">		m_ListBox2.ResetContent();</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Baaa"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Bbbb"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Bccc"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Bddd"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		m_ListBox2.ResetContent();</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Caaa"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Cbbb"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Cccc"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Cddd"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">		m_ListBox2.ResetContent();</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Daaa"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Dbbb"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Dccc"</span>);</span><br><span class="line">		m_ListBox2.AddString(<span class="string">L"Dddd"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">default</span>: <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="下拉框"><a href="#下拉框" class="headerlink" title="下拉框"></a>下拉框</h2><p>下拉框也称组合框，是编辑框和列表框的组合</p>
+<ol>
+<li><p>初始化：有一个列表是否排序的属性</p>
+</li>
+<li><p>消息：<code>ON_CBN_SELENDCANCEL</code> 当前选中项改变</p>
+</li>
+<li><p>操作函数：</p>
+<ol>
+<li><code>AddString</code>：向类表框添加文本</li>
+<li><code>GetCurSel</code>：获取列表框的当前选中项</li>
+<li><code>GetLBText</code>：获取列表框指定行的文本</li>
+<li><code>ResetContent</code>：清空列表框的所有节点</li>
+<li><code>SetCurSel</code>：设置列表框的当前选项</li>
+<li><code>SetEditSel</code>：设置编辑框的文本</li>
+</ol>
+<p>初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">BOOL CMFCApplication2Dlg::OnInitDialog()</span><br><span class="line">&#123;</span><br><span class="line">    CDialogEx::OnInitDialog();</span><br><span class="line">    </span><br><span class="line">    m_ComBox1.AddString(<span class="string">L"河西"</span>);</span><br><span class="line">	m_ComBox1.AddString(<span class="string">L"河北"</span>);</span><br><span class="line">	m_ComBox1.AddString(<span class="string">L"河南"</span>);</span><br><span class="line">	m_ComBox1.AddString(<span class="string">L"河东"</span>);</span><br><span class="line">	m_ComBox1.SetCurSel(<span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnSelchangeCombo1()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">int</span> nIndex = m_ComBox1.GetCurSel();</span><br><span class="line">	<span class="keyword">if</span> (nIndex == <span class="number">-1</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	CString buff;</span><br><span class="line">	m_ComBox1.GetLBText(nIndex, buff);</span><br><span class="line">	<span class="keyword">switch</span> (nIndex) &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">		m_ComBox2.ResetContent();</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"111"</span>);</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"112"</span>);</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"113"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">		m_ComBox2.ResetContent();</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"211"</span>);</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"212"</span>);</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"213"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		m_ComBox2.ResetContent();</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"311"</span>);</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"312"</span>);</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"313"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">		m_ComBox2.ResetContent();</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"411"</span>);</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"412"</span>);</span><br><span class="line">		m_ComBox2.AddString(<span class="string">L"413"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">default</span>: <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	m_ComBox2.SetCurSel(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h2 id="静态文本"><a href="#静态文本" class="headerlink" title="静态文本"></a>静态文本</h2><h3 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h3><p>一般不需要绑定变量，不需响应消息，只是文本提示。若想动态修改标签的文本，可以得到标签控件的窗口句柄，使用 <code>SetWindowText</code> 来修改</p>
+<h3 id="图片控件"><a href="#图片控件" class="headerlink" title="图片控件"></a>图片控件</h3><ol>
+<li><p>初始化：</p>
+<ol>
+<li>修改资源 ID（类向导不会自动修改静态文本类的控件资源 ID）</li>
+<li>将 <code>type</code> 属性修改成 <code>bitmap</code></li>
+<li>将 <code>center image</code> 改为 <code>TRUE</code>，图片控件不能缩放要显示的图片。若图比控件大，控件会自动将大小修改成和图片一样大，该属性设为 <code>TRUE</code> 之后，控件大小就不会自动跟随图片大小，而是固定大小并只显示图片的部分内容</li>
+</ol>
+</li>
+<li><p>消息：不需处理</p>
+</li>
+<li><p>操作函数：</p>
+<p>绑定控件类型（<code>CStatic</code>）</p>
+</li>
+<li><p>给图片控件设置图片</p>
+<ol>
+<li><p>使用资源</p>
+<p>将一张位图添加到资源中，在图片控件的 <code>Image</code> 属性中填写位图的资源 ID，调用 <code>CStatic.SetBitmap</code> 函数将位图资源句柄设置进去</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1571995457852.png" alt="1571995457852"></p>
+<p>调用 <code>CStatic.SetBitmap</code> 函数，将位图的资源句柄设置进去</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnBnClickedButton4()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">	m_Pic.SetBitmap(LoadBitmap(AfxGetInstanceHandle(),</span><br><span class="line">		(TCHAR*)(index % <span class="number">2</span> ? IDB_BITMAP1 : IDB_BITMAP2)));</span><br><span class="line">		++index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另设一个按钮修改图片，从磁盘中获取图片</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnBnClickedButton5()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="function">CFileDialog <span class="title">dlg</span><span class="params">(TRUE)</span></span>;</span><br><span class="line">	dlg.DoModal();</span><br><span class="line">	CString path = dlg.GetPathName();</span><br><span class="line">	<span class="keyword">if</span> (path.IsEmpty())</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	CImage img;<span class="comment">// 使用CImage类加载图片</span></span><br><span class="line">	img.Load(path);</span><br><span class="line">	<span class="comment">// 将CImage类对象作为图片对象设置到图片控件中</span></span><br><span class="line">	m_Pic.SetBitmap(img);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>加载 GIF 动图</p>
+<p>默认的 <code>CStatic</code> 类不支持这个功能，需要自定义，网上有 <code>CPictureEx</code> 类。添加图片控件添加变量时变量的类型使用 <code>CPicturEx</code> 类，在对话框初始化函数中，使用 <code>CPicturEx.Load</code> 函数加载 GIF 图片，使用 <code>CPicturEx.Draw</code> 函数来绘制 GIF 图片</p>
+<p>在 <code>OnInitDialog()</code> 函数内添加</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化gif动图，直接传图片的路径</span></span><br><span class="line">m_Gif.Load(<span class="string">L"123.gif"</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnBnClickedButton6()</span><br><span class="line">&#123;</span><br><span class="line">	m_Gif.Draw();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnBnClickedButton7()</span><br><span class="line">&#123;</span><br><span class="line">	m_Gif.Stop();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+</li>
+</ol>
+<h2 id="滑块"><a href="#滑块" class="headerlink" title="滑块"></a>滑块</h2><ol>
+<li><p>初始化</p>
+<p>设置水平或垂直风格</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1572001890150.png" alt="1572001890150"></p>
+<p>设置滑块取指范围：<code>SetRange()</code></p>
+</li>
+<li><p>消息：</p>
+<ol>
+<li>若滑块是水平风格，向父窗口发送 <code>WM_HSCROLL</code> 消息</li>
+<li>若滑块是垂直风格，向父窗口发送 <code>WM_VSCROLL</code> 消息</li>
+</ol>
+</li>
+<li><p>操作函数：控件类型绑定（<code>CSliderCtrl</code>）</p>
+<p>获取当前位置：<code>GetPos</code></p>
+<p>设置当前位置：<code>SetPos</code></p>
+</li>
+</ol>
+<h2 id="进度条"><a href="#进度条" class="headerlink" title="进度条"></a>进度条</h2><ol>
+<li>进度条实际就是一个在界面上修改位置的滑块，通过 <code>SetPos</code> 来修改进度条的进度</li>
+<li>进度条和滑块外观不一样，但也有水平和垂直</li>
+<li>进度条和滑块一模一样<ol>
+<li>通过 <code>SetRange</code> 设置范围</li>
+<li>通过 <code>SetPos</code> 来设置位置</li>
+<li>通过 <code>GetPos</code> 来获取当前的位置</li>
+</ol>
+</li>
+</ol>
+<p>代码和滑块的写在同一个函数里，水平和垂直函数是在类向导的消息中</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1572005853571.png" alt="1572005853571"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1572006020754.png" alt="1572006020754"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)</span><br><span class="line">&#123;</span><br><span class="line">	CDialogEx::OnVScroll(nSBCode, nPos, pScrollBar);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)</span><br><span class="line">&#123;</span><br><span class="line">	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);</span><br><span class="line">	<span class="comment">//获取滑块当前位置</span></span><br><span class="line">	DWORD dwPos = m_Slider1.GetPos();</span><br><span class="line">	<span class="comment">//修改垂直滑块的位置</span></span><br><span class="line">	m_Slider2.SetPos(dwPos);</span><br><span class="line">	<span class="comment">//修改进度条的位置</span></span><br><span class="line">	m_Progress1.SetPos(dwPos);</span><br><span class="line">	m_Progress2.SetPos(dwPos);</span><br><span class="line"></span><br><span class="line">	CString buff;</span><br><span class="line">	buff.Format(<span class="string">L"%d"</span>, dwPos);</span><br><span class="line">	m_Text.SetWindowText(buff);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1572006775159.png" alt="1572006775159"></p>
+<h2 id="菜单栏"><a href="#菜单栏" class="headerlink" title="菜单栏"></a>菜单栏</h2><ol>
+<li>添加一个菜单资源</li>
+<li>使用 <code>CMenu</code> 来加载菜单</li>
+<li>在 <code>OnInitDialog</code>  函数中使用 <code>SetMen</code> 函数来设置程序的菜单栏</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加载菜单栏</span></span><br><span class="line">m_menu.LoadMenu(IDR_MENU1);</span><br><span class="line"><span class="comment">//设置菜单栏</span></span><br><span class="line">SetMenu(&amp;m_menu);</span><br></pre></td></tr></table></figure>
+
+<p>菜单栏的响应消息：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1572008041544.png" alt="1572008041544"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1572008116690.png" alt="1572008116690"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMenuDlg::OnFileOpen32771()</span><br><span class="line">&#123;</span><br><span class="line">	MessageBox(<span class="string">L"打开文件"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每一个菜单都这样操作</p>
+<h2 id="弹出菜单"><a href="#弹出菜单" class="headerlink" title="弹出菜单"></a>弹出菜单</h2><p>不能弹出根菜单</p>
+<h2 id="状态栏"><a href="#状态栏" class="headerlink" title="状态栏"></a>状态栏</h2><p>在 <code>OnInitDialog</code>  函数中初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建状态栏</span></span><br><span class="line">	m_StatusBar.Create(<span class="keyword">this</span>);</span><br><span class="line">	<span class="comment">//设置指示器的ID</span></span><br><span class="line">	UINT ids[] = &#123; <span class="number">1000</span>, <span class="number">1001</span> &#125;;</span><br><span class="line">	m_StatusBar.SetIndicators(ids, <span class="number">2</span>);</span><br><span class="line">	<span class="comment">//设置面板宽度</span></span><br><span class="line">	m_StatusBar.SetPaneInfo(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">120</span>);</span><br><span class="line">	m_StatusBar.SetPaneInfo(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">80</span>);</span><br><span class="line">	<span class="comment">//设置面板的文本</span></span><br><span class="line">	m_StatusBar.SetPaneText(<span class="number">0</span>, <span class="string">L"123456789"</span>);</span><br><span class="line">	m_StatusBar.SetPaneText(<span class="number">1</span>, <span class="string">L"abcdefghi"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>还需在 <code>WM_SIZE</code> 的消息回调函数中来自动修改状态栏的位置</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMenuDlg::OnSize(UINT nType, <span class="keyword">int</span> cx, <span class="keyword">int</span> cy)</span><br><span class="line">&#123;</span><br><span class="line">	CDialogEx::OnSize(nType, cx, cy);</span><br><span class="line">	<span class="comment">//重新跳转状态栏和工具栏在窗口上的位置</span></span><br><span class="line">	RepositionBars(AFX_IDW_CONTROLBAR_FIRST,</span><br><span class="line">		AFX_IDW_CONTROLBAR_LAST, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="工具栏"><a href="#工具栏" class="headerlink" title="工具栏"></a>工具栏</h2><p>自己画工具图</p>
+<ol>
+<li><p>在 <code>OnInitDialog</code>  函数中加载</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加载资源</span></span><br><span class="line">m_ToolBar.Create(<span class="keyword">this</span>);	</span><br><span class="line">m_ToolBar.LoadToolBar(IDR_TOOLBAR1);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>响应点击消息</p>
+<ol>
+<li><p>先得到工具栏按钮 ID</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1572010128820.png" alt="1572010128820"></p>
+</li>
+</ol>
+</li>
+</ol>
+<ol start="2">
+<li><p>响应虚函数 <code>WM_COMMAND</code> 消息</p>
+</li>
+<li><p>在 <code>wParam</code> 保存的就是按钮 ID</p>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">BOOL CAboutDlg::OnCommand(WPARAM wParam, LPARAM lParam)</span><br><span class="line">&#123;</span><br><span class="line">	UINT id = LOWORD(wParam);</span><br><span class="line">	<span class="keyword">switch</span> (id) &#123;</span><br><span class="line">	<span class="keyword">case</span> ID_BUTTON32775:<span class="comment">// 状态栏按钮的ID</span></span><br><span class="line">		MessageBox(<span class="string">L"开"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> ID_BUTTON32776:</span><br><span class="line">		MessageBox(<span class="string">L"关"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> ID_BUTTON32777:</span><br><span class="line">		MessageBox(<span class="string">L"合"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> ID_BUTTON32778:</span><br><span class="line">		MessageBox(<span class="string">L"启"</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">default</span>: <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> CDialogEx:: OnCommand(wParam, lParam);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>外部传入图片，在 <code>OnInitDialog</code>  函数中</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第二个工具栏</span></span><br><span class="line">	m_ToolBar2.Create(<span class="keyword">this</span>);</span><br><span class="line">	<span class="comment">//加载位图（位图必须是一个16*15的按钮）</span></span><br><span class="line">	m_ToolBar2.LoadBitmap(IDB_BITMAP1);</span><br><span class="line">	<span class="comment">//设置每个按钮的ID</span></span><br><span class="line">	UINT toolBtnIds[] = &#123; <span class="number">2000</span>, <span class="number">2001</span>,<span class="number">2002</span> &#125;;</span><br><span class="line">	m_ToolBar2.SetButtons(toolBtnIds, <span class="number">3</span>);</span><br><span class="line">	<span class="comment">//重新跳转状态栏和工具栏在窗口上的位置</span></span><br><span class="line">	RepositionBars(AFX_IDW_CONTROLBAR_FIRST,</span><br><span class="line">		AFX_IDW_CONTROLBAR_LAST, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<h1 id="通用控件"><a href="#通用控件" class="headerlink" title="通用控件"></a>通用控件</h1><h2 id="列表控件"><a href="#列表控件" class="headerlink" title="列表控件"></a>列表控件</h2><ol>
+<li><p>初始化：设置窗口风格</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1572076330852.png" alt="1572076330852"></p>
+</li>
+<li><p>消息：</p>
+<ol>
+<li><code>NM_CLICK</code>：左键单击</li>
+<li><code>NM_DBCLICK</code>：左键双击</li>
+<li><code>NM_RCLICK</code>：右键单击</li>
+<li><code>NM_RDBCLICK</code>：右键双击</li>
+<li><code>NM_RETURN</code>：回车</li>
+</ol>
+</li>
+<li><p>操作函数：</p>
+<table>
+<thead>
+<tr>
+<th><strong>函数</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>InsertColumn</strong></td>
+<td>插入一列</td>
+</tr>
+<tr>
+<td><strong>DeleteColumn</strong></td>
+<td>删除一列</td>
+</tr>
+<tr>
+<td><strong>InsertItem</strong></td>
+<td>插入一行</td>
+</tr>
+<tr>
+<td><strong>DeleteItem</strong></td>
+<td>删掉一行</td>
+</tr>
+<tr>
+<td><strong>GetItemText</strong></td>
+<td>获取某一个单元格的文本</td>
+</tr>
+<tr>
+<td><strong>SetItemText</strong></td>
+<td>设置某一个单元格的文本</td>
+</tr>
+<tr>
+<td><strong>GetItemData</strong></td>
+<td>获取单元格中的值</td>
+</tr>
+<tr>
+<td><strong>SetItemData</strong></td>
+<td>用int型数据设置单元格文本</td>
+</tr>
+<tr>
+<td><strong>GetItemCount</strong></td>
+<td>获取行数</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>获取被点击的节点：</p>
+<p>初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_CHECKBOXES);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//插入列</span></span><br><span class="line">	m_List.InsertColumn(<span class="number">0</span>,<span class="comment">//列号</span></span><br><span class="line">		<span class="string">L"进程名"</span>,<span class="comment">//列标题</span></span><br><span class="line">		<span class="number">0</span>,<span class="comment">//对齐风格</span></span><br><span class="line">		<span class="number">120</span><span class="comment">//列宽</span></span><br><span class="line">		);</span><br><span class="line">	m_List.InsertColumn(<span class="number">1</span>, <span class="string">L"PID"</span>, <span class="number">0</span>, <span class="number">120</span>);</span><br><span class="line">	m_List.InsertColumn(<span class="number">2</span>, <span class="string">L"路径"</span>, <span class="number">0</span>, <span class="number">120</span>);</span><br><span class="line">	<span class="comment">//插入节点(插入时, 只能设置这行节点的第0列的文本)</span></span><br><span class="line">	<span class="comment">// 想要设置其它列需要通过SetItemText</span></span><br><span class="line">	m_List.InsertItem(<span class="number">0</span>, <span class="string">L"QQ.exe"</span>);</span><br><span class="line">	<span class="comment">//设置第0行第1列的文本</span></span><br><span class="line">	m_List.SetItemText(<span class="number">0</span>, <span class="number">1</span>, <span class="string">L"1122"</span>);</span><br><span class="line">	m_List.SetItemText(<span class="number">0</span>, <span class="number">2</span>, <span class="string">L"D:\\QQ.exe"</span>);</span><br><span class="line">	m_List.SetItemData(<span class="number">0</span>, (DWORD)<span class="string">L"aaaaaaaaaa"</span>);</span><br><span class="line"></span><br><span class="line">	m_List.InsertItem(<span class="number">1</span>, <span class="string">L"wechat.exe"</span>);</span><br><span class="line">	m_List.SetItemText(<span class="number">1</span>, <span class="number">1</span>, <span class="string">L"1133"</span>);</span><br><span class="line">	m_List.SetItemText(<span class="number">1</span>, <span class="number">2</span>, <span class="string">L"D:\\wechat.exe"</span>);</span><br><span class="line">	m_List.SetItemData(<span class="number">1</span>, (DWORD)<span class="string">L"bbbbbbbbbbb"</span>);</span><br><span class="line">	<span class="comment">//获取ID信息</span></span><br><span class="line">	ProcessInfo* procInfo = <span class="keyword">new</span> ProcessInfo;</span><br><span class="line">	m_List.SetItemData(<span class="number">1</span>, (DWORD_PTR)procInfo);</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnFileGetpid()<span class="comment">//此函数在类向导中的ID_FILE_GETPID里</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//得到被右键菜单操作的列表节点</span></span><br><span class="line">	CString buff;</span><br><span class="line">	buff = m_List.GetItemText(m_iItem, <span class="number">0</span>);</span><br><span class="line">	TCHAR* p = (TCHAR*)m_List.GetItemData(m_iItem);</span><br><span class="line">	buff += <span class="string">L"附加数据："</span>;</span><br><span class="line">	buff += p;</span><br><span class="line">	MessageBox(buff);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<p>  <strong>将磁盘信息显示在列表框里</strong></p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化列表控件</span></span><br><span class="line">	<span class="comment">//初始化风格</span></span><br><span class="line">	<span class="comment">// LVS_EX_FULLROWSELECT - 整行选中</span></span><br><span class="line">	<span class="comment">// LVS_EX_GRIDLINES - 网格</span></span><br><span class="line">	<span class="comment">// LVS_EX_CHECKBOXES - 节点的复选框</span></span><br><span class="line">	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_CHECKBOXES);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//插入列</span></span><br><span class="line">	m_List.InsertColumn(<span class="number">0</span>, <span class="string">L"盘符"</span>, <span class="number">0</span>, <span class="number">80</span>);</span><br><span class="line">	m_List.InsertColumn(<span class="number">0</span>, <span class="string">L"卷标题"</span>, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">	m_List.InsertColumn(<span class="number">0</span>, <span class="string">L"类型"</span>, <span class="number">0</span>, <span class="number">80</span>);</span><br><span class="line">	m_List.InsertColumn(<span class="number">0</span>, <span class="string">L"已用空间"</span>, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">	m_List.InsertColumn(<span class="number">0</span>, <span class="string">L"剩余空间"</span>, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">	m_List.InsertColumn(<span class="number">0</span>, <span class="string">L"总空间"</span>, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">	<span class="comment">//获取盘符</span></span><br><span class="line">	TCHAR buff[MAX_PATH];</span><br><span class="line">	GetLogicalDriveStrings(MAX_PATH, buff);</span><br><span class="line">	TCHAR* p = buff;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	TCHAR volName[<span class="number">100</span>];</span><br><span class="line">	TCHAR fsName[<span class="number">100</span>];</span><br><span class="line">	TCHAR* pDriverType[] = &#123;<span class="string">L"未知"</span>, <span class="string">L"无效"</span>,<span class="string">L"可移动磁盘"</span>,</span><br><span class="line">		<span class="string">L"硬盘"</span>,<span class="string">L"远程磁盘"</span>,<span class="string">L"光盘"</span>,<span class="string">L"RAM"</span> &#125;;</span><br><span class="line">	<span class="keyword">while</span> (*p != <span class="number">0</span>) &#123;</span><br><span class="line">		m_List.InsertItem(i, p);</span><br><span class="line">		<span class="comment">//获取卷标题</span></span><br><span class="line">		GetVolumeInformation(p,<span class="comment">//盘符</span></span><br><span class="line">			volName,<span class="comment">//卷标题</span></span><br><span class="line">			<span class="keyword">sizeof</span>(volName),</span><br><span class="line">			<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">			fsName,<span class="comment">//文件系统名</span></span><br><span class="line">			<span class="keyword">sizeof</span>(fsName));</span><br><span class="line">		CString t;</span><br><span class="line">		t.Format(<span class="string">L"%s(%s)"</span>, volName, fsName);</span><br><span class="line">		m_List.SetItemText(i, <span class="number">1</span>, t);</span><br><span class="line">		<span class="comment">//获取磁盘类型</span></span><br><span class="line">		DWORD type = GetDriveType(p);</span><br><span class="line">		m_List.SetItemText(i, <span class="number">2</span>, pDriverType[type]);</span><br><span class="line"></span><br><span class="line">		DWORD dwSectorsPerCluster = <span class="number">0</span>;<span class="comment">// 没个簇的扇区的个数</span></span><br><span class="line">		DWORD dwBytesPerSector = <span class="number">0</span>;<span class="comment">// 扇区字节数</span></span><br><span class="line">		DWORD dwNumberOfFreeClusters = <span class="number">0</span>;<span class="comment">// 空闲空间的簇的个数</span></span><br><span class="line">		DWORD dwTotalNumberOfClusters = <span class="number">0</span>;<span class="comment">// 总空间簇的个数</span></span><br><span class="line">		<span class="comment">//获取空间</span></span><br><span class="line">		GetDiskFreeSpace(p, &amp;dwSectorsPerCluster, &amp;dwBytesPerSector,</span><br><span class="line">			&amp;dwNumberOfFreeClusters, &amp;dwTotalNumberOfClusters);</span><br><span class="line">		DWORD64 dwFreeSize = (DWORD64)dwNumberOfFreeClusters * dwSectorsPerCluster * dwBytesPerSector;</span><br><span class="line">		DWORD64 dwTotalSize = (DWORD64)dwTotalNumberOfClusters * dwSectorsPerCluster * dwBytesPerSector;;</span><br><span class="line">		DWORD64 dwUseSize = dwTotalSize - dwFreeSize;</span><br><span class="line">		<span class="comment">//已用空间</span></span><br><span class="line">		t.Format(<span class="string">L"%.2lfGB"</span>, (<span class="keyword">double</span>)dwUseSize / <span class="number">1024</span> / <span class="number">1024</span> / <span class="number">1024</span>);</span><br><span class="line">		m_List.SetItemText(i, <span class="number">3</span>, t);</span><br><span class="line">		<span class="comment">//可用空间</span></span><br><span class="line">		t.Format(<span class="string">L"%.2lfGb"</span>, (<span class="keyword">double</span>)dwFreeSize / <span class="number">1024</span> / <span class="number">1024</span> / <span class="number">1024</span>);</span><br><span class="line">		m_List.SetItemText(i, <span class="number">4</span>, t);</span><br><span class="line">		<span class="comment">//总空间</span></span><br><span class="line">		t.Format(<span class="string">L"%.2lfGb"</span>, (<span class="keyword">double</span>)dwTotalSize / <span class="number">1024</span> / <span class="number">1024</span> / <span class="number">1024</span>);</span><br><span class="line">		m_List.SetItemText(i, <span class="number">5</span>, t);</span><br><span class="line"></span><br><span class="line">		++i;</span><br><span class="line">		p += _tcslen(p) + <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//右击列表产生菜单</span></span><br><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnRclickList1(NMHDR *pNMHDR, LRESULT *pResult)</span><br><span class="line">&#123;</span><br><span class="line">	LPNMITEMACTIVATE pNMItemActivate = <span class="keyword">reinterpret_cast</span>&lt;LPNMITEMACTIVATE&gt;(pNMHDR);</span><br><span class="line">	*pResult = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	CString buff;</span><br><span class="line">	buff = m_List.GetItemText(pNMItemActivate-&gt;iItem,</span><br><span class="line">		pNMItemActivate-&gt;iSubItem);</span><br><span class="line">	<span class="comment">//保存行号</span></span><br><span class="line">	m_iItem = pNMItemActivate-&gt;iItem;</span><br><span class="line">	</span><br><span class="line">	CMenu menu;</span><br><span class="line">	menu.LoadMenu(IDR_MENU1);</span><br><span class="line">	CMenu* pSubMenu = menu.GetSubMenu(<span class="number">0</span>);</span><br><span class="line">	CPoint pos;</span><br><span class="line">	GetCursorPos(&amp;pos);</span><br><span class="line">	pSubMenu-&gt;TrackPopupMenu(<span class="number">0</span>, pos.x, pos.y, <span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//左击列表获取每行信息</span></span><br><span class="line"><span class="keyword">void</span> CMFCApplication2Dlg::OnClickList1(NMHDR *pNMHDR, LRESULT *pResult)</span><br><span class="line">&#123;</span><br><span class="line">	LPNMITEMACTIVATE pNMItemActivate = <span class="keyword">reinterpret_cast</span>&lt;LPNMITEMACTIVATE&gt;(pNMHDR);</span><br><span class="line">	*pResult = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">// HitTest可以根据鼠标的位置来找到</span></span><br><span class="line">    <span class="comment">// 节点的行(是判断鼠标坐标是落在哪</span></span><br><span class="line">    <span class="comment">// 一行上)</span></span><br><span class="line">    <span class="comment">// 鼠标坐标必须转换成列表控件的客户区坐标</span></span><br><span class="line">	CPoint pos;</span><br><span class="line">	GetCursorPos(&amp;pos);</span><br><span class="line">	<span class="comment">//必须是通过列表控件所绑定的变量来调用ScreenToClient函数</span></span><br><span class="line">	m_List.ScreenToClient(&amp;pos);</span><br><span class="line">	<span class="keyword">int</span> nIndex = m_List.HitTest(pos);</span><br><span class="line">	<span class="keyword">if</span> (nIndex != <span class="number">-1</span>) &#123;</span><br><span class="line">		CString buff;</span><br><span class="line">		buff = m_List.GetItemText(nIndex, <span class="number">0</span>);</span><br><span class="line">		MessageBox(buff);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<h2 id="树控件"><a href="#树控件" class="headerlink" title="树控件"></a>树控件</h2><ol>
+<li><p>初始化</p>
+</li>
+<li><p>消息：和列表控件一样</p>
+</li>
+<li><p>操作函数</p>
+<table>
+<thead>
+<tr>
+<th>InsertItem</th>
+<th><strong>插入一项</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DeleteAllItems</strong></td>
+<td><strong>删除所有项</strong></td>
+</tr>
+<tr>
+<td><strong>DeleteItem</strong></td>
+<td><strong>删除某一项</strong></td>
+</tr>
+<tr>
+<td><strong>SelectItem</strong></td>
+<td><strong>选择某一项</strong></td>
+</tr>
+<tr>
+<td><strong>GetItemText</strong></td>
+<td><strong>获取某个节点的文本</strong></td>
+</tr>
+<tr>
+<td><strong>GetNextSiblingItem</strong></td>
+<td><strong>获取下个兄弟节点</strong></td>
+</tr>
+<tr>
+<td><strong>GetPrevSiblingItem</strong></td>
+<td><strong>获取上个兄弟节点</strong></td>
+</tr>
+<tr>
+<td><strong>GetParentItem</strong></td>
+<td><strong>获取父节点</strong></td>
+</tr>
+<tr>
+<td><strong>GetRootItem</strong></td>
+<td><strong>获取根节点</strong></td>
+</tr>
+<tr>
+<td><strong>GetSelectedItem</strong></td>
+<td><strong>获取被选择的项</strong></td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">BOOL CTreeViewDlg::OnInitDialog()</span><br><span class="line">&#123;</span><br><span class="line">	CDialogEx::OnInitDialog();</span><br><span class="line">	HTREEITEM hItem1;</span><br><span class="line">	hItem1 = m_Tree.InsertItem(<span class="string">L"AAA"</span>,<span class="comment">//节点的文本</span></span><br><span class="line">		TVI_ROOT,<span class="comment">//父节点</span></span><br><span class="line">		TVI_LAST<span class="comment">//兄弟节点间的位置</span></span><br><span class="line">	);</span><br><span class="line">	m_Tree.InsertItem(<span class="string">L"aaa"</span>, hItem1, TVI_LAST);</span><br><span class="line">	m_Tree.InsertItem(<span class="string">L"bbb"</span>, hItem1, TVI_LAST);</span><br><span class="line"></span><br><span class="line">	HTREEITEM hItem2;</span><br><span class="line">	hItem2 = m_Tree.InsertItem(<span class="string">L"一一一"</span>, TVI_ROOT, TVI_LAST);</span><br><span class="line">	m_Tree.InsertItem(<span class="string">L"111"</span>, hItem2, TVI_LAST);</span><br><span class="line">	m_Tree.InsertItem(<span class="string">L"222"</span>, hItem2, TVI_LAST);</span><br><span class="line">    <span class="keyword">return</span> TRUE;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CTreeViewDlg::OnClickTree1(NMHDR *pNMHDR, LRESULT *pResult)</span><br><span class="line">&#123;</span><br><span class="line">	*pResult = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//通过鼠标坐标来获取节点的句柄</span></span><br><span class="line">	CPoint pos;</span><br><span class="line">	GetCursorPos(&amp;pos);</span><br><span class="line">	m_Tree.ScreenToClient(&amp;pos);</span><br><span class="line">	HTREEITEM hItem = m_Tree.HitTest(pos);</span><br><span class="line">	<span class="keyword">if</span> (hItem == <span class="literal">NULL</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	CString buff = m_Tree.GetItemText(hItem);</span><br><span class="line">	MessageBox(buff);</span><br><span class="line">	<span class="comment">//m_Tree.SetItemText(hItem, L"......");</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>并将消息映射 <code>ON_NOTIFY(NM_CLICK, IDC_TREE1, &amp;CTreeViewDlg::OnClickTree1)</code> 中的 <code>NM_CLICK</code> 改为 <code>NM_RCLICK</code></p>
+<h2 id="选项卡控件"><a href="#选项卡控件" class="headerlink" title="选项卡控件"></a>选项卡控件</h2><p>子类化 <code>Tab</code> 控件</p>
+<ol>
+<li><p>继承 <code>CTabCtr</code> 类</p>
+</li>
+<li><p>添加成员函数：<code>addTab</code> 添加一个选项卡</p>
+<p>选项卡标题，选项卡子窗口</p>
+</li>
+<li><p>处理 <code>TCN_SELCHANG</code> 发射消息</p>
+<ol>
+<li>将所有选项卡的子窗口的大小设置成 <code>Tab</code> 控件的客户区大小</li>
+<li>将所有选项卡的子窗口的坐标移动到 <code>Tab</code> 控件的客户区</li>
+<li>将所有的选项卡的子窗口隐藏</li>
+<li>将当前选项卡对应的子窗口显示</li>
+</ol>
+</li>
+</ol>
+<p>先创建一个 MFC 程序，在主对话框资源上拖一个 Table Ctrl，类向导中点击添加 MFC 类，基类选择 CTableCtrl，自己类名为 CMyTableCtrl。为主对话框中的 Table 控件添加控件变量，将变量类型修改为自己定义的 CMyTableCtrl，然后变量名为 m_MyTable。之后在资源视图中添加两个对话框资源，分别设置对话框属性，将 <code>style</code> 设为 <code>child</code>，将 <code>border</code> 设为 <code>NONE</code>，然后为这两个对话框添加类，基类为 CDialogEx，类名分别为 CDiaA 和 CDiaB。</p>
+<p>在自己建的类 CMyTableCtrl 中添加函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CMyTableCtrl::addTab(<span class="keyword">const</span> CString &amp; title, CWnd * pSubWnd)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//添加一个选项卡控件的标题栏</span></span><br><span class="line">	InsertItem(m_subWnd.size(), title);</span><br><span class="line">	m_subWnd.push_back(pSubWnd);</span><br><span class="line">	pSubWnd-&gt;SetParent(<span class="keyword">this</span>);</span><br><span class="line">	<span class="comment">//将子窗口大小修改成Tab控件客户区的大小</span></span><br><span class="line">	<span class="comment">//并将子窗口坐标移动到客户区左上角</span></span><br><span class="line">	CRect rt;</span><br><span class="line">	GetClientRect(rt);</span><br><span class="line">	rt.DeflateRect(<span class="number">1</span>, <span class="number">22</span>, <span class="number">3</span>, <span class="number">2</span>);</span><br><span class="line">	pSubWnd-&gt;MoveWindow(rt);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">void</span> CMyTableCtrl::OnTcnSelchange(NMHDR *pNMHDR, LRESULT *pResult)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> 在此添加控件通知处理程序代码</span></span><br><span class="line">	*pResult = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//处理TCN_SELCHANG发射消息</span></span><br><span class="line">	CRect rt;</span><br><span class="line">	<span class="comment">//获取tab控件的大小消息</span></span><br><span class="line">	GetClientRect(rt);</span><br><span class="line">	rt.DeflateRect(<span class="number">1</span>, <span class="number">22</span>, <span class="number">3</span>, <span class="number">2</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span>&amp; wnd : m_subWnd) &#123;</span><br><span class="line">		<span class="comment">//将所有选项卡的子窗口大小设置成Tab控件的客户区大小</span></span><br><span class="line">		<span class="comment">//将所有选项卡的子窗口坐标移动Tab控件的客户区</span></span><br><span class="line">		wnd-&gt;MoveWindow(rt);</span><br><span class="line">		<span class="comment">//将所有选项卡的子窗口隐藏</span></span><br><span class="line">		wnd-&gt;ShowWindow(SW_HIDE);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//将所有选项卡对应的子窗口显示</span></span><br><span class="line">	<span class="keyword">int</span> nIndex = <span class="keyword">this</span>-&gt;GetCurSel();</span><br><span class="line">	m_subWnd[nIndex]-&gt;ShowWindow(SW_SHOW);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在主对话框中初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">BOOL CTabCtrlDlg::OnInitDialog()</span><br><span class="line">&#123;</span><br><span class="line">	CDialogEx::OnInitDialog();</span><br><span class="line">    CProcess* pProcDlg = <span class="keyword">new</span> CProcess;</span><br><span class="line">	pProcDlg-&gt;Create(IDD_PROCESS);</span><br><span class="line">	m_Tab.addTab(<span class="string">L"进程"</span>, pProcDlg);	</span><br><span class="line">	CThread* pThreadDlg = <span class="keyword">new</span> CThread;</span><br><span class="line">	pThreadDlg-&gt;Create(IDD_THREAD);</span><br><span class="line">	m_Tab.addTab(<span class="string">L"线程"</span>, pThreadDlg);</span><br><span class="line">	<span class="keyword">return</span> TRUE;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/23/2019-10-23-MFC/">MFC</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
