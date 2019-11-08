@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>进程与线程 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">进程与线程</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 28, 2019&nbsp;&nbsp;13:32:36</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><ol>
+<li>进程是操作系统结构的基础；是一个正在执行的程序；计算机中正在运行的程序实例；可以分配给处理器执行的一个实体</li>
+<li>一个进程包含一个运行中的程序所用到的所有资源：一个虚拟的内存空间。内存空间中有很多模块，被分为两大部分：用户层和内核层。普通程序只能访问用户层空间（00000000<del>7FFFFFFF），大部分对象（结构体变量）都是放在内核空间（80000000</del>FFFFFFFF），故不能直接访问到，只能通过句柄。所有的进程内核层是共享的，不同的进程用户层空间不一样。在进程的虚拟内存中一般会加载一个 exe 和很多的 dll，这些都称之为模块，进程本身是一个综合了各种资源的东西，不能执行代码，能执行代码的是归属于进程的线程</li>
+<li>进程是惰性的，它仅是一个包含有线程的容器，其本身没有执行代码的能力，因此每个进程在创建之初都会创建一个主线程用于执行代码，若此主线程结束，系统就会销毁这个进程内核对象</li>
+<li>进程是程序在一个数据集合上运行的过程（一个程序可能同时属于多个进程），是操作系统进行资源分配和调度的一个独立单位，进程可分为系统进程和用户进程</li>
+<li>在 Windows 下，进程又被细化为线程，即一个进程下有多个能独立运行的更小的单位。程序是静止的，而进程是动态的</li>
+</ol>
+<p>进程的创建</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL WINAPI <span class="title">CreateProcess</span><span class="params">(_In_opt_ LPCSTR lpApplicationName,<span class="comment">//可执行文件名称</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_Inout_opt_ LPSTR lpCommandLine,<span class="comment">//命令行</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_opt_ LPSECURITY_ATTRIBUTES lpProcessAttributes,<span class="comment">//进程安全属性</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_opt_ LPSECURITY_ATTRIBUTES lpThreadAttributes,<span class="comment">//线程安全属性</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ BOOL bInheritHandles,<span class="comment">//句柄继承</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ DWORD dwCreationFlags,<span class="comment">//创建方式标志</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_opt_ LPVOID lpEnvironment,<span class="comment">//环境字符串块</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_opt_ LPCSTR lpCurrentDirectory,<span class="comment">//新进程的当前目录</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ LPSTARTUPINFOA lpStartupInfo,<span class="comment">//进程配置结构体</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_Out_ LPPROCESS_INFORMATION lpProcessInformation)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>进程创建实例</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CreateChildProcess</span><span class="params">(LPTSTR lpPath, BOOL bWait)</span> </span>&#123;</span><br><span class="line">	STARTUPINFO si = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	PROCESS_INFORMATION pi = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	si.cb = <span class="keyword">sizeof</span>(si);</span><br><span class="line">	<span class="comment">//创建子进程并判断是否成功</span></span><br><span class="line">	<span class="keyword">if</span> (!CreateProcess(lpPath, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, FALSE, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, &amp;si, &amp;pi))</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	<span class="comment">//是否需要等待进程执行结束</span></span><br><span class="line">	<span class="keyword">if</span> (bWait)</span><br><span class="line">		WaitForSingleObject(pi.hProcess, INFINITE);</span><br><span class="line">	<span class="comment">//关闭进程句柄和线程句柄</span></span><br><span class="line">	CloseHandle(pi.hProcess);</span><br><span class="line">	CloseHandle(pi.hThread);</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><ol>
+<li><p>一个线程就是操作系统的一个内核对象，在 Windows 操作系统内核中没有进程的概念，只有线程的概念，进程只不过是在逻辑上对一组线程及其相关的资源进行的一种封装</p>
+</li>
+<li><p>线程是进程中某个单一顺序的控制流，也被称为轻量进程，指运行中的程序的调度单位，有自己的一块堆栈和执行环境</p>
+</li>
+<li><p>一个线程可以再次创建多个线程，由其创建的线程仍然可以分别创建多个线程</p>
+</li>
+<li><p>作为一个独立的执行单元来讲，线程占用的系统资源远不及进程，但其本质却未大打折扣</p>
+</li>
+<li><p>CPU 执行代码主要依靠一套寄存器：</p>
+<p>通用寄存器：eax，ebx，ecx，edx，esi，esp，ebp</p>
+<p>指令寄存器：eip 存储下一条要执行的指令</p>
+<p>段寄存器：cs，ss，ds，es，fd，gs</p>
+</li>
+<li><p>所有线程都是操作系统统一管理的，每一个线程都有自己的优先级，根据优先级决定先后调用顺序，线程发生切换，实际就是切换线程的执行环境  </p>
+</li>
+<li><p>退出线程的方式：</p>
+<ol>
+<li>通过返回方式正常退出（最理想）</li>
+<li>通过 <code>ExitThread</code> 强制结束本线程</li>
+<li>通过 <code>TernamiteThread</code> 来结束指定线程</li>
+<li>通过结束进程来结束所有线程</li>
+</ol>
+</li>
+</ol>
+<p>线程的创建</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">HANDLE WINAPI <span class="title">CreateThread</span><span class="params">(_In_opt_ LPSECURITY_ATTRIBUTES lpThreadAttributes,</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ SIZE_T dwStackSize,<span class="comment">//指定线程可以拥有多少个栈空间</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ LPTHREAD_START_ROUTINE lpStartAddress, <span class="comment">//线程函数起始地址</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_opt_ __drv_aliasesMem LPVOID lpParameter, <span class="comment">//线程函数参数</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ DWORD dwCreationFlags, <span class="comment">//线程创建标志</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_Out_opt_ LPDWORD lpThreadId <span class="comment">/*新建线程的ID*/</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p> 线程实例</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//线程函数</span></span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">ThreadProc</span><span class="params">(LPVOID lpParam)</span> </span>&#123;</span><br><span class="line">	MessageBox(<span class="literal">NULL</span>, (LPCTSTR)lpParam, _T(<span class="string">"CreateThread"</span>), MB_OK);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CreateChildThread</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	DWORD dwThreadId = <span class="number">0</span>;</span><br><span class="line">	HANDLE hThread = CreateThread(<span class="literal">NULL</span>,<span class="comment">//默认安全属性</span></span><br><span class="line">		<span class="number">0</span>,<span class="comment">//默认堆栈大小</span></span><br><span class="line">		ThreadProc,<span class="comment">//线程函数</span></span><br><span class="line">		_T(<span class="string">"CreateThread"</span>),<span class="comment">//参数</span></span><br><span class="line">		<span class="number">0</span>,<span class="comment">//默认创建标志</span></span><br><span class="line">		&amp;dwThreadId);<span class="comment">//返回TID</span></span><br><span class="line">	<span class="keyword">if</span> (hThread == <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="comment">//ExitProcess</span></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="内核对象"><a href="#内核对象" class="headerlink" title="内核对象"></a>内核对象</h1><ol>
+<li><p>Windows 系统中对象被保护起来，需要通过他们的句柄，调用相应的 API 函数去操作这些对象，所有的 API 函数都属于不同的动态链接库（DLL 文件）。根据对象的不同使用情况，可以分为 user对象，GDI对象和内核对象，其中user对象和窗口、控件等有关，GDI对象和绘图有关，内核对象和系统全局性的一些功能有关</p>
+<p>常见的内核对象：</p>
+<table>
+<thead>
+<tr>
+<th>进程</th>
+<th>线程</th>
+<th>访问令牌</th>
+<th>文件</th>
+<th>文件映射</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>I/O 完成端口</strong></td>
+<td><strong>邮槽</strong></td>
+<td><strong>管道</strong></td>
+<td><strong>互斥体</strong></td>
+<td><strong>信号量</strong></td>
+</tr>
+<tr>
+<td><strong>事件</strong></td>
+<td><strong>计时器</strong></td>
+<td><strong>线程池</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>所有内核对象都遵循统一的使用模式：</p>
+<ol>
+<li>创建对象</li>
+<li>打开对象，得到句柄（可与第一步合并，表示创建时就打开）</li>
+<li>通过 API 访问对象</li>
+<li>关闭句柄</li>
+<li>句柄完全关闭，对象自动销毁</li>
+</ol>
+</li>
+<li><p>所有内核对象都属于操作系统内核，可在不同的进程间访问到，俗称：<strong>内核对象是跨进程的</strong>，通过引用计数和句柄表管理</p>
+</li>
+<li><p>每一个内核对象结构体都有一个字段叫做<strong>引用计数</strong>，当有一个进程创建或打开此内核对象，则引用计数自增1，进程终止，或关闭句柄，引用计数自减1，当引用计数为0，内核对象自动销毁</p>
+</li>
+<li><p>每个内核对象创建时都有一个安全属性，这个安全属性标识了怎么去使用这个对象，比如可读可写，权限等，一般创建一个内核对象时都需要指定一个安全属性 <code>SECURITY_ATTRIBUTES</code>，若传 <code>NULL</code> 的话，就会指定一个默认的属性</p>
+</li>
+<li><p>内核对象的句柄和进程有关，对于同一个对象，在不同的进程中，其句柄值不同，这点和 GDI对象不同，GDI对象的句柄值是全局有效的。由此可见，<strong>不同类型的对象，其管理方式也是不同的</strong></p>
+</li>
+<li><p>每个进程对象中都有一个<strong>句柄表</strong>，用于记录本进程所打开的所有内核对象，可以简单的将句柄表理解为一个一维的结构体数组，句柄值可看做句柄表中的索引，故而内核对象的句柄值仅仅对本进程有效。句柄表中的每一项描述了使用此句柄访问内核对象的权限，以及此句柄是否可以被子进程继承</p>
+</li>
+<li><p>获取内核对象句柄：</p>
+<ol>
+<li>自己创建</li>
+<li>自己打开（此对象是已创建好的）</li>
+<li>从父进程继承过来</li>
+<li>别的进程复制过来，<code>DuplicateHandle()</code> 函数</li>
+</ol>
+</li>
+</ol>
+<h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><ol>
+<li><p>进程的基本操作：</p>
+<p>创建：<code>CreateProcess</code>    终止：<code>ExitProcess</code>    打开已存在的进程：<code>OpenProcess</code>    </p>
+<p>强制结束：<code>TerminateProcess</code>    进程间的通讯：<code>COPY_DATA</code> 消息，邮槽</p>
+</li>
+<li><p>线程的基本操作：</p>
+<p>创建：<code>CreateThread</code>    打开：<code>OpenThread</code>    挂起：<code>SuspendThread</code>    恢复：<code>ResumeThread</code></p>
+<p>终止：<code>ExitThread</code>    强制结束：<code>TerminateThread</code></p>
+</li>
+</ol>
+<h2 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h2><p>方法很多，这里使用创建快照的方式：<code>CreateToolHelp32Snapshot</code></p>
+<ul>
+<li>进程快照：得到系统上所有的进程</li>
+<li>模块快照：以进程为单位</li>
+</ul>
+<p>需要知道：</p>
+<ol>
+<li><p>进程是操作系统管理的，遍历时能够遍历出系统所有进程的信息（进程名，路径，进程 ID），通常都是知道进程名再去找 ID，ID 在每一次程序运行时都不一样，若要操作进程，就要使用 <code>OpenProcess</code> 函数得到其句柄，<code>OpenProcess</code> 函数的作用就是根据进程 ID 得到句柄的</p>
+</li>
+<li><p>模块是属于某个进程的，故遍历模块时需指定遍历哪一个进程的模块，能够遍历出的模块信息为：模块名，模块的起始地址（加载基址）</p>
+<p>遍历模块的用处：</p>
+<ol>
+<li>可以知道一个程序都加载了哪些 DLL，监测 DLL 注入</li>
+<li>分析 DLL 中的 PE 文件信息，可以为分析一个程序提供依据</li>
+</ol>
+</li>
+<li><p>线程虽属于一个进程，但其是操作系统统一管理的，故需遍历操作系统中的所有线程，然后自己过滤得到某个进程的线程，线程遍历得到的信息有：线程 ID，所属进程的 ID</p>
+<p>遍历线程的用处：得到进程中每个线程的信息，操作这些线程，比如挂起，终止等</p>
+</li>
+</ol>
+<p><strong>进程的遍历</strong>，使用 Release</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;Tlhelp32.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HANDLE hProcessSnap;<span class="comment">//进程快照句柄</span></span><br><span class="line">	HANDLE hProcess;<span class="comment">//进程句柄</span></span><br><span class="line">	PROCESSENTRY32 stcPe32 = &#123; <span class="number">0</span> &#125;;<span class="comment">//进程快照信息</span></span><br><span class="line">	stcPe32.dwSize = <span class="keyword">sizeof</span>(PROCESSENTRY32);</span><br><span class="line">	<span class="comment">//创建一个进程相关的快照句柄</span></span><br><span class="line">	hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span> (hProcessSnap == INVALID_HANDLE_VALUE)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	<span class="comment">//通过进程快照句柄获取第一个进程信息</span></span><br><span class="line">	<span class="keyword">if</span> (!Process32First(hProcessSnap, &amp;stcPe32)) &#123;</span><br><span class="line">		CloseHandle(hProcessSnap);</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//循环遍历进程信息</span></span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		<span class="comment">//获取优先级信息</span></span><br><span class="line">		hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, </span><br><span class="line">			stcPe32.th32ProcessID);</span><br><span class="line">		<span class="keyword">if</span> (hProcess) &#123;</span><br><span class="line">			GetPriorityClass(hProcess);<span class="comment">//获取进程优先级</span></span><br><span class="line">			CloseHandle(hProcess);<span class="comment">//关闭句柄</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//获取进程的其他相关信息</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"进程ID:%d   "</span>,stcPe32.th32ProcessID);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"线程数:%d   "</span>, stcPe32.cntThreads);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"父进程ID:%d"</span>, stcPe32.th32ParentProcessID);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"进程路径：%s"</span>, stcPe32.szExeFile);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">	&#125; <span class="keyword">while</span> (Process32Next(hProcessSnap, &amp;stcPe32));</span><br><span class="line">	<span class="comment">//关闭句柄退出函数</span></span><br><span class="line">	CloseHandle(hProcessSnap);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>模块的遍历</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">HANDLE hModuleSnap = INVALID_HANDLE_VALUE;</span><br><span class="line">MODULEENTRY32 me32 = &#123; <span class="keyword">sizeof</span>(MODULEENTRY32) &#125;;</span><br><span class="line"><span class="comment">//创建一个模块相关的句柄</span></span><br><span class="line">DWORD dwPId = <span class="number">0</span>;</span><br><span class="line">hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE,<span class="comment">//指定模块类型 </span></span><br><span class="line">	dwPId);<span class="comment">//指定进程</span></span><br><span class="line"><span class="keyword">if</span> (hModuleSnap == INVALID_HANDLE_VALUE)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"><span class="comment">//通过模块快照句柄获取第一个模块信息</span></span><br><span class="line"><span class="keyword">if</span> (!Module32First(hModuleSnap, &amp;me32)) &#123;</span><br><span class="line">	CloseHandle(hModuleSnap);</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//循环获取模块信息</span></span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"模块句柄%d  "</span>, me32.hModule);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"加载基址%d  "</span>, me32.modBaseAddr);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"模块名%s  "</span>, me32.szExePath);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">&#125; <span class="keyword">while</span> (Module32Next(hModuleSnap, &amp;me32));</span><br><span class="line"><span class="comment">//关闭句柄并退出函数</span></span><br><span class="line">CloseHandle(hModuleSnap);</span><br></pre></td></tr></table></figure>
+
+<p><strong>线程的遍历</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;Tlhelp32.h&gt;</span></span></span><br><span class="line"><span class="function">VOID <span class="title">ListProcessThreads</span><span class="params">(DWORD dwPID)</span> </span>&#123;</span><br><span class="line">	HANDLE hThreadSnap = INVALID_HANDLE_VALUE;</span><br><span class="line">	THREADENTRY32 te32;</span><br><span class="line">	<span class="comment">//创建快照</span></span><br><span class="line">	hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span> (hThreadSnap == INVALID_HANDLE_VALUE)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="comment">//设置输入参数，结构体的大小</span></span><br><span class="line">	te32.dwSize = <span class="keyword">sizeof</span>(THREADENTRY32);</span><br><span class="line">	<span class="comment">//开始获取信息</span></span><br><span class="line">	<span class="keyword">if</span> (!Thread32First(hThreadSnap, &amp;te32)) &#123;</span><br><span class="line">		CloseHandle(hThreadSnap);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (te32.th32OwnerProcessID == dwPID) &#123;<span class="comment">//dwPID是指定进程的ID</span></span><br><span class="line">			<span class="comment">//显示相关信息</span></span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"\n   THREAD ID = 0x%08X"</span>, te32.th32ThreadID);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"\t   base priority = %d"</span>, te32.tpBasePri);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"\t   delta priority = %d"</span>, te32.tpDeltaPri);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">while</span> (Thread32Next(hThreadSnap, &amp;te32));</span><br><span class="line">	CloseHandle(hThreadSnap);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ListProcessThreads(<span class="number">8364</span>);<span class="comment">//传入进程ID</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>文件的遍历</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;atlstr.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">listDir</span><span class="params">(<span class="keyword">const</span> CString&amp; path, <span class="keyword">int</span> deep)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (deep == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	WIN32_FIND_DATA wfd = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	HANDLE hFind = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//查找第一个文件，注意路径需加上通配符</span></span><br><span class="line">	hFind = FindFirstFile(path + <span class="string">L"\\*"</span>, &amp;wfd);</span><br><span class="line">	<span class="keyword">if</span> (hFind == INVALID_HANDLE_VALUE)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		<span class="comment">//过滤掉当前目录和上层目录</span></span><br><span class="line">		<span class="keyword">if</span>(wcscmp(wfd.cFileName, <span class="string">L"."</span>) == <span class="number">0</span> ||</span><br><span class="line">			wcscmp(wfd.cFileName, <span class="string">L".."</span>) == <span class="number">0</span>)</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		wprintf(<span class="string">L"%s\\%s\n"</span>, (LPCWSTR)path, wfd.cFileName);</span><br><span class="line">		<span class="comment">//判断当前遍历到的数据是否是目录</span></span><br><span class="line">		<span class="comment">//可以通过文件属性标志位来判断</span></span><br><span class="line">		<span class="keyword">if</span> (wfd.dwFileAttributes &amp; FILE_ATTRIBUTE_DIRECTORY) &#123;</span><br><span class="line">			<span class="comment">// 如果是目录, 就递归扫描这个目录</span></span><br><span class="line">			<span class="comment">// 拼接成一个文件路径(遍历得到的文件名,只是一个没有路径的文件名)</span></span><br><span class="line">			<span class="comment">// 传入进来的参数就是它所在的文件夹</span></span><br><span class="line">			<span class="comment">// 此时将文件夹和目录名拼接在一起就能得到一个绝对路径了</span></span><br><span class="line">			CString absPath = path + <span class="string">L"\\"</span> + wfd.cFileName;</span><br><span class="line">			<span class="comment">//递归调用</span></span><br><span class="line">			listDir(absPath, deep - <span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">while</span> (FindNextFile(hFind, &amp;wfd));</span><br><span class="line">	FindClose(hFind);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	listDir(<span class="string">L"C:\\"</span>, <span class="number">2</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 用树型控件实现文件目录的浏览 </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CDlgFile::ShowFile(CString str_Dir, HTREEITEM tree_Root)</span><br><span class="line">&#123;</span><br><span class="line">	CFileFind FileFind;<span class="comment">//通过CFileFind类获取文件路径或名称时，要至少调用一次FindNextFileW()函数</span></span><br><span class="line">	<span class="comment">//临时变量，用以记录返回的树根节点</span></span><br><span class="line">	HTREEITEM tree_Temp;</span><br><span class="line">	<span class="comment">//判断输入目录是否是'\'，若不存在则补充</span></span><br><span class="line">	<span class="keyword">if</span> (str_Dir.Right(<span class="number">1</span>) != <span class="string">"\\"</span>)</span><br><span class="line">		str_Dir += <span class="string">"\\"</span>;</span><br><span class="line">	str_Dir += <span class="string">"*.*"</span>;</span><br><span class="line">	BOOL res = FileFind.FindFile(str_Dir);</span><br><span class="line">	<span class="keyword">while</span> (res)</span><br><span class="line">	&#123;</span><br><span class="line">		tree_Temp = tree_Root;</span><br><span class="line">		res = FileFind.FindNextFileW();</span><br><span class="line">		<span class="keyword">if</span> (FileFind.IsDirectory() &amp;&amp; !FileFind.IsDots())<span class="comment">//目录是文件夹</span></span><br><span class="line">		&#123;</span><br><span class="line">			CString strPath = FileFind.GetFilePath(); <span class="comment">//得到路径，做为递归调用的开始</span></span><br><span class="line">			CString strTitle = FileFind.GetFileName();<span class="comment">//得到目录名，做为树控的结点</span></span><br><span class="line">			tree_Temp = m_MyTree.InsertItem(strTitle, <span class="number">0</span>, <span class="number">0</span>, tree_Root);</span><br><span class="line">			ShowFile(strPath, tree_Temp);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (!FileFind.IsDirectory() &amp;&amp; !FileFind.IsDots())<span class="comment">//如果是文件</span></span><br><span class="line">		&#123;</span><br><span class="line">			CString strPath = FileFind.GetFilePath(); <span class="comment">//得到路径，做为递归调用的开始</span></span><br><span class="line">			CString strTitle = FileFind.GetFileName();<span class="comment">//得到文件名，做为树控的结点</span></span><br><span class="line">			m_MyTree.InsertItem(strTitle, <span class="number">0</span>, <span class="number">0</span>, tree_Temp);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	FileFind.Close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="进程间的通讯"><a href="#进程间的通讯" class="headerlink" title="进程间的通讯"></a>进程间的通讯</h2><h3 id="WM-COPYDATA"><a href="#WM-COPYDATA" class="headerlink" title="WM_COPYDATA"></a><code>WM_COPYDATA</code></h3><p><code>WM_COPYDATA</code> 是一个特殊的、专门用于传递数据的消息，此消息可以携带一个大体积的消息参数，不同于其他只能携带两个固定参数的消息。发送 <code>WM_COPYDATA</code> 消息时，<code>wParam</code> 应保存发送此消息的窗口句柄，<code>lParam</code> 应指向一个名为 <code>COPYDATASTRUCT</code> 的结构体</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tagCOPYDATASTRUCT</span> &#123;</span></span><br><span class="line">	ULONG_PTR dwData;<span class="comment">//任意一个32位的值</span></span><br><span class="line">	DWORD cbData;<span class="comment">//发送数据的大小</span></span><br><span class="line">	PVOID lpData;<span class="comment">//待发送数据块指针</span></span><br><span class="line">&#125;COPYDATASTRUCT, *PCOPYDATASTRUCT;</span><br></pre></td></tr></table></figure>
+
+<p>需注意：<code>WM_COPYDATA</code> 的数据会被发送到目标进程的栈空间保存，因此单次发送的数据量不宜过大</p>
+<p>发送方：为一个窗口名为“WM_COPYDATA接收方”的窗口发送消息</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	COPYDATASTRUCT cds = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	cds.dwData = <span class="number">0x123456</span>;</span><br><span class="line">	cds.lpData = (LPVOID)<span class="string">L"abc"</span>;<span class="comment">//内容</span></span><br><span class="line">	cds.cbData = <span class="built_in">strlen</span>((<span class="keyword">char</span>*)cds.lpData) + <span class="number">10</span>;<span class="comment">//可以指定数据大小为11字节</span></span><br><span class="line">	HWND hWnd = FindWindow(<span class="literal">NULL</span>, <span class="string">L"WM_COPYDATA接收方"</span>);<span class="comment">//接收方窗口名</span></span><br><span class="line">	SendMessage(hWnd, WM_COPYDATA, <span class="number">0</span>, (LPARAM)&amp;cds);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接收方：首先创建一个对话框窗口，名为“WM_COPYDATA接收方”</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"resource.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atlstr.h&gt;</span></span></span><br><span class="line"><span class="function">INT_PTR CALLBACK <span class="title">DlgProc</span><span class="params">(HWND hWnd, UINT uMsg, WPARAM w, LPARAM l)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (uMsg)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> WM_CLOSE:</span><br><span class="line">            EndDialog(hWnd,<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> WM_COPYDATA:</span><br><span class="line">        &#123;</span><br><span class="line">            COPYDATASTRUCT* pCds = (COPYDATASTRUCT*)l;</span><br><span class="line">            CString buff;</span><br><span class="line">            buff.Format(<span class="string">L"%x 大小:%d 数据:%s"</span>,</span><br><span class="line">                        pCds-&gt;dwData,</span><br><span class="line">                        pCds-&gt;cbData,</span><br><span class="line">                        pCds-&gt;lpData);</span><br><span class="line">            MessageBox(hWnd, buff, <span class="string">L"提示"</span>, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">WinMain</span><span class="params">( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, </span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ LPSTR lpCmdLine, _In_ <span class="keyword">int</span> nShowCmd )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    DialogBox(hInstance, (TCHAR*)IDD_DIALOG1, <span class="literal">NULL</span>, DlgProc);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="邮槽"><a href="#邮槽" class="headerlink" title="邮槽"></a>邮槽</h3><ol>
+<li>邮槽是 Windows 系统中最简单的一种进程间通信方式，一个进程可以创建一个邮槽，其他进程可以通过打开此邮槽与创建邮槽的进程通讯</li>
+<li>邮槽的通讯是单向的，消息被写入邮槽后以队列的方式保存</li>
+<li>邮槽除可在本机内进行进程间通讯外，还可在主机间通讯 </li>
+<li><ul>
+<li>创建邮槽对象：<code>CreateMailslot()</code></li>
+<li>打开邮槽对象：<code>CreateFile()</code></li>
+<li>读写邮槽：<code>ReadFile/WriteFile</code></li>
+<li>获取邮槽信息：<code>GetMailslotInfo()</code></li>
+</ul>
+</li>
+</ol>
+<p>服务端代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//创建一个邮槽服务端</span></span><br><span class="line">	HANDLE hMailslot;</span><br><span class="line">	<span class="comment">//'\\\\.\\'表示当前主机，若想连接到其他主机，可将 . 换成其他主机名</span></span><br><span class="line">	<span class="comment">//mailslot邮槽关键字</span></span><br><span class="line">	hMailslot = CreateMailslot(</span><br><span class="line">		<span class="string">L"\\\\.\\mailslot\\邮槽"</span>,</span><br><span class="line">		<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="comment">//建立死循环来等待其他进程将信息投递到邮槽</span></span><br><span class="line">	DWORD msgSize = <span class="number">0</span>;<span class="comment">//消息的字节数</span></span><br><span class="line">	DWORD nextMsgSize = <span class="number">0</span>;<span class="comment">//下一条消息的字节数</span></span><br><span class="line">	DWORD msgCount = <span class="number">0</span>;<span class="comment">//邮槽里共有几条消息</span></span><br><span class="line">	DWORD readTimeout = <span class="number">0</span>;<span class="comment">//读取消息的超时时间</span></span><br><span class="line">	BOOL ret = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">		<span class="comment">//等待邮槽信息</span></span><br><span class="line">		ret = GetMailslotInfo(hMailslot, &amp;msgSize, &amp;nextMsgSize,</span><br><span class="line">			&amp;msgCount, &amp;readTimeout);</span><br><span class="line">		<span class="keyword">if</span>(!ret)</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">if</span> (msgCount == <span class="number">0</span>) &#123;</span><br><span class="line">			Sleep(<span class="number">100</span>);</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//知道邮槽里的信息占多少个字节后，就可以申请堆空间来将邮槽内的信息读取出来</span></span><br><span class="line">		<span class="keyword">char</span>* pBuff = <span class="keyword">new</span> <span class="keyword">char</span>[nextMsgSize + <span class="number">1</span>];</span><br><span class="line">		<span class="built_in">memset</span>(pBuff, <span class="number">0</span>, nextMsgSize + <span class="number">1</span>);</span><br><span class="line">		ReadFile(hMailslot, pBuff, nextMsgSize, &amp;msgSize, <span class="number">0</span>);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"服务端 &gt; %s\n"</span>, pBuff);</span><br><span class="line">		<span class="keyword">delete</span>[] pBuff;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;   </span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 1. 打开一个邮槽对象</span></span><br><span class="line">    HANDLE hMailslot = INVALID_HANDLE_VALUE;</span><br><span class="line">    hMailslot =</span><br><span class="line">        CreateFile(<span class="string">L"\\\\.\\mailslot\\邮槽"</span>,</span><br><span class="line">                   GENERIC_WRITE,<span class="comment">/*以写的方式打开*/</span></span><br><span class="line">                   FILE_SHARE_WRITE,<span class="comment">/*共享写入的权限*/</span></span><br><span class="line">                   <span class="literal">NULL</span>,<span class="comment">/*安全描述符*/</span></span><br><span class="line">                   OPEN_EXISTING,<span class="comment">/*文件打开时必须存在*/</span></span><br><span class="line">                   FILE_ATTRIBUTE_NORMAL,<span class="comment">/*文件属性: 普通*/</span></span><br><span class="line">                   <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hMailslot == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"打开失败: %d\n"</span>, GetLastError());</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span> buff[<span class="number">100</span>];</span><br><span class="line">    DWORD dwWrite = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"请输入要发送的内容: "</span>);</span><br><span class="line">        scanf_s(<span class="string">"%s"</span>, buff, <span class="keyword">sizeof</span>(buff));</span><br><span class="line">        WriteFile(hMailslot, buff, <span class="built_in">strlen</span>(buff) + <span class="number">1</span>, &amp;dwWrite, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h1><ol>
+<li><p>若编写多线程程序，那么多个线程是并发执行，可以认为它们是在同时执行代码。但线程之间并非完全没有关系，很多时候会有以下两种关系：</p>
+<ol>
+<li>线程 A 的继续执行，要以线程 B 完成某一操作之后为前提，这种需求称为同步</li>
+<li>多个线程在争抢同一个资源，如全局变量，文件，数据结构，对象等，这种需求称为同步互斥</li>
+</ol>
+</li>
+<li><p>解决互斥问题</p>
+<ol>
+<li><p>原子操作：适合去解决共享资源是全局变量的互斥问题，作用就是对于一个变量的基本算术运算保证是原子性的</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>InterlockedIncrement</td>
+<td>自增</td>
+<td>InterlockedIncrement(&amp;g_count)</td>
+</tr>
+<tr>
+<td>InterlockedDecrement</td>
+<td>自减</td>
+<td>InterlockedDecrement(&amp;g_count);</td>
+</tr>
+<tr>
+<td>InterlockedExchangeAdd</td>
+<td>加法/减法</td>
+<td>InterlockedExchangeAdd(&amp;g_count, 256L);</td>
+</tr>
+<tr>
+<td>InterlockedExchange</td>
+<td>赋值</td>
+<td>InterlockedExchange(&amp;g_count, 256L);</td>
+</tr>
+</tbody></table>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> g_n = <span class="number">0</span>;</span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">ThreadPro1</span><span class="params">(LPVOID lparam)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++)</span><br><span class="line">		<span class="comment">//g_n++;</span></span><br><span class="line">		InterlockedIncrement(&amp;g_n);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">ThreadPro2</span><span class="params">(LPVOID lparam)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++)</span><br><span class="line">		<span class="comment">//g_n--;</span></span><br><span class="line">		InterlockedDecrement(&amp;g_n);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HANDLE hthread1, hthread2;</span><br><span class="line">	hthread1 = CreateThread(<span class="literal">NULL</span>, <span class="literal">NULL</span>, ThreadPro1, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">	hthread2 = CreateThread(<span class="literal">NULL</span>, <span class="literal">NULL</span>, ThreadPro2, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">	WaitForSingleObject(hthread1, <span class="number">-1</span>);</span><br><span class="line">	WaitForSingleObject(hthread2, <span class="number">-1</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, g_n);</span><br><span class="line">	getchar();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+</li>
+</ol>
+<ol start="2">
+<li><p>原子操作仅仅能解决某一个变量问题，只能使得一个整型数据做简单算数运算时是原子的，但大部分时候其实是希望保护一段代码，使得这一段代码是原子操作，而非是某一个变量的操作，使用临界区恰能解决这个问题</p>
+<p>被保护的代码（代码访问了共享资源）放置在</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>函數</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>InitializeCriticalSection</td>
+<td>初始化</td>
+</tr>
+<tr>
+<td>DeleteCriticalSection</td>
+<td>销毁</td>
+</tr>
+<tr>
+<td>EnterCriticalSection</td>
+<td>进入临界区</td>
+</tr>
+<tr>
+<td>LeaveCriticalSection</td>
+<td>离开临界区</td>
+</tr>
+</tbody></table>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="comment">//临界区</span></span><br><span class="line">CRITICAL_SECTION g_crit;</span><br><span class="line"><span class="keyword">long</span> g_n = <span class="number">0</span>;</span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">ThreadPro1</span><span class="params">(LPVOID lparam)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">		EnterCriticalSection(&amp;g_crit);</span><br><span class="line">		g_n++;</span><br><span class="line">		LeaveCriticalSection(&amp;g_crit);</span><br><span class="line">	&#125;		</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">ThreadPro2</span><span class="params">(LPVOID lparam)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">		EnterCriticalSection(&amp;g_crit);<span class="comment">//进入临界区</span></span><br><span class="line">		g_n--;</span><br><span class="line">		LeaveCriticalSection(&amp;g_crit);<span class="comment">//离开临界区</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//初始化临界区</span></span><br><span class="line">	InitializeCriticalSection(&amp;g_crit);</span><br><span class="line">	HANDLE hthread1, hthread2;</span><br><span class="line">	hthread1 = CreateThread(<span class="literal">NULL</span>, <span class="literal">NULL</span>, ThreadPro1, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">	hthread2 = CreateThread(<span class="literal">NULL</span>, <span class="literal">NULL</span>, ThreadPro2, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">	WaitForSingleObject(hthread1, <span class="number">-1</span>);</span><br><span class="line">	WaitForSingleObject(hthread2, <span class="number">-1</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, g_n);</span><br><span class="line">	DeleteCriticalSection(&amp;g_crit);<span class="comment">//销毁临界区</span></span><br><span class="line">	getchar();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="异步-IO"><a href="#异步-IO" class="headerlink" title="异步 IO"></a>异步 IO</h1><ol>
+<li><p>将同步 IO 模式改为异步 IO 的模式</p>
+<p>打开文件时加上重叠 IO 的标志：<code>FILE_FLAG_OVERLAPPED</code></p>
+<p>普通的文件读取:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//打开文件</span></span><br><span class="line">    HANDLE hFile = CreateFile(</span><br><span class="line">        <span class="string">L"异步IO.cpp"</span>,</span><br><span class="line">		GENERIC_READ,<span class="comment">//读写方式，只读</span></span><br><span class="line">		FILE_SHARE_READ,<span class="comment">//共享方式，共享读</span></span><br><span class="line">		<span class="literal">NULL</span>,<span class="comment">//安全描述符</span></span><br><span class="line">		OPEN_EXISTING,<span class="comment">//创建标志，存在时才打开</span></span><br><span class="line">        FILE_ATTRIBUTE_NORMAL,<span class="comment">//文件属性和标志，正常属性</span></span><br><span class="line">        <span class="literal">NULL</span></span><br><span class="line">    );</span><br><span class="line">    <span class="comment">//获取一个文件的大小</span></span><br><span class="line">    DWORD dwSize = GetFileSize(hFile, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">//读取文件</span></span><br><span class="line">    <span class="keyword">char</span> *p = <span class="keyword">new</span> <span class="keyword">char</span>[dwSize];</span><br><span class="line">	DWORD dwRealSize = <span class="number">0</span>;</span><br><span class="line">	ReadFile(hFile, p, dwSize, &amp;dwRealSize, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">//关闭句柄</span></span><br><span class="line">    CloseHandle(hFile);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>异步 IO 方式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打开文件</span></span><br><span class="line">HANDLE hFile = INVALID_HANDLE_VALUE;</span><br><span class="line">	hFile = CreateFile(</span><br><span class="line">		<span class="string">L"异步IO.cpp"</span>,</span><br><span class="line">		GENERIC_READ,<span class="comment">//读写方式，只读</span></span><br><span class="line">		FILE_SHARE_READ,<span class="comment">//共享方式，共享读</span></span><br><span class="line">		<span class="literal">NULL</span>,<span class="comment">//安全描述符</span></span><br><span class="line">		OPEN_EXISTING,<span class="comment">//创建标志，存在时才打开</span></span><br><span class="line">		<span class="comment">//文件属性和标志，正常属性|重叠IO标志</span></span><br><span class="line">		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,</span><br><span class="line">		<span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//获取一个文件的大小</span></span><br><span class="line">DWORD dwSize = GetFileSize(hFile, <span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//读取文件</span></span><br><span class="line"><span class="keyword">char</span> *p = <span class="keyword">new</span> <span class="keyword">char</span>[dwSize];</span><br><span class="line">DWORD dwRealSize = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//异步IO函数返回时IO没有结束，所以原来的一些参数无效，如读取或写入多少个字节，文件指针也没用，因为同一时刻可能会有多个IO在进行</span></span><br><span class="line">OVERLAPPED al = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">ReadFile(hFile, p, dwSize, <span class="literal">NULL</span>, &amp;al);<span class="comment">//调用ReadFile函数后，IO并未结束，还可以继续做其他事</span></span><br><span class="line"><span class="comment">//.......</span></span><br><span class="line">WaitForSingleObject(hFile, <span class="number">-1</span>);</span><br><span class="line"><span class="comment">//关闭句柄</span></span><br><span class="line">CloseHandle(hFile);</span><br></pre></td></tr></table></figure>
+
+<p>以重叠方式打开的句柄拥有以下特性：</p>
+<ol>
+<li><p>句柄变成了可等待的状态</p>
+<ul>
+<li>有信号：当有一个 IO 任务被完成，就变成有信号</li>
+<li>无信号：默认无信号</li>
+</ul>
+</li>
+<li><p>句柄不能使用文件读写位置</p>
+<ul>
+<li>不能使用 <code>SetFilePointer</code> 来设置文件的读写位置</li>
+<li>调用 <code>ReadFile</code> 或 <code>WriteFile</code> 时，也不会使用文件读写位置来定义读写的文件内容</li>
+<li>只能使用 <code>OVERLAPPED</code> 的结构体来指定文件的读写位置</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">OVERLAPPED</span> &#123;</span></span><br><span class="line">       ULONG_PTR Internal;<span class="comment">// [输出]保存IO任务的错误码</span></span><br><span class="line">       ULONG_PTR InternalHigh;<span class="comment">//[输出]保存IO任务的完成的字节数</span></span><br><span class="line">       <span class="keyword">union</span> &#123;</span><br><span class="line">           <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">               DWORD Offset;<span class="comment">//[输入]用于指定文件读写位置的低32位</span></span><br><span class="line">               DWORD OffsetHigh;<span class="comment">//[输入]用于指定文件读写位置的高32位</span></span><br><span class="line">           &#125; DUMMYSTRUCTNAME;</span><br><span class="line">           PVOID Pointer;</span><br><span class="line">       &#125; DUMMYUNIONNAME;</span><br><span class="line">       HANDLE  hEvent;<span class="comment">//[输入]用于提供任务完成通知事件对象</span></span><br><span class="line">   &#125; OVERLAPPED, *LPOVERLAPPED;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li>投递 IO 任务<ol>
+<li>通过 <code>ReadFile</code> 来投递一个读取的 IO 任务</li>
+<li>通过 <code>WriteFile</code> 来投递一个写入的 IO 任务</li>
+</ol>
+</li>
+</ol>
+<h2 id="获取-IO-完成通知"><a href="#获取-IO-完成通知" class="headerlink" title="获取 IO 完成通知"></a>获取 IO 完成通知</h2><ol>
+<li><p>根据文件句柄的信号来判断</p>
+<p>缺点：若一个文件同时存在多个 IO 任务，只要其中一个任务完成了，文件句柄就变成有信号状态，无法判断是哪个 IO 被完成了</p>
+</li>
+<li><p>使用事件对象信号状态来判断</p>
+<ol>
+<li>每个 IO 任务都有一个重叠 IO 结构体来配置信息</li>
+<li>每个 IO 任务都会配有一个事件对象，哪个事件对象被设置成有信号了，就说明哪个 IO 任务完成了</li>
+<li>要等待事件对象的信号时，需要创建线程等待</li>
+</ol>
+<p>缺点：若 IO 任务很多，就说明要等待的事件也很多，就需要创建大量线程等待，造成效率低下</p>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MyOverlapped</span> :</span> <span class="keyword">public</span> OVERLAPPED &#123;</span><br><span class="line">	MyOverlapped() &#123;</span><br><span class="line">		<span class="comment">//将OVERLAPPED部分填充为0</span></span><br><span class="line">		<span class="built_in">memset</span>(<span class="keyword">this</span>, <span class="number">0</span>, <span class="keyword">sizeof</span>(OVERLAPPED));</span><br><span class="line">		pBuff = <span class="literal">nullptr</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">char</span>* pBuff;</span><br><span class="line">	~MyOverlapped() &#123;</span><br><span class="line">		<span class="keyword">if</span> (pBuff)</span><br><span class="line">			<span class="keyword">delete</span> pBuff;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">ThreadProc</span><span class="params">(VOID* pArg)</span> </span>&#123;<span class="comment">//创建进程</span></span><br><span class="line">	MyOverlapped* pOv = (MyOverlapped*)pArg;</span><br><span class="line">	WaitForSingleObject(pOv-&gt;hEvent, <span class="number">-1</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"读取偏移：[%d]的IO任务完成，实际读取到的字节数：%d"</span></span><br><span class="line">		<span class="string">"读取到的内容是：%s"</span>,</span><br><span class="line">		pOv-&gt;Offset, pOv-&gt;InternalHigh, pOv-&gt;pBuff);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HANDLE hFile = INVALID_HANDLE_VALUE;</span><br><span class="line">	hFile = CreateFile(</span><br><span class="line">		<span class="string">L"p3.cpp"</span>,</span><br><span class="line">		GENERIC_READ,   <span class="comment">//读写方式，只读</span></span><br><span class="line">		FILE_SHARE_READ,<span class="comment">//共享方式，共享读</span></span><br><span class="line">		<span class="literal">NULL</span>,           <span class="comment">//安全描述符</span></span><br><span class="line">		OPEN_EXISTING,  <span class="comment">//创建标志，存在时才打开</span></span><br><span class="line">		<span class="comment">//文件属性和标志，正常属性|重叠IO标志</span></span><br><span class="line">		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,</span><br><span class="line">		<span class="literal">NULL</span>);</span><br><span class="line">	MyOverlapped* ov = <span class="keyword">new</span> MyOverlapped;</span><br><span class="line">	ov-&gt;Offset = <span class="number">0</span>;<span class="comment">//表示从第20个字节开始读</span></span><br><span class="line">	ov-&gt;pBuff = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">200</span>];<span class="comment">//缓冲区大小200字节</span></span><br><span class="line">	<span class="built_in">memset</span>(ov-&gt;pBuff, <span class="number">0</span>, <span class="number">200</span>);</span><br><span class="line">	DWORD read = <span class="number">0</span>;</span><br><span class="line">	ov-&gt;hEvent = CreateEvent(<span class="literal">NULL</span>,<span class="comment">//安全描述符</span></span><br><span class="line">		FALSE,<span class="comment">//是否需要手动重置信号</span></span><br><span class="line">		FALSE,<span class="comment">//初始是否有信号 </span></span><br><span class="line">		<span class="literal">NULL</span><span class="comment">//事件对象名(一般为了跨进程使用)</span></span><br><span class="line">	);</span><br><span class="line">	ReadFile(hFile, ov-&gt;pBuff, <span class="number">100</span>, &amp;read, ov);</span><br><span class="line"></span><br><span class="line">	MyOverlapped* ov2 = <span class="keyword">new</span> MyOverlapped;</span><br><span class="line">	ov2-&gt;Offset = <span class="number">100</span>;</span><br><span class="line">	ov2-&gt;hEvent = CreateEvent(<span class="literal">NULL</span>, FALSE, FALSE, <span class="literal">NULL</span>);</span><br><span class="line">	ov2-&gt;pBuff = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">200</span>];</span><br><span class="line">	ReadFile(hFile, ov2-&gt;pBuff, <span class="number">100</span>, &amp;read, ov2);</span><br><span class="line"></span><br><span class="line">	CreateThread(<span class="number">0</span>, <span class="number">0</span>, &amp;ThreadProc, ov, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	CreateThread(<span class="number">0</span>, <span class="number">0</span>, &amp;ThreadProc, ov2, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">		Sleep(<span class="number">100</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>使用扩展版的 API:</p>
+<ul>
+<li><code>ReadFileEX</code>，<code>WriteFileEx</code></li>
+<li>扩展版的函数能接收一个完成函数的<strong>回调函数</strong></li>
+<li>当 IO 任务被系统底层处理完毕后，这个回调函数就会被系统插入到线程的 APC 队列中</li>
+<li>当线程被挂起（睡眠）时，挂起前，根据可警醒状态是否为真，来决定调用 APC 队列中的函数</li>
+</ul>
+<p>缺点：若在程序中没调用 <code>Sleep</code> 或其他等待函数，或调用了但没设置可警醒状态，那么即使 IO 任务完成了，回调函数也不会被调用</p>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MyOverlapped</span> :</span> <span class="keyword">public</span> OVERLAPPED &#123;</span><br><span class="line">	MyOverlapped()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 将OVERLAPPED部分填充为0</span></span><br><span class="line">		<span class="built_in">memset</span>(<span class="keyword">this</span>, <span class="number">0</span>, <span class="keyword">sizeof</span>(OVERLAPPED));</span><br><span class="line">		pBuff = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">char</span> *pBuff;</span><br><span class="line">	~MyOverlapped() &#123;</span><br><span class="line">		<span class="keyword">if</span> (pBuff) &#123;</span><br><span class="line">			<span class="keyword">delete</span> pBuff;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">VOID WINAPI <span class="title">ioProc</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_    DWORD dwErrorCode,<span class="comment">/*错误码,*/</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_In_    DWORD dwNumberOfBytesTransfered,<span class="comment">/*实际完成的字节数*/</span></span></span></span><br><span class="line"><span class="function"><span class="params">	_Inout_ LPOVERLAPPED lpOverlapped<span class="comment">/*重叠结构体,传入到ReadFile那个*/</span></span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	MyOverlapped* pOv = (MyOverlapped*)lpOverlapped;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"读取偏移:[%d]的IO任务完成, 实际读取到的字节数:%d"</span></span><br><span class="line">		<span class="string">"读取到的内容是:%s"</span>,</span><br><span class="line">		pOv-&gt;Offset,</span><br><span class="line">		pOv-&gt;InternalHigh,</span><br><span class="line">		pOv-&gt;pBuff);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HANDLE hFile = INVALID_HANDLE_VALUE;</span><br><span class="line">	hFile = CreateFile(</span><br><span class="line">		<span class="string">L"p2.cpp"</span>,</span><br><span class="line">		GENERIC_READ,<span class="comment">/*读写方式:只读*/</span></span><br><span class="line">		FILE_SHARE_READ,<span class="comment">/*共享方式: 共享读*/</span></span><br><span class="line">		<span class="literal">NULL</span>,<span class="comment">/*安全描述符*/</span></span><br><span class="line">		OPEN_EXISTING,<span class="comment">/*创建标志:存在时才打开*/</span></span><br><span class="line">		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,<span class="comment">/*文件属性和标志:正常属性|重叠IO标志 */</span></span><br><span class="line">		<span class="literal">NULL</span>);</span><br><span class="line">	MyOverlapped* ov = <span class="keyword">new</span> MyOverlapped;</span><br><span class="line">	ov-&gt;Offset = <span class="number">0</span>;</span><br><span class="line">	ov-&gt;pBuff = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">100</span>];</span><br><span class="line">	<span class="built_in">memset</span>(ov-&gt;pBuff, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">	ov-&gt;hEvent = <span class="literal">NULL</span>;</span><br><span class="line">	ReadFileEx(hFile, ov-&gt;pBuff, <span class="number">50</span>, ov, ioProc);</span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		SleepEx(<span class="number">30</span>, TRUE);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>通过完成端口来等待 IO 任务<ul>
+<li>创建异步 IO 方式的文件对象  </li>
+<li>创建一个完成端口对象</li>
+<li>将完成端口和文件对象进行绑定</li>
+<li>创建指定个数线程，在线程监视完成端口和完成列表的状态，通过 API <code>GetQueuedCompletionStatus</code> 来获取完成列表的状态</li>
+<li>发起异步 IO 任务</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MyOverlapped</span> :</span> <span class="keyword">public</span> OVERLAPPED &#123;</span><br><span class="line">	MyOverlapped()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 将OVERLAPPED部分填充为0</span></span><br><span class="line">		<span class="built_in">memset</span>(<span class="keyword">this</span>, <span class="number">0</span>, <span class="keyword">sizeof</span>(OVERLAPPED));</span><br><span class="line">		pBuff = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">char</span> *pBuff;</span><br><span class="line">	~MyOverlapped() &#123;</span><br><span class="line">		<span class="keyword">if</span> (pBuff) &#123;</span><br><span class="line">			<span class="keyword">delete</span> pBuff;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">threadProc</span><span class="params">(LPVOID pArg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HANDLE hIoComp = (HANDLE)pArg;</span><br><span class="line">	DWORD dwBytes = <span class="number">0</span>;</span><br><span class="line">	ULONG_PTR completionKey = <span class="number">0</span>;</span><br><span class="line">	MyOverlapped* pOv = <span class="literal">NULL</span>;</span><br><span class="line">	BOOL ret = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		ret = GetQueuedCompletionStatus(</span><br><span class="line">			hIoComp,</span><br><span class="line">			&amp;dwBytes,<span class="comment">/*实际完成的字节数*/</span></span><br><span class="line">			&amp;completionKey,<span class="comment">/*和文件设备关联在一起的完成键*/</span></span><br><span class="line">			(OVERLAPPED**)&amp;pOv,<span class="comment">/*通过ReadFile投递IO任务时传递重叠结构*/</span></span><br><span class="line">			<span class="number">-1</span><span class="comment">/*超时时间*/</span>);</span><br><span class="line">		<span class="keyword">if</span> (ret == FALSE) &#123;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"读取偏移:[%d]的IO任务完成, 实际读取到的字节数:%d"</span></span><br><span class="line">			<span class="string">"读取到的内容是:%s"</span>,</span><br><span class="line">			pOv-&gt;Offset,</span><br><span class="line">			pOv-&gt;InternalHigh,</span><br><span class="line">			pOv-&gt;pBuff);</span><br><span class="line">		<span class="keyword">delete</span> pOv;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 1. 创建异步IO方式的文件对象</span></span><br><span class="line">	HANDLE hFile = INVALID_HANDLE_VALUE;</span><br><span class="line">	hFile = CreateFile(</span><br><span class="line">		<span class="string">L"p2.cpp"</span>,</span><br><span class="line">		GENERIC_READ,<span class="comment">/*读写方式:只读*/</span></span><br><span class="line">		FILE_SHARE_READ,<span class="comment">/*共享方式: 共享读*/</span></span><br><span class="line">		<span class="literal">NULL</span>,<span class="comment">/*安全描述符*/</span></span><br><span class="line">		OPEN_EXISTING,<span class="comment">/*创建标志:存在时才打开*/</span></span><br><span class="line">		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,<span class="comment">/*文件属性和标志:正常属性|重叠IO标志 */</span></span><br><span class="line">		<span class="literal">NULL</span>);</span><br><span class="line">	<span class="comment">// 2. 创建一个完成端口对象</span></span><br><span class="line">	SYSTEM_INFO si = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	GetSystemInfo(&amp;si);</span><br><span class="line">	HANDLE hIoComp = CreateIoCompletionPort(</span><br><span class="line">		INVALID_HANDLE_VALUE,</span><br><span class="line">		<span class="literal">NULL</span>,</span><br><span class="line">		<span class="literal">NULL</span>,</span><br><span class="line">		si.dwNumberOfProcessors<span class="comment">/*处理器个数*/</span>);</span><br><span class="line">	<span class="comment">// 3. 将完成端口和文件对象进行绑定</span></span><br><span class="line">	CreateIoCompletionPort(</span><br><span class="line">		hFile,<span class="comment">/*要和完成端口进行绑定的文件句柄*/</span></span><br><span class="line">		hIoComp,<span class="comment">/*绑定到哪个完成端口上*/</span></span><br><span class="line">		<span class="number">0</span>,<span class="comment">/*完成键, 和文件句柄关联的值*/</span></span><br><span class="line">		<span class="number">0</span>);</span><br><span class="line">	<span class="comment">// 4. 创建指定个数线程, 在线程监视完成端口 完成列表的状态</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; si.dwNumberOfProcessors; ++i) &#123;</span><br><span class="line">		CreateThread(<span class="number">0</span>, <span class="number">0</span>, &amp;threadProc, hIoComp, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	DWORD read = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">// 5. 发起异步IO任务.</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; ++i) &#123;</span><br><span class="line">		MyOverlapped* pOv = <span class="keyword">new</span> MyOverlapped;</span><br><span class="line">		pOv-&gt;pBuff = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">50</span>];</span><br><span class="line">		<span class="built_in">memset</span>(pOv-&gt;pBuff, <span class="number">0</span>, <span class="number">50</span>);</span><br><span class="line">		pOv-&gt;Offset = i * <span class="number">40</span>;</span><br><span class="line">		ReadFile(hFile, pOv-&gt;pBuff, <span class="number">40</span>, &amp;read, pOv);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		Sleep(<span class="number">1000</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="事件对象"><a href="#事件对象" class="headerlink" title="事件对象"></a>事件对象</h1><ol>
+<li><p>内核对象</p>
+</li>
+<li><p>通过 <code>CreateEvent</code> 来创建</p>
+<ol>
+<li>可配置手动使用或自动使用</li>
+<li>可配置初始化是否有信号</li>
+<li>通过 <code>SetEvent</code> 将事件设置为有信号</li>
+<li>通过 <code>ResetEvent</code> 重置事件对象的信号（设置为无信号）</li>
+</ol>
+</li>
+<li><p>通过 <code>WaitForSingleObject</code> 来等待信号</p>
+<p><code>WaitForSingleObject</code> 还会进一步修改等待事件对象的信号，从无信号开始阻塞等待，直到事件对象有信号后就从阻塞状态返回，返回前会顺手将事件对象设置为无信号</p>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/11/05/2019-11-5-汇编语言/">汇编语言</a>
+            
+            
+            <a class="next" rel="next" href="/2019/10/25/2019-10-25-MFC控件/">MFC控件</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
