@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>PE文件结构 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">PE文件结构</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 11, 2019&nbsp;&nbsp;14:40:14</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="PE文件"><a href="#PE文件" class="headerlink" title="PE文件"></a>PE文件</h1><ol>
+<li><p>文件是存储数据的实体，不同的文件是给不同的软件去使用，不同的文件主要是格式不同</p>
+<p>格式就是数组的排列组织方式，软件读取文件按照固定形式去解析文件</p>
+</li>
+<li><p>PE文件：<code>Portable Executable</code>，可执行文件 </p>
+<p>供 Windows 系统解析，解析完后就能创建出进程去运行</p>
+</li>
+<li><p>学习PE文件就是学习一堆结构体</p>
+</li>
+<li><p>FOA (Offset)：文件偏移，某个数据距离文件开头的偏移</p>
+<p>VA：虚拟地址，程序运行时是将PE文件加载到进程的内存空间中，这块内存空间称之为虚拟内存空间，32位虚拟内存空间以字节为单位，每个字节都有一个编号，从 0x00000000 到 0xFFFFFFFF </p>
+<p>RVA：相对虚拟地址，PE文件不会占满整个虚拟内存空间，而是会占用一部分，那么就会有一个起始位置，这个起始位置也称为加载基址，PE文件中的数据相对于加载基址的偏移就是相对虚拟基址</p>
+<p>EXE默认加载基址是 0x400000， DLL文件默认基址是 0x10000000，需注意基址不是程序的入口点</p>
+<p><strong>虚拟地址（VA） = 基地址 + 相对虚拟地址（RVA）</strong></p>
+<p><strong>FOA - 该区段在文件中的起始地址 = RVA - 该区段在内存中的起始地址</strong></p>
+<p><strong>系统加载PE文件，是将PE文件原封不动地复制到内存中，那么某一个数据的FOA和RVA就是相等的</strong></p>
+</li>
+</ol>
+<h2 id="DOS头"><a href="#DOS头" class="headerlink" title="DOS头"></a>DOS头</h2><ol>
+<li><p>Windows 系统中的可执行文件在设计时考虑到兼容性问题，在正常的可执行文件开始部分嵌入一个DOS可执行文件，作用就是在MS-DOS系统下能够输出一行“这个程序不是运行在此系统下的”</p>
+<p>只有2个字段是有用的：</p>
+<ul>
+<li>第一个 <code>e_magic</code>：永远是 0x5A4D</li>
+<li>最后一个 <code>e_ifanew</code>：真正可执行文件的起始位置</li>
+</ul>
+</li>
+</ol>
+<h2 id="NT头"><a href="#NT头" class="headerlink" title="NT头"></a>NT头</h2><ol>
+<li><p><code>DWORD Signature</code>：永远是 0x00004550</p>
+</li>
+<li><p><code>IMAGE_FILE_HEADER</code>：文件头</p>
+<ul>
+<li><code>NumberOfSection</code>：区段数量</li>
+<li><code>SizeOfOptionalHeader</code>：扩展头大小，因扩展头中数据目录表的个数是不确定的，故需要一个大小</li>
+</ul>
+</li>
+<li><p><code>IMAGE_OPTIONAL_HEADER</code>：扩展头</p>
+<ul>
+<li><p><code>ImageBase</code>：程序默认的加载基址</p>
+</li>
+<li><p><code>AddressOfEntryPoint</code>：程序入口点（EP）</p>
+</li>
+<li><p><code>SectionAlignment</code>：内存对齐，0x1000（1页内存4KB）</p>
+</li>
+<li><p><code>FileAlignment</code>：文件对齐，0x200</p>
+</li>
+<li><p><code>SizeOfImage</code>：映像大小，即PE文件被加载到内存占用的空间大小</p>
+</li>
+<li><p><code>SizeOfHeader</code>：头部大小，<code>DOS头 + NT头 + 区块表大小</code></p>
+</li>
+<li><p><code>DllCharacteristics</code>：PE的一组属性</p>
+</li>
+<li><p><code>DataDirectory</code>：数据目录表，描述了PE文件中16个或更多非常重要的数据块的大小和位置</p>
+<p>导入表、导出表、重定位表、资源表、TLS表、……</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="区段表"><a href="#区段表" class="headerlink" title="区段表"></a>区段表</h2><p>结构体数组，数组的元素个数由头文件中的 <code>NumberOfSection</code> 决定，区段表的一个元素描述的就是一个区段的信息</p>
+<ol>
+<li><code>Name</code>：区段名</li>
+<li><code>PointerToRawData</code>：在文件中的位置</li>
+<li><code>SizeOfRawData</code>：在文件中的大小</li>
+<li><code>VirtualAddress</code>：在内存中的位置</li>
+<li><code>VirtualSize</code>：在内存中的大小</li>
+<li><code>Characteristics</code>：区段的属性：可读、可写、可执行</li>
+</ol>
+<h2 id="导出表"><a href="#导出表" class="headerlink" title="导出表"></a>导出表</h2><ol>
+<li><p>一个程序的运行实际由多个部分组成，通常有一个 exe 和多个 dll，dll 会提供函数、变量给其他模块使用，但并非所有 dll 中的函数都能提供给其他模块使用，只有在编写 dll 时，函数、变量被导出了才能提供给其他模块使用，导出表就是专门用来记录本文件导出信息的一个数据结构</p>
+</li>
+<li><p>导出函数地址表的 RVA：<code>AddressOfFunctions</code></p>
+<p>导出函数名称表的 RVA：<code>AddressNames</code></p>
+<p>导出函数序号表的 RVA：<code>AddressNameOrdinals</code></p>
+<p>名称表元素个数和序号表元素个数是相同的</p>
+<p>地址表中元素可能会比序号表和名称表元素个数要多</p>
+<p>Windows 的 PE 文件支持2种导出方式：无论何种导出方式，都有函数地址</p>
+<ol>
+<li>名称导出：函数既有名称又有序号</li>
+<li>序号导出：函数只有序号，没有名称</li>
+</ol>
+<p>地址表中多出来的就是没有名称的函数或无效函数</p>
+</li>
+<li><p>通过导出表能够获得一个模块任何导出函数的地址，相当于自己能够实现 <code>GetProcAddress</code></p>
+<ul>
+<li>若导入地址表被破坏了，可以修复导入地址表</li>
+<li>可以检测 IAT-Hook，主要思路就是获取 IAT 位置原始的函数地址</li>
+<li>适用于不方便使用 <code>GetProcAddress</code> 而需要通过函数名或序号获取函数地址的情况</li>
+</ul>
+</li>
+</ol>
+<h2 id="导入表"><a href="#导入表" class="headerlink" title="导入表"></a>导入表</h2><ol>
+<li><p>该模块使用了其他哪些模块提供的哪些函数，需要记录这些信息，记录的信息就在导入表中</p>
+<p>重要字段：</p>
+<ol>
+<li><code>OriginalFirstThunk</code>（INT）：导入名称表的 RVA</li>
+<li><code>FirstThunk</code>（IAT）：导入地址表的 RVA</li>
+<li><code>Name</code>：导入的 dll 名称的 RVA</li>
+</ol>
+<p>INT 和 IAT 在还是文件的时候（即还未运行），里面存储的内容是一样的，因为在程序未运行时，无法得知此模块会加载到什么位置，也就无法得知函数的地址是多少，程序运行后，系统会将 IAT 填充上函数的地址，所有调用其他模块函数的代码全都是 <code>call ds:[IAT地址]</code></p>
+</li>
+<li><p>通过数据目录表的第1项，得到 RVA，就能找到 <code>IMAGE_IMPORT_DESCRIPTOR</code> 结构体的数组，数组以全0元素结尾</p>
+</li>
+<li><p>知道导入表能够知道模块之间是如何进行配合的</p>
+<ul>
+<li>可以做 IAT-Hook，替换 IAT 表中的内容，就可以 Hook</li>
+<li>知道一个 exe 用到了哪些模块的哪些函数，可以根据函数名猜测功能，利于分析程序</li>
+</ul>
+</li>
+</ol>
+<h2 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;delayimp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib, <span class="meta-string">"Delayimp.lib"</span>)</span></span><br><span class="line"><span class="comment">//设置“链接器”-&gt;“输入”-&gt;“延迟加载的DLL”选项中的值</span></span><br><span class="line"><span class="comment">//为我们需要延迟加载的DLL名称（大小写必须完全一致）</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	MessageBox(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>延迟加载前</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191112212232982.png" alt="image-20191112212232982"></p>
+<p>延迟加载</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191112212321148.png" alt="image-20191112212321148"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191112212424734.png" alt="image-20191112212424734"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/11/15/2019-11-15-内存管理/">内存管理</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/05/2019-11-5-汇编语言/">汇编语言</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
