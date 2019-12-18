@@ -284,7 +284,7 @@
 <li><p>使用场合</p>
 <ul>
 <li><p>传参</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>&amp; a, <span class="keyword">int</span>&amp; b)</span></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> t = a;</span><br><span class="line">  a = b;</span><br><span class="line">     b = t;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> n1 = <span class="number">10</span>, n2 = <span class="number">20</span>;</span><br><span class="line">     swap(n1, n2);<span class="comment">//执行后，n1 = 20，n2 = 10</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>&amp; a, <span class="keyword">int</span>&amp; b)</span></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> t = a;</span><br><span class="line">  	a = b;</span><br><span class="line">     b = t;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> n1 = <span class="number">10</span>, n2 = <span class="number">20</span>;</span><br><span class="line">     swap(n1, n2);<span class="comment">//执行后，n1 = 20，n2 = 10</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -417,7 +417,7 @@
 </li>
 <li><p>转换构造：指的是那些只有一个形参，且参数类型是非本类类型的构造函数们，一般能够显式调用（例如 <code>MyClass obj(5)</code>），也能隐式调用： <code>fun(5)</code></p>
 </li>
-<li><p>拷贝构造：指的是只有一个形参，且参数类型是本类类型的引用，一般是在定义一个对象时，将另一个对象作为初始值时，就会自动调用这个版本的构造函数，一般编译器会默认提供一个拷贝构造，默认提供的拷贝构造会将对象的内存空间进行拷贝</p>
+<li><p>拷贝构造：指的是只有一个形参，且参数类型是本类类型的引用，一般是在定义一个对象时，将另一个对象作为初始值，就会自动调用这个版本的构造函数，一般编译器会默认提供一个拷贝构造，默认提供的拷贝构造会将对象的内存空间进行拷贝</p>
 <p>类中包含有指针成员的时候，一般就需要自己编写拷贝构造，实现对指针指向的内存进行拷贝的功能，而默认拷贝构造是不会去拷贝指针指向的内容(深拷贝和浅拷贝的区别)</p>
 </li>
 <li><p>带参构造：含有两个以上的形参的构造函数统称带参构造</p>
@@ -513,7 +513,7 @@
 </ul>
 <p>静态成员变量是类内定义的，但本质上属于全局变量，作用域是类域</p>
 <ul>
-<li><p>静态成员变量的<strong>生存周期</strong>和全局变量相同，从程序运行到程序结束（类内成员变量的生存周期是和对象一起，随对象的构造而拥有内存，随对象的析构而失去内存，对象又分为局部对象，全局对象，堆空间对象），因此静态成员变量不属于对象的一部分（即对象的内存中不包含静态成员变量）</p>
+<li><p>静态成员变量的<strong>生存周期</strong>和全局变量相同，从程序运行到程序结束（类内成员变量的生存周期是和对象一起，随对象的构造而拥有内存，随对象的析构而失去内存，对象又分为局部对象，全局对象，堆空间对象），因此<strong>静态成员变量不属于对象的一部分</strong>（即对象的内存中不包含静态成员变量）</p>
 </li>
 <li><p>静态成员变量的<strong>作用域</strong>属于类域，当需要在类外使用静态成员变量时，可通过两种方法来访问：</p>
 <ol>

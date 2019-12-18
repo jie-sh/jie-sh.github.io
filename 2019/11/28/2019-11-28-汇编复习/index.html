@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>汇编复习 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">汇编复习</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 28, 2019&nbsp;&nbsp;16:53:27</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>寄存器<br>    8个8位通用寄存器<br>    8个16位通用寄存器<br>    8个32位通用寄存器<br>标志寄存器<br>    控制标志<br>    状态标志<br>        OF CF ZF SF  PF AF<br>        OF 规律：<br>            正数+正数==负数 OF = 1<br>            负数+负数==正数 OF = 1<br>            正数+负数       OF = 0<br>        OF 置位方法<br>            如果最高有效位产生了进位或借位<br>            CF = 1<br>            次高位向最高有效位有进位<br>            TMP = 1<br>            OF = CF ^ TMP</p>
+<p>分段机制<br>    物理地址= 段地址<em>0x10+段内偏移<br>段寄存器<br>    ES、CS、SS、DS、FS、GS<br>MOV指令<br>    规则：<br>    DEST: R\m\Sreg<br>    Src:  R\Imm\m\Sreg<br>    这两个操作数不能同时为内存<br>OD快捷键<br>    单步步入<br>    单步步过<br>    运行<br>    跳转到指定位置 Ctrl+G<br>    汇编窗口中使用空格 修改汇编指令<br>    注释 ;分号<br>数据传送指令(不影响EFLAGS)<br>    堆栈操作: PUSH POP PUSHAD POPAD<br>    数据扩展指令:     MOVSX(符号位扩展)<br>                    MOVZX(零扩展)<br>    取址指令：LEA  r=后边表达式的结果<br>        LEA EAX,DWORD PTR DS:[0x12345678] EAX = 0x12345678<br>        MOV EAX,DWORD PTR DS:[0x12345678] EAX = [0x12345678] 地址里的内容<br>    交换指令：XCHG<br>        XCHG EAX,EAX = NOP<br>二进制算术运算<br>    加 ADD<br>    减 SUB<br>    自增 INC ;不影响CF<br>    自减 DEC ;不影响CF<br>    乘 IMUL（重点）MUL<br>        IMUL 一个操作数 AX=SRC</em>AL/DX:AX=SRC<em>AX/EDX:EAX=SRC</em>EAX<br>             两个操作数 DEST=DEST<em>SRC<br>             三个操作数 DEST = SRC1(r/m)</em>SRC2(imm)<br>    除 IDIV        DIV<br>二进制逻辑位移<br>    逻辑左移 SHL CF &lt;- MSB MLB &lt;- 0<br>    逻辑右移 SHR<br>二进制逻辑位操作<br>    按位与 AND CF/OF=0 其它根据结果设置<br>    按位或 OR  CF/OF=0 其它根据结果设置<br>    按位异或 XOR CF/OF=0 其它根据结果设置<br>    按位取反 NOT 不影响EFLAGS<br>流程控制指令 CMP + Jcc<br>    分支<br>        if-else if-else<br>        JGE/JAE 是不比较ZF的<br>        switch-case<br>    循环<br>        for（3）<br>        while（2）<br>        do-while（1）<br>    函数<br>        指令 PUSH POP CALL RET<br>            PUSH: SUB ESP,4; MOV [ESP],XXX<br>            POP (EAX): MOV EAX,[ESP];ADD ESP,4;<br>            CALL:    PUSH nextEIP;JMP DEST<br>            RET:    pop eip;jmp eip<br>            RET (8)imm:    pop eip;jmp eip;esp+=8<br>        堆栈图<br>            EBP-4    LOCAL<br>            EBP     上一层栈的EBP<br>            EBP+4    返回地址<br>            EBP+8    第一个参数<br>            EBP+C    第二个参数<br>        开辟栈帧指令<br>            PUSH EBP;<br>            MOV EBP,ESP;<br>            SUB ESP,XXX;<br>                相当于 ENTER XXX,0<br>            MOV ESP,EBP;<br>            POP EBP<br>                相当于 LEAVE<br>串操作指令<br>    memset<br>        STOS： 用AL/AX/EAX填充ES:[EDI]CL/CX/ECX次<br>        REP STOS<br>    memecpy<br>        MOVS:  DS:[ESI]-&gt;ES:[EDI] CL/CX/ECX次 ESI+1/2/4/8 EDI+1/2/4/8<br>        REP MOVS(B/W/D/Q)<br>    strlen<br>        SCAS:    AL/AX/EAX/ - es:[edi]<br>        REPNE SCAS:    找一个指定的数字<br>        repe scas<br>    strcmp<br>        CMPS:    DS:[ESI]-ES:[EDI]<br>        REPNE cmps<br>        repe cmps<br>堆栈平衡</p>
+<p>函数调用约定<br>    __cdecl    外平栈（调用者平衡），从右向左，PUSH 入栈<br>    __stdcall 内平栈（被调用者平衡），从右向左，PUSH 入栈<br>    __fastcall 内平栈，前两个参数ECX,EDX传参，其余，从右向左，PUSH 入栈<br>    __thiscall 不能直接显示调用，this指针使用ECX，其余，从右向左，PUSH 入栈 内平栈（被调用者平衡），从右向左，PUSH</p>
+<p>常见指令编码：<br>    E8 CALL<br>    E9 JMP<br>    40<del>4F INC r DEC r<br>    50</del>5F PUSH r POP r<br>    70<del>7f + Ib系列 jcc short JMP<br>    0f80</del>0f8f Id 系列  JCC near jmp<br>前缀<br>    F0 LOCK<br>    F2 REPNE<br>    F3 REP<br>    26 ES<br>    2e CS<br>    36 SS<br>    3e DS<br>    64 FS<br>    65 GS<br>    66 修改操作数大小<br>    67 切换寻址模式内存地址大小<br>内联汇编<br>    __asm{}<br>插入字节码<br>    __emit(0xE9);插入一个JMP指令<br>裸函数<br>    __declspec(naked)</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/02/2019-12-02-Python基础/"></a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/20/2019-11-20-网络编程基础/">网络编程基础</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>数据库 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">数据库</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 6, 2019&nbsp;&nbsp;13:34:18</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="数据库基础知识"><a href="#数据库基础知识" class="headerlink" title="数据库基础知识"></a>数据库基础知识</h1><h2 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h2><ol>
+<li><p>层次模型</p>
+</li>
+<li><p>网状模型</p>
+</li>
+<li><p>关系模型：用二维表格结构表达实体类型及实体间联系的数据模型</p>
+</li>
+<li><p>对象模型</p>
+</li>
+</ol>
+<h1 id="数据库的基本操作"><a href="#数据库的基本操作" class="headerlink" title="数据库的基本操作"></a>数据库的基本操作</h1><h2 id="创建查看删除数据库"><a href="#创建查看删除数据库" class="headerlink" title="创建查看删除数据库"></a>创建查看删除数据库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-- 当指定名称的数据库不存在时创建它，并设置编码和排序规则</span><br><span class="line">CREATE DATABASE IF NOT EXISTS db_name CHARACTER SET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line">-- 显示当前的所有数据库</span><br><span class="line">SHOW DATABASES;</span><br><span class="line"></span><br><span class="line">-- 显示数据库的创建语句，可以用于查看默认编码方式</span><br><span class="line">SHOW CREATE DATABASE db_name;</span><br><span class="line"></span><br><span class="line">-- 修改数据库的默认编码方式</span><br><span class="line">ALTER DATABASE db_name CHARACTER SET GBK; </span><br><span class="line"></span><br><span class="line">-- 如果数据库存在，则删除它</span><br><span class="line">DROP DATABASE IF EXISTS db_name;</span><br><span class="line"></span><br><span class="line">-- 使用某一个数据库</span><br><span class="line">USE db_name;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>整数类型：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>字节</th>
+<th>最小值（有/无符号）</th>
+<th>最大值（有/无符号）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TINYINT</td>
+<td>1</td>
+<td>-128/0</td>
+<td>127/255</td>
+</tr>
+<tr>
+<td>SMALLINT</td>
+<td>2</td>
+<td>-32768/0</td>
+<td>32767/65535</td>
+</tr>
+<tr>
+<td>MEDIUMINT</td>
+<td>3</td>
+<td>-8388608/0</td>
+<td>8388607/16777215</td>
+</tr>
+<tr>
+<td>INT/INTEGE</td>
+<td>4</td>
+<td>-2147483648/0</td>
+<td>2147483647/4294967295</td>
+</tr>
+<tr>
+<td>BIGINT</td>
+<td>8</td>
+<td>-9223372036854775808/0</td>
+<td>9223372036854775807/17446744073709551615</td>
+</tr>
+</tbody></table>
+<p>小数类型：M 表示总位数，D 表示小数位数</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>字节</th>
+<th>最小值（理论）</th>
+<th>最大值（理论）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FLOAT</td>
+<td>4</td>
+<td>-3.402823466E+38</td>
+<td>3.402823466E+38</td>
+</tr>
+<tr>
+<td>DOUBLE</td>
+<td>8</td>
+<td>-1.7976931348623157E+308</td>
+<td>1.7976931348623157E+308</td>
+</tr>
+<tr>
+<td>DECIMAL [(M [, D])]</td>
+<td>变长</td>
+<td>默认是 (10, 2)    M 最大是65，D, 最大是30</td>
+<td>(+65 个 9)</td>
+</tr>
+</tbody></table>
+<p>字符串与二进制类型：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>最大长度</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>255</td>
+<td>Char(M), M: 字符数</td>
+</tr>
+<tr>
+<td>varchar</td>
+<td>65535</td>
+<td>编码不同，字符数不同：GBK &lt;= 32767，UTF8 &lt;= 21845</td>
+</tr>
+<tr>
+<td>tinyText, text, mediumText, longtext</td>
+<td>2^8+1, 2^16+2, 2^24+3, 2^32+4</td>
+<td>定义时，通常不用指定长度，自己算</td>
+</tr>
+<tr>
+<td>enum</td>
+<td>enum(‘shanghai’, ‘beijing’, ‘hangzhou’)</td>
+<td>内部存储是整数类型表示，字段值只能是某一枚举选项</td>
+</tr>
+<tr>
+<td>Set</td>
+<td>1, 2, 3, 4, 8</td>
+<td></td>
+</tr>
+<tr>
+<td>Binary, varbinary, blob</td>
+<td>Binary(5), varbinary(varchar), blob(text) 作类比</td>
+<td>二进制数据（字节而非字符）</td>
+</tr>
+</tbody></table>
+<h2 id="创建数据表"><a href="#创建数据表" class="headerlink" title="创建数据表"></a>创建数据表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-- 创建一张表，设置其中的字段信息(列名\类型)</span><br><span class="line">CREATE TABLE my_table(</span><br><span class="line">	m_id INT,</span><br><span class="line">	m_name VARCHAR(32),</span><br><span class="line">	m_sex enum(&apos;男&apos;, &apos;女&apos;, &apos;保密&apos;),</span><br><span class="line">	m_class VARCHAR(32),</span><br><span class="line">	m_start_date DATETIME</span><br><span class="line">)CHARACTER SET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line">-- 显示指定表的字段信息</span><br><span class="line">DESC my_table;</span><br><span class="line"></span><br><span class="line">-- 查看数据库的所有的表</span><br><span class="line">SHOW TABLES;</span><br><span class="line"></span><br><span class="line">-- 查看创建表的时候实际使用的语句</span><br><span class="line">SHOW CREATE TABLE my_table;</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改数据表"><a href="#修改数据表" class="headerlink" title="修改数据表"></a>修改数据表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#修改表名</span><br><span class="line">RENAME TABLE my_able TO tab;</span><br><span class="line"></span><br><span class="line">-- 在指定表的每一个位置添加一个字段 [FIRST \ AFTER column]</span><br><span class="line">ALTER TABLE my_table ADD test2 INT AFTER m_name;</span><br><span class="line">ALTER TABLE my_table ADD t INT FIRST;</span><br><span class="line"></span><br><span class="line">-- 使用 MODIFY 修改指定表中某一列的类型</span><br><span class="line">ALTER TABLE my_table MODIFY t DOUBLE;</span><br><span class="line">DESC my_table;</span><br><span class="line">-- 使用 CHANGE 修改指定表中某一列的类型和列名</span><br><span class="line">ALTER TABLE my_table CHANGE t test1 INT;</span><br><span class="line">DESC my_table;</span><br><span class="line"></span><br><span class="line">-- 删除表中的指定字段</span><br><span class="line">ALTER TABLE my_table DROP test1;</span><br><span class="line"></span><br><span class="line">-- 删除表</span><br><span class="line">DROP TABLE tab;</span><br><span class="line">SHOW TABLES;</span><br></pre></td></tr></table></figure>
+
+<h1 id="数据的基本操作"><a href="#数据的基本操作" class="headerlink" title="数据的基本操作"></a>数据的基本操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">-- 为指定表的指定字段添加一条记录，非空字段必须添加</span><br><span class="line">INSERT INTO my_table VALUE(1, &apos;xiaoming&apos;, &apos;男&apos;, &apos;36&apos;, now());</span><br><span class="line"></span><br><span class="line">-- 给指定表的所有字段添加多行内容</span><br><span class="line">INSERT INTO my_table</span><br><span class="line">VALUES</span><br><span class="line">	( 1, &apos;xiaoming&apos;, &apos;男&apos;, &apos;36&apos;, &quot;2018-1-1 09:41:02&quot; ),</span><br><span class="line">	( 2, &apos;xiaohong&apos;, &apos;女&apos;, &apos;33&apos;, &quot;2018-9-1 09:41:02&quot; ),</span><br><span class="line">	( 3, &apos;xiaotian&apos;, &apos;男&apos;, &apos;36&apos;, &quot;2017-10-1 09:41:02&quot; ),</span><br><span class="line">	( 4, &apos;xiaoyi&apos;, &apos;男&apos;, &apos;35&apos;, &quot;2018-11-11 09:41:02&quot; ),</span><br><span class="line">	( 5, &apos;xiaolan&apos;, &apos;女&apos;, &apos;35&apos;, &quot;2018-5-4 09:41:02&quot; ),</span><br><span class="line">	( 6, &apos;xiaojin&apos;, &apos;女&apos;, &apos;34&apos;, &quot;2017-3-1 09:41:02&quot; );</span><br><span class="line"></span><br><span class="line">-- 设置所有的性别为女</span><br><span class="line">UPDATE my_tab SET m_sex = &quot;女&quot;;</span><br><span class="line"></span><br><span class="line">-- 带条件地设置某些用户的性别为男</span><br><span class="line">UPDATE my_tab SET m_sex = &quot;男&quot; WHERE m_class = &apos;36&apos;;</span><br><span class="line"></span><br><span class="line">-- 将所有35班的用户性别设为“男”，姓名设为“xxx”</span><br><span class="line">UPDATE my_tab SET m_sex = &quot;男&quot;, m_name = &apos;xxx&apos; WHERE m_class = &apos;35&apos;;</span><br><span class="line"></span><br><span class="line">-- 删除姓名为&quot;xiaohong&quot;的字段</span><br><span class="line">DELETE FROM my_tab WHERE m_name = &quot;xiaohong&quot;;</span><br><span class="line"></span><br><span class="line">-- 删除所有信息</span><br><span class="line">DELETE FROM my_tab;</span><br></pre></td></tr></table></figure>
+
+<h1 id="表的约束"><a href="#表的约束" class="headerlink" title="表的约束"></a>表的约束</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">-- 表的约束类型</span><br><span class="line">CREATE TABLE my_student (</span><br><span class="line">-- 主键约束：非空且唯一的，通常是 id 值，并且是自增的</span><br><span class="line">m_id INT PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">-- 唯一约束，非空约束：不能重复的，且非空</span><br><span class="line">m_name VARCHAR ( 32 ) UNIQUE NOT NULL,</span><br><span class="line">-- 默认约束，设置了默认约束的字段可以不进行手动的添加</span><br><span class="line">m_sex ENUM ( &apos;男&apos;, &apos;女&apos;, &apos;保密&apos; ) DEFAULT &apos;保密&apos;,</span><br><span class="line">-- 外键，关联到班级表的主键</span><br><span class="line">m_class INT NOT NULL </span><br><span class="line">) CHARACTER </span><br><span class="line">SET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line">-- 班级表，描述班级的信息</span><br><span class="line">CREATE TABLE my_class(</span><br><span class="line">m_id INT PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">m_name VARCHAR(32) NOT NULL UNIQUE,</span><br><span class="line">m_count INT NOT NULL DEFAULT 0</span><br><span class="line">)CHARACTER SET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line">-- 为 my_student 中的 m_class 添加外键关联到 my_class 中的 m_id</span><br><span class="line">-- 在添加数据的过程中，外键必须是一个已经存在的主键</span><br><span class="line">ALTER TABLE my_student ADD FOREIGN KEY(my_class) REFERENCES my_class(m_id);</span><br></pre></td></tr></table></figure>
+
+<h1 id="单表查询"><a href="#单表查询" class="headerlink" title="单表查询"></a>单表查询</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">-- 简单的查询所有的数据</span><br><span class="line">SELECT * FROM my_table;</span><br><span class="line"></span><br><span class="line">-- 查询指定表的某几列数据</span><br><span class="line">SELECT m_name, m_sex FROM my_table;</span><br><span class="line"></span><br><span class="line">-- 当前的学生分布在哪些班级</span><br><span class="line">SELECT m_class FROM my_table;</span><br><span class="line">SELECT DISTINCT m_class FROM my_table;	#去重</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CREATE TABLE my_tab(</span><br><span class="line">	m_id INT,</span><br><span class="line">	m_name VARCHAR(32),</span><br><span class="line">	m_sex enum(&apos;男&apos;, &apos;女&apos;, &apos;保密&apos;),</span><br><span class="line">	m_class VARCHAR(32),</span><br><span class="line">	m_score INT</span><br><span class="line">)CHARACTER SET utf8 COLLATE utf8_general_ci;</span><br><span class="line">INSERT INTO my_tab</span><br><span class="line">VALUES</span><br><span class="line">	( 1, &apos;xiaoming&apos;, &apos;男&apos;, &apos;36&apos;, 90),</span><br><span class="line">	( 2, &apos;xiaohong&apos;, &apos;女&apos;, &apos;33&apos;, 78),</span><br><span class="line">	( 3, &apos;xiaotian&apos;, &apos;男&apos;, &apos;36&apos;,  80),</span><br><span class="line">	( 4, &apos;xiaoyi&apos;, &apos;男&apos;, &apos;35&apos;, 67 ),</span><br><span class="line">	( 5, &apos;xiaolan&apos;, &apos;女&apos;, &apos;35&apos;, 94 ),</span><br><span class="line">	( 6, &apos;xiaojin&apos;, &apos;女&apos;, &apos;34&apos;, 88 );</span><br><span class="line">-- 对查询到的结果进行运算，	</span><br><span class="line">SELECT m_name, m_score*0.6 FROM my_tab;</span><br><span class="line">-- 对查询到的数据取别名</span><br><span class="line">SELECT m_name as 姓名, m_score*0.6 as 成绩 FROM my_tab;</span><br><span class="line"></span><br><span class="line">-- 带条件的查询之关系运算符</span><br><span class="line">SELECT m_name, m_class FROM my_tab WHERE m_class &gt; 34;</span><br><span class="line">-- 带条件的查询之IN，位于某些数据之中</span><br><span class="line">SELECT m_name, m_class FROM my_tab WHERE m_class IN(34, 35, 36);</span><br><span class="line">-- 带条件的查询之 BETWEEN AND，位于某个区间</span><br><span class="line">SELECT m_name, m_class FROM my_tab WHERE m_class BETWEEN 34 AND 36;</span><br><span class="line">-- 带条件的查询之 LIKE _(一个任意字符)  %(任意个任意字符)</span><br><span class="line">SELECT m_name, m_class FROM my_tab WHERE m_name LIKE &quot;_____i%&quot;;</span><br><span class="line"></span><br><span class="line">-- 查询所有分数大于 80 且性别为女的同学</span><br><span class="line">SELECT * FROM my_tab WHERE m_score &gt; 80 AND m_sex = &quot;女&quot;;</span><br><span class="line"></span><br><span class="line">-- 对查询到的结果，按照学生的分数，以降序 DESC 进行排序，升序 ASC</span><br><span class="line">SELECT * FROM my_tab ORDER BY m_score DESC;</span><br><span class="line">-- 以降序查询分数最高的前三位同学的信息(起始，个数)</span><br><span class="line">SELECT * FROM my_tab ORDER BY m_score DESC LIMIT 0, 3;</span><br><span class="line"></span><br><span class="line">-- 统计学生个数 COUNT(*|列名)   统计记录的条数</span><br><span class="line">SELECT COUNT(*) FROM my_tab;</span><br><span class="line"></span><br><span class="line">-- 统计玩家平均积分 AVG(数值类型列名)  平均值</span><br><span class="line">SELECT AVG(m_score) FROM my_tab;</span><br><span class="line"></span><br><span class="line">-- 统计用户的总分和 SUM (数值类型列名) 求和</span><br><span class="line">SELECT SUM(m_score) FROM my_tab;</span><br><span class="line"></span><br><span class="line">-- 获取用户的最高分积分 MAX(列名)  最大值</span><br><span class="line">SELECT MAX(m_score) FROM my_tab;</span><br><span class="line"></span><br><span class="line">-- 可以使用 md5 和 sha1 等函数直接地获取计算后的结果</span><br><span class="line">SELECT md5(sha1(&quot;jdsojw&quot;));</span><br><span class="line"></span><br><span class="line">-- 分组查询，枚举出指定列的指定信息进行运算</span><br><span class="line">SELECT m_class, COUNT(*) FROM my_tab GROUP BY m_class;</span><br><span class="line"></span><br><span class="line">-- 查询班级数大于 34 的班级每个班实际有多少同学</span><br><span class="line">SELECT 	m_class, COUNT(*) FROM my_tab GROUP BY m_class HAVING m_class &gt; 34;</span><br></pre></td></tr></table></figure>
+
+<h1 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">-- 初始化数据</span><br><span class="line">CREATE TABLE my_class(</span><br><span class="line">m_id INT PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">m_name VARCHAR(32) NOT NULL UNIQUE,</span><br><span class="line">m_count INT NOT NULL DEFAULT 0</span><br><span class="line">)CHARACTER SET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line">INSERT INTO my_class</span><br><span class="line">VALUES</span><br><span class="line">(1, &quot;33&quot;, 33),</span><br><span class="line">(2, &quot;34&quot;, 34),</span><br><span class="line">(3, &quot;35&quot;, 35),</span><br><span class="line">(4, &quot;36&quot;, 36);</span><br><span class="line"></span><br><span class="line">CREATE TABLE my_student (</span><br><span class="line">m_id INT PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">m_name VARCHAR ( 32 ) UNIQUE NOT NULL,</span><br><span class="line">m_sex ENUM ( &apos;男&apos;, &apos;女&apos;, &apos;保密&apos; ) DEFAULT &apos;保密&apos;,</span><br><span class="line">m_class INT NOT NULL, </span><br><span class="line">m_score INT </span><br><span class="line">) CHARACTER </span><br><span class="line">SET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line">INSERT INTO my_student</span><br><span class="line">VALUES </span><br><span class="line">(1, &apos;xiaoming&apos;, &apos;男&apos;, 4, 98),</span><br><span class="line">(2, &apos;xiaogang&apos;, &apos;女&apos;, 3, 68),</span><br><span class="line">(3, &apos;xiaohong&apos;, &apos;男&apos;, 2, 81),</span><br><span class="line">(4, &apos;xiaolv&apos;, &apos;女&apos;, 4, 75),</span><br><span class="line">(5, &apos;dabai&apos;, &apos;男&apos;, 4, 43),</span><br><span class="line">(6, &apos;dahei&apos;, &apos;女&apos;, 3, 89),</span><br><span class="line">(7, &apos;zhonglan&apos;, &apos;男&apos;, 2, 92),</span><br><span class="line">(8, &apos;zhongzi&apos;, &apos;保密&apos;, 3, 86),</span><br><span class="line">(9, &apos;xioaming&apos;, &apos;保密&apos;, 1, 66);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-- 多表查询，交叉连接，查询到的是两张表的乘积（笛卡尔积）</span><br><span class="line">SELECT * FROM my_class, my_student;</span><br><span class="line"></span><br><span class="line">-- 多表查询，内连接，将两张表的字段进行了比较</span><br><span class="line">SELECT * FROM my_class, my_student WHERE my_class.m_id = my_student.m_class;</span><br><span class="line"></span><br><span class="line">-- 左外连接查询， on 后面是查询条件，以左边的 my_class 为主，如果右边没有数据匹配，就填充 null</span><br><span class="line">SELECT * FROM my_class LEFT JOIN my_student ON my_class.m_id = my_student.m_class;</span><br><span class="line"></span><br><span class="line">-- 子查询：外层查询的查询结果依赖于内层的查询， in 条件，结果是否在集合中</span><br><span class="line">SELECT DISTINCT * FROM my_class</span><br><span class="line">	WHERE m_id IN </span><br><span class="line">	(</span><br><span class="line">		SELECT m_class FROM my_student WHERE m_sex = &quot;女&quot;</span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">-- 判断有没有任何一个同学分数大于 90， 如果有则输出前三名</span><br><span class="line">SELECT * FROM my_student, my_class</span><br><span class="line">	WHERE EXISTS </span><br><span class="line">	(</span><br><span class="line">		SELECT m_score FROM my_student WHERE m_score &gt; 90</span><br><span class="line">	)AND my_student.m_class = my_class.m_id</span><br><span class="line">	ORDER BY m_score DESC LIMIT 0, 3;</span><br><span class="line">	</span><br><span class="line">-- 如果有男生和任何一个女生的成绩相同就输出信息</span><br><span class="line">SELECT * FROM my_student, my_class</span><br><span class="line">	WHERE m_score = ANY</span><br><span class="line">	(</span><br><span class="line">		SELECT m_score FROM my_student WHERE m_sex = &quot;女&quot;</span><br><span class="line">	)AND my_student.m_class = my_class.m_id AND m_sex = &quot;男&quot;;</span><br><span class="line">	</span><br><span class="line">-- 如果有男生的成绩大于任何一个女生的成绩就输出信息</span><br><span class="line">SELECT * FROM my_student, my_class</span><br><span class="line">	WHERE m_score &gt; ALL</span><br><span class="line">	(</span><br><span class="line">		SELECT m_score FROM my_student WHERE m_sex = &quot;女&quot;</span><br><span class="line">	)AND my_class.m_id = my_student.m_class AND m_sex = &quot;男&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>#CPP - MySQL</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 mysql 提供的进行数据库编程，需要保证当前的应用哦个</span></span><br><span class="line"><span class="comment">// 程序版本(x86/x64)，库文件版本和本机的数据库完全一致。需</span></span><br><span class="line"><span class="comment">// 要将安装目录下的整个 inlcude 文件夹和 lib 路径下的 </span></span><br><span class="line"><span class="comment">// libmysql.lib 和 libmysql.dll 拷贝当当前的项目路径下</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"include/mysql.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib, <span class="meta-string">"libmysql.lib"</span>)</span></span><br><span class="line"><span class="comment">// 检查数据库的执行是否成功</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Check</span><span class="params">(MYSQL* mysql)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//mysql_errno 返回的是错误码</span></span><br><span class="line">	<span class="keyword">if</span> (mysql_errno(mysql)) &#123;</span><br><span class="line">		<span class="comment">//mysql_error 返回的是错误信息</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"连接数据库出错：%s\n"</span>, mysql_error(mysql));</span><br><span class="line">		system(<span class="string">"pause"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//向指定的表中添加数据</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insert</span><span class="params">(MYSQL* mysql, LPCSTR sql)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 直接执行添加数据的操作</span></span><br><span class="line">	mysql_query(mysql, sql);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 需要检查数据是否添加成功</span></span><br><span class="line">	Check(mysql);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//查询指定的数据</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Select</span><span class="params">(MYSQL* mysql, LPCSTR sql)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 直接执行添加数据的操作</span></span><br><span class="line">	mysql_query(mysql, sql);</span><br><span class="line">	Check(mysql);</span><br><span class="line">	<span class="comment">// 获取到查询的结果值</span></span><br><span class="line">	MYSQL_RES* pRes = <span class="literal">NULL</span>;</span><br><span class="line">	pRes = mysql_use_result(mysql);</span><br><span class="line">	Check(mysql);</span><br><span class="line">	<span class="comment">// 获取到查询结果有多少</span></span><br><span class="line">	<span class="keyword">int</span> nColCount = mysql_num_fields(pRes);</span><br><span class="line">	<span class="comment">// 输出每一列的列名</span></span><br><span class="line">	MYSQL_FIELD* pField = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nColCount; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 从结果中获取到每一列的名称</span></span><br><span class="line">		pField = mysql_fetch_field(pRes);</span><br><span class="line">		<span class="comment">// 某一些情况下不存在列名不存在的就是 null</span></span><br><span class="line">		<span class="keyword">if</span> (pField == <span class="literal">nullptr</span>)</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%s | "</span>, pField-&gt;name);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">puts</span>(<span class="string">""</span>);</span><br><span class="line">	<span class="comment">// 输出每一个查询到的字段</span></span><br><span class="line">	MYSQL_ROW row = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="keyword">while</span> (row = mysql_fetch_row(pRes))</span><br><span class="line">	&#123;   <span class="comment">// 获取每一行的信息</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nColCount; ++i)</span><br><span class="line">		&#123;    <span class="comment">// 需要提防产生空指针的情况</span></span><br><span class="line">			<span class="keyword">if</span> (row[i] != <span class="literal">nullptr</span>)</span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">"[%s] "</span>, row[i]);</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">"[null] "</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 修改控制台的默认字符编码</span></span><br><span class="line">	system(<span class="string">"chcp 65001"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 1. 初始化 mysql 数据库</span></span><br><span class="line">	mysql_library_init(argc, argv, <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2. 操作 mysql 数据库需要提供一个 MYSQL 对象</span></span><br><span class="line">	MYSQL mysql = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	mysql_init(&amp;mysql);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 3. 连接数据库，需要提供明文的数据库信息</span></span><br><span class="line">	mysql_real_connect(&amp;mysql, <span class="string">"127.0.0.1"</span>, <span class="string">"root"</span>,</span><br><span class="line">		<span class="string">"password"</span>, <span class="string">"db_name"</span>, <span class="number">3306</span>, <span class="literal">nullptr</span>, <span class="number">0</span>);</span><br><span class="line">	Check(&amp;mysql);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 4. 向数据库中添加信息</span></span><br><span class="line">	<span class="comment">//Insert(&amp;mysql, "INSERT INTO my_class(m_name, m_count) VALUE('41', 41);");</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 5. 从数据库中查询信息</span></span><br><span class="line">	Select(&amp;mysql, <span class="string">"SELECT * FROM my_student;"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 6. 清理 mysql 数据库</span></span><br><span class="line">	mysql_library_end();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Python-MySQL"><a href="#Python-MySQL" class="headerlink" title="Python - MySQL"></a>Python - MySQL</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line">class mysql(object):</span><br><span class="line">    # 连接到数据库</span><br><span class="line">    def __init__(self):</span><br><span class="line">        try:</span><br><span class="line">            # 创建连接对象，连接到数据库</span><br><span class="line">            self.connect = pymysql.connect(host=&quot;127.0.0.1&quot;,</span><br><span class="line">                user=&quot;root&quot;, password=&quot;password&quot;, db=&quot;db_name&quot;)</span><br><span class="line">            # 获取到游标对象，游标对象被用于执行查询操作</span><br><span class="line">            self.cursor = self.connect.cursor()</span><br><span class="line">        except Exception as e:</span><br><span class="line">            # 一旦出现问题，这里会打印错误信息</span><br><span class="line">            print(e)</span><br><span class="line"></span><br><span class="line">    # 添加数据到表中</span><br><span class="line">    def insert(self, sql):</span><br><span class="line">        try:</span><br><span class="line">            # 使用 execute 执行 sql 指令</span><br><span class="line">            self.cursor.execute(sql)</span><br><span class="line">            # 任何对 sql 数据库执行修改的操作都需要提交</span><br><span class="line">            self.connect.commit()</span><br><span class="line">        except Exception as e:</span><br><span class="line">            # 如果指令执行出错，理论应该回滚操作</span><br><span class="line">            self.connect.rollback()</span><br><span class="line">            # 输出错误信息</span><br><span class="line">            print(e)</span><br><span class="line"></span><br><span class="line">    # 查询数据，返回查询到的数据和数量</span><br><span class="line">    def select(self, sql):</span><br><span class="line">        try:</span><br><span class="line">            # 使用 execute 执行 sql 指令</span><br><span class="line">            self.cursor.execute(sql)</span><br><span class="line">            # 使用 fetchall 获取所有结果</span><br><span class="line">            result = self.cursor.fetchall()</span><br><span class="line">            # 使用 rowcount 获取返回的条目数量</span><br><span class="line">            count = self.cursor.rowcount</span><br><span class="line">            # 查询到的结果是一个由所有的条目组成的元组</span><br><span class="line">            # 元组的每一个元素又是一个元组，这个元组中</span><br><span class="line">            # 保存的是查询到的每一列的信息</span><br><span class="line">            return count, result</span><br><span class="line">        except Exception as e:</span><br><span class="line">            # 如果指令执行出错，理论应该回滚操作</span><br><span class="line">            self.connect.rollback()</span><br><span class="line">            # 输出错误信息</span><br><span class="line">            print(e)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    sql = mysql()</span><br><span class="line">    #sql.insert(&quot;INSERT INTO my_class VALUE(43, &apos;43&apos;, 43);&quot;)</span><br><span class="line">    print(sql.select(&quot;SELECT * FROM my_student;&quot;))</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/11/2019-12-11-Python模块/">python模块</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/04/2019-12-04-Python基础3/">python基础3</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
