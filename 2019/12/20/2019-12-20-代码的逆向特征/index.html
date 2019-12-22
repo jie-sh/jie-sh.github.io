@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>代码的逆向特征 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">代码的逆向特征</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 20, 2019&nbsp;&nbsp;13:32:48</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>[toc]</p>
+<h1 id="一、识别程序的特征"><a href="#一、识别程序的特征" class="headerlink" title="一、识别程序的特征"></a>一、识别程序的特征</h1><ol start="0">
+<li><p>如何识别程序的特征</p>
+<ul>
+<li>PE 工具查看链接器版本</li>
+<li>PE 工具查看区段信息</li>
+<li>查看目标程序的二进制特征</li>
+</ul>
+</li>
+<li><p>BC++ 程序</p>
+<ul>
+<li><p>区段特征：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220140824560.png" alt="image-20191220140824560"></p>
+<p>导入导出表以及只读数据是分开的</p>
+</li>
+<li><p>链接器版本：5.0</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220141134080.png" alt="image-20191220141134080"></p>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>程序的二进制特征：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220141407316.png" alt="image-20191220141407316"></p>
+<p>​    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EB 10 66 62 3A 43 2B 2B 48 4F 4F 4B 90</span><br></pre></td></tr></table></figure>
+
+<p>BC++ 编写的程序，IAT 函数的调用通常是 E8 跳转表 + FF25</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220142007230.png" alt="image-20191220142007230"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220142045694.png" alt="image-20191220142045694"></p>
+<ol start="2">
+<li>Delphi 程序</li>
+</ol>
+<ul>
+<li><p>区段特征：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220142410874.png" alt="image-20191220142410874"></p>
+<p>这三个通常是 .text，.data，.textbss等</p>
+</li>
+<li><p>链接器版本：2.25</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220142633733.png" alt="image-20191220142633733"></p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>- 程序的二进制特征：5个 `call` 后紧跟着一堆 0，第一个 `call` 里面调用 `GetModuleHandle` 函数
+
+  ![image-20191220142750565](C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191220142750565.png)
+
+  ![image-20191220142912321](C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191220142912321.png)
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">55 8B EC 83 C4 F0 B8 ?? ?? ?? ?? E8 ?? ?? ?? ?? A1 ?? ?? ?? ?? 8B 00</span><br></pre></td></tr></table></figure></code></pre><ol start="3">
+<li><p>VB6 程序</p>
+<ul>
+<li><p>区段特征：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220143455127.png" alt="image-20191220143455127"></p>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- 链接器版本：6.0
+
+  ![image-20191220143608453](C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191220143608453.png)
+
+
+
+- 程序的二进制特征：VB 是运行在 VB 虚拟机中的，Windows 下 VB 虚拟机是一个 DLL 模块，若存在这种形式的跳转，就可直接进行判断
+
+  ![image-20191220143731780](C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191220143731780.png)</code></pre><ol start="4">
+<li><p>易语言、VC6</p>
+<ul>
+<li><p>区段特征：</p>
+<p>易语言：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220144038624.png" alt="image-20191220144038624"></p>
+<p>VC6：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220144204962.png" alt="image-20191220144204962"></p>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- 链接器版本：
+
+  ![image-20191220144116354](C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191220144116354.png)
+
+
+
+- 程序的二进制特征：两个 `push` 语句，一个抬高堆栈语句，既可用 `sub`，也可用 `add`，一个 `GetVersion` 函数
+
+  易语言：
+
+  ![image-20191220144517946](C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191220144517946.png)
+
+  VC6：
+
+  ![image-20191220144607426](C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191220144607426.png)</code></pre><ol start="5">
+<li><p>汇编语言：</p>
+<p>汇编语言的链接器版本和区段特征是不固定的，也没有明确的二进制特征。可以通过文件的大小来猜测是否是一个汇编程序，程序的 OEP 部分通常直接就是逻辑代码，也可作为标识</p>
+</li>
+<li><p>VS 程序</p>
+<ul>
+<li>不同版本的 VS 编写出来的程序特征是不同的</li>
+<li>通常 debug 版本的程序入口点可能存在 <code>call + call</code>，而 release 是 <code>call + jmp</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">VS 版本</th>
+<th align="center">链接器版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">VC 6.0</td>
+<td align="center">6.0</td>
+</tr>
+<tr>
+<td align="center">VC2003</td>
+<td align="center">7.0 / 7.1</td>
+</tr>
+<tr>
+<td align="center">VS2005</td>
+<td align="center">8.0</td>
+</tr>
+<tr>
+<td align="center">VS2008</td>
+<td align="center">9.0</td>
+</tr>
+<tr>
+<td align="center">VS2010</td>
+<td align="center">10.0</td>
+</tr>
+<tr>
+<td align="center">VS2012</td>
+<td align="center">11.0</td>
+</tr>
+<tr>
+<td align="center">VS2013</td>
+<td align="center">12.0</td>
+</tr>
+<tr>
+<td align="center">VS2015</td>
+<td align="center">14.0</td>
+</tr>
+<tr>
+<td align="center">VS2017</td>
+<td align="center">14.1</td>
+</tr>
+<tr>
+<td align="center">VS2019</td>
+<td align="center">14.2</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<h1 id="二、基本数据类型的识别"><a href="#二、基本数据类型的识别" class="headerlink" title="二、基本数据类型的识别"></a>二、基本数据类型的识别</h1><ol>
+<li><p>常量的识别</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">bool</span> bRet = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> nCount = SIZE;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* szHello = <span class="string">"Hello 15PB"</span>;</span><br><span class="line"><span class="keyword">const</span> eData data = eData::enum_TYPE_1;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">float</span> fNum = <span class="number">1.5</span>;</span><br><span class="line"><span class="keyword">const</span> sData stc = &#123; <span class="number">1</span>,<span class="number">2.0</span>,<span class="string">'1'</span> &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>常量信息可能被保存在常量数据区和代码区</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220151908251.png" alt="image-20191220151908251"></p>
+</li>
+</ol>
+<ol start="2">
+<li><p>字符串常量的初始化</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 字符串数组</span></span><br><span class="line"><span class="keyword">char</span> szStr[<span class="number">100</span>] = &#123; <span class="string">"szStr[100] Hello 15PB"</span> &#125;;</span><br><span class="line"><span class="comment">// 宽字符串数组 </span></span><br><span class="line"><span class="keyword">wchar_t</span> szWchar[<span class="number">100</span>] = <span class="string">L"szWchar Hello 15PB"</span>;</span><br><span class="line"><span class="comment">// 普通的字符数组</span></span><br><span class="line"><span class="keyword">char</span> szHello[] = <span class="string">"szHello[] Hello 15PB"</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>对于一个字符串初始化通常是：4字节拷贝 + 不足4字节拷贝 + 填充剩余的空间为0 </li>
+<li>若初始化数据较多，第一步和第二步会简化为一个串操作进行赋值</li>
+<li>对于一个未指定大小的字符串初始化操作，没有填充剩余空间的步骤</li>
+</ul>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220163014617.png" alt="image-20191220163014617"></p>
+</li>
+</ol>
+<ol start="3">
+<li><p>指针和引用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>* pnumber = &amp;number;</span><br><span class="line"><span class="comment">// 00F21739  lea         eax, [number]</span></span><br><span class="line"><span class="comment">// 00F2173C  mov         dword ptr[pnumber], eax</span></span><br><span class="line"><span class="keyword">int</span>&amp; rnumber = number;</span><br><span class="line"><span class="comment">// 00F2173F  lea         eax, [number]</span></span><br><span class="line"><span class="comment">// 00F21742  mov         dword ptr[rnumber], eax</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>指针和引用在汇编层面的实现完全一致</li>
+</ul>
+</li>
+</ol>
+<h1 id="三、分析对象"><a href="#三、分析对象" class="headerlink" title="三、分析对象"></a>三、分析对象</h1><ol>
+<li><p>构造函数的分析</p>
+<ul>
+<li>构造函数会使用 ecx 传递对象的首地址（this），构造函数的返回值是 this</li>
+<li>一个存在继承关系且有虚函数的构造函数 = 构造父类\成员 + 初始化虚表指针 + 用户代码 + 返回值</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CObj</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CObj() &#123; <span class="built_in">printf</span>(<span class="string">"CObj::CObj()\n"</span>); 	&#125;</span><br><span class="line">	~CObj() &#123; <span class="built_in">printf</span>(<span class="string">"CObj::~CObj()\n"</span>); &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 局部对象</span></span><br><span class="line">	CObj obj;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220164524065.png" alt="image-20191220164524065"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220164936511.png" alt="image-20191220164936511"></p>
+</li>
+</ol>
+<p>   存在继承关系的构造函数</p>
+   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Base() &#123; <span class="built_in">printf</span>(<span class="string">"Base::Base()\n"</span>); &#125;</span><br><span class="line">	~Base() &#123; <span class="built_in">printf</span>(<span class="string">"Base::~Base()\n"</span>); &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CObj</span> :</span> <span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CObj() &#123; <span class="built_in">printf</span>(<span class="string">"CObj::CObj()\n"</span>); &#125;</span><br><span class="line">	~CObj() &#123; <span class="built_in">printf</span>(<span class="string">"CObj::~CObj()\n"</span>); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>   <img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220165933403.png" alt="image-20191220165933403"></p>
+<p>   存在虚函数</p>
+   <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">show1</span><span class="params">()</span> </span>&#123; <span class="built_in">printf</span>(<span class="string">"Base::show1()\n"</span>); &#125;</span><br><span class="line">	Base() &#123; <span class="built_in">printf</span>(<span class="string">"Base::Base()\n"</span>); &#125;</span><br><span class="line">	~Base() &#123; <span class="built_in">printf</span>(<span class="string">"Base::~Base()\n"</span>); &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CObj</span> :</span> <span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">show2</span><span class="params">()</span> </span>&#123; <span class="built_in">printf</span>(<span class="string">"CObj::show2()\n"</span>); &#125;</span><br><span class="line">	CObj() &#123; <span class="built_in">printf</span>(<span class="string">"CObj::CObj()\n"</span>); &#125;</span><br><span class="line">	~CObj() &#123; <span class="built_in">printf</span>(<span class="string">"CObj::~CObj()\n"</span>); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>   <img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220172213240.png" alt="image-20191220172213240"></p>
+<ol start="2">
+<li><p>析构函数的分析</p>
+<ul>
+<li>析构函数无返回值</li>
+<li>一个存在继承关系且有虚函数的析构函数 = 重置虚表指针 + 用户代码 + 析构父类</li>
+</ul>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220165206484.png" alt="image-20191220165206484"></p>
+</li>
+</ol>
+<p>   存在继承关系的析构函数</p>
+<p>   <img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220170040678.png" alt="image-20191220170040678"></p>
+<p>   存在虚函数</p>
+<p>   <img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220173000068.png" alt="image-20191220173000068"></p>
+<ol start="3">
+<li><p>成员函数和数据成员</p>
+<ul>
+<li>成员函数的调用会使用 ecx 传递 this 指针</li>
+<li>数据成员的使用是通过 this 加上一个偏移得到的</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">COBj2</span></span></span><br><span class="line"><span class="class">&#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CObj</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> number1 = <span class="number">10</span>;</span><br><span class="line">	<span class="keyword">int</span> number2 = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> n1, <span class="keyword">int</span> n2)</span> </span></span><br><span class="line"><span class="function">	</span>&#123; </span><br><span class="line">		number1 = n1;</span><br><span class="line">		number2 = n2;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"CObj::CObj()\n"</span>); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	COBj2 obj2;</span><br><span class="line">	<span class="comment">// 局部对象</span></span><br><span class="line">	CObj obj;</span><br><span class="line">	obj.<span class="built_in">set</span>(<span class="number">100</span>, <span class="number">200</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220185500576.png" alt="image-20191220185500576"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220185532171.png" alt="image-20191220185532171"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220185603972.png" alt="image-20191220185603972"></p>
+</li>
+<li><p>虚函数</p>
+<ul>
+<li>并非所有的虚函数调用都会有动态联编</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CObj</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123; <span class="built_in">printf</span>(<span class="string">"show\n"</span>); &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hook_show</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"hook_show\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	DWORD OldProtect = <span class="number">0</span>;</span><br><span class="line">	LPVOID Addr = <span class="number">0</span>;</span><br><span class="line">	CObj obj;</span><br><span class="line">	obj.show();</span><br><span class="line">	CObj* pObj = &amp;obj;</span><br><span class="line">	pObj-&gt;show();</span><br><span class="line">	<span class="comment">// 获取虚函数表</span></span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		mov eax, dword ptr [pObj]		; 取地对象首地址</span><br><span class="line">		mov eax, [eax]					; 虚函数指针</span><br><span class="line">		mov Addr, eax</span><br><span class="line">		push eax</span><br><span class="line">	&#125;</span><br><span class="line">	VirtualProtect(Addr, <span class="number">0x4</span>, PAGE_READWRITE, &amp;OldProtect);</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		pop eax</span><br><span class="line">		mov ecx, hook_show				; 替换的函数</span><br><span class="line">		mov [eax], ecx					; 替换</span><br><span class="line">	&#125;</span><br><span class="line">	VirtualProtect(Addr, <span class="number">0x4</span>, OldProtect, &amp;OldProtect);</span><br><span class="line">	pObj-&gt;show();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220191452621.png" alt="image-20191220191452621"></p>
+</li>
+</ol>
+<p>   <img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220191617853.png" alt="image-20191220191617853"></p>
+<h1 id="四、对系统代码的识别"><a href="#四、对系统代码的识别" class="headerlink" title="四、对系统代码的识别"></a>四、对系统代码的识别</h1><ol>
+<li><p>初始化安全 <code>cookie</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">002A171E  mov         eax,dword ptr [__security_cookie (02AA004h)]  </span><br><span class="line">002A1723  xor         eax,ebp  </span><br><span class="line">002A1725  mov         dword ptr [ebp-4],eax</span><br><span class="line">; 安全 cookie 是一个运行时确定的值，使用当前的 ebp 对它进行加密，并放置到 ebp - 4 的位置，如果被缓冲区溢出攻击了，那么 ebp - 4 绝对会被覆盖，覆盖后的值再次使用 ebp 异或解密就无法恢复之前的数值，导致程序结束</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>检查一段代码是否是用户代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">002A1728  mov         ecx,offset _2A6D85CB_</span><br><span class="line">002A172D  call        @__CheckForDebuggerJustMyCode@4 (02A1208h)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>检查数组是否越界</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">002A17EE  lea         edx,ds:[2A181Ch]  </span><br><span class="line">002A17F4  call        @_RTC_CheckStackVars@8 (02A1235h) </span><br><span class="line">;如果操作了数组，数组之后会被填充 0xCCCCCCCC，如果当前的数组越界写入了数据，就会覆盖 cc，这个函数被用于检查 cc 是否被覆盖（数组越界）</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p>检查当前程序是否被缓冲区溢出攻击</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">002A17FE  mov         ecx,dword ptr [ebp-4]  </span><br><span class="line">002A1801  xor         ecx,ebp  </span><br><span class="line">002A1803  call        @__security_check_cookie@4 (02A11DBh)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="5">
+<li><p>检查堆栈是否平衡</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">002A1808  add         esp,220h  </span><br><span class="line">002A180E  cmp         ebp,esp  </span><br><span class="line">002A1810  call        __RTC_CheckEsp (02A1212h) </span><br><span class="line">;检查堆栈是否平衡，如果存在函数调用就会在最后检查</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/21/2019-12-21-各数据结构的逆向特征/">各数据结构的逆向特征</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/11/2019-12-11-Python模块/">python模块</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
