@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>扫雷外挂 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">扫雷外挂</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 23, 2019&nbsp;&nbsp;14:26:17</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>[toc]</p>
+<h1 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h1><ol>
+<li>鼠标悬停在扫雷数组上可以判断是否是雷，并作出提示</li>
+<li>一键扫雷</li>
+</ol>
+<h1 id="分析工具"><a href="#分析工具" class="headerlink" title="分析工具"></a>分析工具</h1><ol>
+<li>动态调试工具 Ollydbg</li>
+<li>搜索数据 Cheat Engine</li>
+<li>寻找窗口回调函数 Spy++</li>
+<li>查壳，查编译环境 PEiD/exeinfo</li>
+<li>开发工具 VS2017</li>
+</ol>
+<h1 id="需要分析的数据和代码"><a href="#需要分析的数据和代码" class="headerlink" title="需要分析的数据和代码"></a>需要分析的数据和代码</h1><ol>
+<li>扫雷数组的宽度、高度和雷的数量</li>
+<li>扫雷数组的基址</li>
+<li>鼠标位置</li>
+<li>鼠标位置转换成扫雷数组下标的代码</li>
+<li>扫雷数组下标转换成鼠标位置的代码（便于发消息）</li>
+</ol>
+<h1 id="扫雷游戏分析"><a href="#扫雷游戏分析" class="headerlink" title="扫雷游戏分析"></a>扫雷游戏分析</h1><h2 id="获取扫雷数组的数据"><a href="#获取扫雷数组的数据" class="headerlink" title="获取扫雷数组的数据"></a>获取扫雷数组的数据</h2><p>先查看这个游戏的编写工具</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223145814657.png" alt="image-20191223145814657"></p>
+<p>链接器版本是7.0，故可推测是使用 VC2003 编写的</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223150233783.png" alt="image-20191223150233783"></p>
+<p>查看 API，可看到第一个运行时库 msvcrt.dll，有这个库的程序一般是 SDK 程序，且扫雷游戏大小只有 117KB，只可能是 SDK，若是静态编译的MFC程序则大小在 1M 以上</p>
+<p>使用 CE 工具查找扫雷数组的宽度、高度和雷的数量，得到这些数据的地址</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223151215534.png" alt="image-20191223151215534"></p>
+<h2 id="OD中分析数据"><a href="#OD中分析数据" class="headerlink" title="OD中分析数据"></a>OD中分析数据</h2><p>先在 CE 中查找访问高度、宽度、雷数的地址数据的代码，应该是先取出地址再去访问，故其中只有3处符合，分别在 OD 中查找这3处的地址</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223155242076.png" alt="image-20191223155242076"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223155432004.png" alt="image-20191223155432004"></p>
+<p>设置扫雷的界面便于我们之后在 OD 中观察内存，高度设为10，宽度为14，雷数为10，在 OD 的数据窗口中一行为16个字节，2列的边界加14列的宽度刚好填满一行</p>
+<p>在 OD 中附加扫雷，依次进入这3处地址 0x1002EEA，0x1003705，0x10019EB，简单地看一下汇编代码，发现第一个地址是初始化雷区的代码，后两处地址代码是和界面有关</p>
+<p>接下来需要详细地分析第一处的汇编代码，其中数组基地址是 0x1005340，高度是 0x1005338，宽度是 0x1005334，雷数是 0x1005330</p>
+<img src="C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191223162156788.png" alt="image-20191223162156788" style="zoom: 200%;">
+
+<p>第一次运行，雷区边界的初始化：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223161925610.png" alt="image-20191223161925610"></p>
+<p>之后在扫雷界面点击一下：</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223162606583.png" alt="image-20191223162606583"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223163749791.png" alt="image-20191223163749791"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223162621753.png" alt="image-20191223162621753"></p>
+<p>发现雷区里面有数据填充，对比三个界面，可知：</p>
+<p>0x10 代表边界，0x0F 代表初始值，0x40 代表周围没有雷，0x41 代表周围有1个类，依次类推，0x48 代表周围有8个类，0x8F 代表雷，数组中每一行下面都会有一行 0x0F 隔开</p>
+<h2 id="坐标转换"><a href="#坐标转换" class="headerlink" title="坐标转换"></a>坐标转换</h2><p>首先使用 Spy++ 查找鼠标点击的消息，先清除一些干扰消息，如 <code>WM_NCHITTEST</code>，<code>WM_SETCURSOR</code>，<br><code>WM_SETFOCUS</code>，<code>WM_TIMECHANGE</code>，<code>WM_TIMER</code> 等，便于查找消息</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223184743292.png" alt="image-20191223184743292"></p>
+<p>在扫雷界面点击，出现了2个消息，<code>WM_LBUTTONDOWN</code> 和 <code>WM_LBUTTONUP</code>，参数中有坐标点信息，接下来从这2个消息着手分析</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223185220126.png" alt="image-20191223185220126"></p>
+<p>再看到 <code>Window Proc:01001BC9</code>，打开 OD 进行分析</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223185904923.png" alt="image-20191223185904923"></p>
+<p>在 OD 中的 0x1001BC9 地址处假定参数，设置消息断点</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223190851676.png" alt="image-20191223190851676"></p>
+<p>运行，程序断下</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223191558710.png" alt="image-20191223191558710"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223191657609.png" alt="image-20191223191657609"></p>
+<p>37=0x25，63=0x3F，可见 ECX 高16位保存 y 坐标，低16位保存 x 坐标</p>
+<p>因为要寻找将屏幕坐标转换为数组下标的代码，需跟踪 ARG.4，而 ECX 保存了 x，y 坐标，故之后单步往下走，看代码有没有对 ARG.4 和 ECX 的再次访问，直到找到 0x1002009 地址处</p>
+<p>点击扫雷界面的红框位置，接着运行程序，发现程序会将鼠标点击位置处的屏幕坐标转换为扫雷界面的数组下标，x=3，y=2</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191223194712891.png" alt="image-20191223194712891"></p>
+<p>#注入程序DLL编写</p>
+<p>VS2017 中新建 MFC DLL，部分代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自己编写的窗口回调函数</span></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">My_DefWindowProcW</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ HWND hWnd,</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ UINT Msg,</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ WPARAM wParam,</span></span></span><br><span class="line"><span class="function"><span class="params">	_In_ LPARAM lParam)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (Msg == WM_KEYDOWN &amp;&amp; wParam == VK_F5) &#123;<span class="comment">//按下F5键</span></span><br><span class="line">		<span class="comment">//F5一键秒杀，遍历扫雷数组中的元素，判断不是雷的元素，模拟点击</span></span><br><span class="line">		<span class="comment">//用于测试</span></span><br><span class="line">		OutputDebugString(<span class="string">L"F5"</span>);		</span><br><span class="line">		<span class="keyword">int</span> nWidth = *g_pWidth;</span><br><span class="line">		<span class="keyword">int</span> nHeight = *g_pHeight;</span><br><span class="line">		<span class="keyword">int</span> nCounter = *g_pCounter;</span><br><span class="line">		CString strString;</span><br><span class="line">		strString.Format(<span class="string">L"宽度：%d, 高度：%d, 雷数：%d"</span>,</span><br><span class="line">			nWidth, nHeight, nCounter);</span><br><span class="line">		OutputDebugString(strString.GetBuffer());</span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> nMineCount = <span class="number">0</span>;	</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">size_t</span> y = <span class="number">1</span>; y &lt; nHeight + <span class="number">1</span>; y++) &#123;</span><br><span class="line">			CString strLine;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">size_t</span> x = <span class="number">1</span>; x &lt; nWidth + <span class="number">1</span>; x++) &#123;</span><br><span class="line">				<span class="comment">//数组基地址+(y+1)*32+x+1(y=0~nHeight)</span></span><br><span class="line">				<span class="comment">//y*32表示每次向下移动2行</span></span><br><span class="line">				BYTE byCode = *(PBYTE)((DWORD)g_pBase + y * <span class="number">32</span> + x);</span><br><span class="line">				<span class="keyword">if</span> (byCode == MINE)</span><br><span class="line">					nMineCount++;  <span class="comment">//雷的数量加1</span></span><br><span class="line">				<span class="keyword">else</span> &#123;</span><br><span class="line">					<span class="comment">//点击无雷的位置</span></span><br><span class="line">					<span class="keyword">int</span> xPos, yPos;</span><br><span class="line">					xPos = (x &lt;&lt; <span class="number">4</span>) - <span class="number">4</span>;</span><br><span class="line">					yPos = (y &lt;&lt; <span class="number">4</span>) + <span class="number">0x27</span>;</span><br><span class="line">					SendMessage(hWnd, WM_LBUTTONDOWN, <span class="number">0</span>, MAKELPARAM(xPos, yPos));</span><br><span class="line">					SendMessage(hWnd, WM_LBUTTONUP, <span class="number">0</span>, MAKELPARAM(xPos, yPos));</span><br><span class="line">				&#125;</span><br><span class="line">				CString strCode;</span><br><span class="line">				strCode.Format(<span class="string">L"%02x "</span>, byCode);</span><br><span class="line">				strLine += strCode;</span><br><span class="line">			&#125;</span><br><span class="line">			OutputDebugString(strLine.GetBuffer());</span><br><span class="line">		&#125;</span><br><span class="line">		CString strCount;</span><br><span class="line">		strCount.Format(<span class="string">L"找到的雷数：%d"</span>, nMineCount);</span><br><span class="line">		OutputDebugString(strCount.GetBuffer());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (Msg == WM_MOUSEMOVE) &#123;</span><br><span class="line">		<span class="comment">//鼠标移动，将鼠标在屏幕上的坐标转换为数组下标</span></span><br><span class="line">		<span class="keyword">int</span> x, y;</span><br><span class="line">		x = LOWORD(lParam);  <span class="comment">//获取低位</span></span><br><span class="line">		y = HIWORD(lParam);  <span class="comment">//获取高位</span></span><br><span class="line">		x = (x + <span class="number">4</span>) &gt;&gt; <span class="number">4</span>;</span><br><span class="line">		y = (y - <span class="number">0x27</span>) &gt;&gt; <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">		BYTE byCode = *(PBYTE)((DWORD)g_pBase + y * <span class="number">32</span> + x);</span><br><span class="line">		<span class="keyword">if</span> (byCode == MINE)</span><br><span class="line">			SetWindowText(hWnd, <span class="string">L"此处有雷"</span>);</span><br><span class="line">		<span class="keyword">else</span> </span><br><span class="line">			SetWindowText(hWnd, <span class="string">L"  "</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> CallWindowProc(g_OldProc, hWnd, Msg, wParam, lParam);</span><br><span class="line">&#125;</span><br><span class="line">BOOL CMFCsaoleiApp::InitInstance()</span><br><span class="line">&#123;</span><br><span class="line">	CWinApp::InitInstance();</span><br><span class="line">	<span class="comment">//1.通过Spy++获取窗口名和类名，再查找窗口，获取窗口句柄</span></span><br><span class="line">	g_Wnd = ::FindWindow(<span class="string">L"扫雷"</span>, <span class="string">L"扫雷"</span>);</span><br><span class="line">	<span class="keyword">if</span> (g_Wnd == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		OutputDebugString(<span class="string">L"找不到扫雷窗口"</span>);</span><br><span class="line">		<span class="keyword">return</span> FALSE;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//2.修改窗口回调函数</span></span><br><span class="line">	g_OldProc = (WNDPROC)SetWindowLong(g_Wnd, GWL_WNDPROC, (LONG)My_DefWindowProcW);</span><br><span class="line">	<span class="keyword">if</span> (g_OldProc == <span class="literal">NULL</span>) &#123;</span><br><span class="line">		OutputDebugString(<span class="string">L"设置窗口回调函数失败"</span>);</span><br><span class="line">		<span class="keyword">return</span> FALSE;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/12/21/2019-12-21-各数据结构的逆向特征/">各数据结构的逆向特征</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
