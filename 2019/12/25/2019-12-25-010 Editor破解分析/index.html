@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>010 Editor破解分析 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">010 Editor破解分析</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 25, 2019&nbsp;&nbsp;11:21:35</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>[toc]</p>
+<h1 id="暴力破解分析"><a href="#暴力破解分析" class="headerlink" title="暴力破解分析"></a>暴力破解分析</h1><h2 id="分析思路"><a href="#分析思路" class="headerlink" title="分析思路"></a>分析思路</h2><ol>
+<li>找到注册的窗口</li>
+<li>测试注册窗口的反应</li>
+<li>根据反应做出下一步分析的打算<ul>
+<li>猜测 API，API 下断动态调试</li>
+<li>挑出敏感字符串，在程序中搜索</li>
+</ul>
+</li>
+<li>动态分析，定位关键跳，修改代码</li>
+<li>动态分析，定位关键 <code>call</code>，修改代码</li>
+</ol>
+<h2 id="尝试注册"><a href="#尝试注册" class="headerlink" title="尝试注册"></a>尝试注册</h2><p>安装 010 Editor v8.0.1 版本，完成后会提示评估版本试用期是30天，需要我们注册</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225135210971.png" alt="image-20191225135210971"></p>
+<p>找到注册窗口并试着注册，发现会有错误提示，名称或密码无效</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225135500199.png" alt="image-20191225135500199"></p>
+<h2 id="分析注册窗口"><a href="#分析注册窗口" class="headerlink" title="分析注册窗口"></a>分析注册窗口</h2><ol>
+<li><p>第一种方法是查找弹出窗口的 API</p>
+<p>先在 OD 中附加程序，找到主模块</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225143336391.png" alt="image-20191225143336391"></p>
+<p>查找当前模块中的名称 <code>Ctrl+N</code>，发现有很多导入函数，使用的是 Qt5 的动态库，由于不清楚 Qt 库函数，故无法定位用的是什么 Qt 窗口函数</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225141143383.png" alt="image-20191225141143383"></p>
+<p>实际上不论什么界面库，能弹出窗口最终调用的都是 API 函数，可以查找和窗口有关的动态库模块 <code>user32.dll</code></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225142434842.png" alt="image-20191225142434842"></p>
+<p>再查找当前模块中的名称，其中和创建窗口有关的 API 有 <code>CreateWindow</code>，<code>MessageBox</code>，<code>DialogBox</code>，<code>CreateDialog</code> 等</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225143007133.png" alt="image-20191225143007133"></p>
+<p>若不能确定调用的是哪个 API 就在所有的 API 下断，Qt 的窗口函数底层应该调用 <code>CreateWindow</code>，尝试后发现是 <code>CreateWindowExW</code> 这个 API，下断，运行</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225143745037.png" alt="image-20191225143745037"></p>
+<p>点击 K，栈回溯分析</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225144532329.png" alt="image-20191225144532329"></p>
+<p>发现有一个 <code>show</code> 函数，调用来自主模块，我们主要分析的也是主模块，依次双击进入，查看附近代码有无可疑或敏感的字符串，若没有就点击下一个，直到找到提示无效的密码</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225150700646.png" alt="image-20191225150700646"></p>
+<p>发现这儿有一个跳转，查看下面的信息框，根据跳转指示可以知道是哪儿跳转来的，然后一步一步往上跟，进行动态分析</p>
+</li>
+</ol>
+<ol start="2">
+<li><p>第二种方法是搜索字符串</p>
+<p>首先注册，弹出名称或密码无效的提示，<code>Ctrl+C</code> 赋值字符串到记事本，在 OD 中右击中文搜索引擎，搜索 ASCII，再右击查找，输入部分字符串，确定后就能找到，再查找下一个，看看有没有多个相同的字符串</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225192927691.png" alt="image-20191225192927691"></p>
+</li>
+</ol>
+<h2 id="动态分析"><a href="#动态分析" class="headerlink" title="动态分析"></a>动态分析</h2><p>找到正确的字符串，再往上跟，分析各个跳转指令的条件</p>
+<p>找到关键跳，不能跳过正确的字符串</p>
+<img src="C:\Users\14622\AppData\Roaming\Typora\typora-user-images\image-20191225163401915.png" alt="image-20191225163401915" style="zoom: 200%;">
+
+<p>再往上，找到该跳转来源，即关键函数，将返回值改为 <code>eax = 0x2D</code> 就爆破成功</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225164536708.png" alt="image-20191225164536708"></p>
+<p>但先要去掉随机地址，用 010 Editor 打开，修改随机地址 4081 为 0081，再重新加载 OD</p>
+<p>进入关键函数，修改</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225172352627.png" alt="image-20191225172352627"></p>
+<p>然后保存，打开新保存的程序，授权成功</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225172526657.png" alt="image-20191225172526657"></p>
+<h1 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h1><h2 id="分析思路-1"><a href="#分析思路-1" class="headerlink" title="分析思路"></a>分析思路</h2><ol>
+<li>单步跟踪，找到访问用户名密码的代码</li>
+<li>一步一步分析，加注释</li>
+<li>反复推敲，找规律</li>
+<li>写代码验证</li>
+</ol>
+<h2 id="算法验证"><a href="#算法验证" class="headerlink" title="算法验证"></a>算法验证</h2><ol>
+<li><p>进入关键函数，遇到第一个功能 CALL，经调试可发现功能是密码字符串转16进制字节数据，它之上的两个函数分别是判断输入的用户名和密码是否为空，若有一个为空就退出</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227084950718.png" alt="image-20191227084950718"></p>
+</li>
+</ol>
+<ol start="2">
+<li><p>继续往下跟踪分析，可以看到将密码的16进制数据进行一系列运算判断</p>
+<p>K[3] 的值可以有3个，0x9C / 0xFC /0xAC，分别对应不同的算法</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227090842432.png" alt="image-20191227090842432"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227090907361.png" alt="image-20191227090907361"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227090923725.png" alt="image-20191227090923725"></p>
+<p>以下是值为 0x9C 的算法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">013BDC5D   .  8A5D DF   MOV BL,BYTE PTR SS:[EBP-0x21]     ;  BL = K[3]</span><br><span class="line">013BDC60   .  8A7D E1   MOV BH,BYTE PTR SS:[EBP-0x1F]     ;  BH = K[5]</span><br><span class="line">013BDC63   .  80FB 9C   CMP BL,0x9C                       ;  Switch (cases 9C..FC)</span><br><span class="line">013BDC66   .  75 70     JNZ SHORT 010Edito.013BDCD8       ;  K[3] 应为 0x9C 0xFC 0xAC</span><br><span class="line">013BDC68   .  8A45 DC   MOV AL,BYTE PTR SS:[EBP-0x24]     ;  AL = K[0]; Case 9C of switch 013BDC63</span><br><span class="line">013BDC6B   .  3245 E2   XOR AL,BYTE PTR SS:[EBP-0x1E]     ;  AL = K[0] ^ K[6]</span><br><span class="line">013BDC6E   .  8845 E8   MOV BYTE PTR SS:[EBP-0x18],AL     ;  [ebp - 0x18] = AL</span><br><span class="line">013BDC71   .  8A45 DD   MOV AL,BYTE PTR SS:[EBP-0x23]     ;  AL = K[1]</span><br><span class="line">013BDC74   .  3245 E3   XOR AL,BYTE PTR SS:[EBP-0x1D]     ;  AL = K[1] ^ K[7]</span><br><span class="line">013BDC77   .  FF75 E8   PUSH DWORD PTR SS:[EBP-0x18]      ;  K[0] ^ K[6]</span><br><span class="line">013BDC7A   .  0FB6C8    MOVZX ECX,AL                      ;  ecx = K[1] ^ K[7] &amp; 0xFF 0扩展填充</span><br><span class="line">013BDC7D   .  B8 000100&gt;MOV EAX,0x100                     ;  eax = 0x100</span><br><span class="line">013BDC82   .  66:0FAFC8 IMUL CX,AX                        ;  cx = ( K[1] ^ K[7] &amp; 0xFF ) * 0x100</span><br><span class="line">013BDC86   .  8A45 DE   MOV AL,BYTE PTR SS:[EBP-0x22]     ;  AL = K[2]</span><br><span class="line">013BDC89   .  32C7      XOR AL,BH                         ;  AL = K[2] ^ K[5]</span><br><span class="line">013BDC8B   .  0FB6C0    MOVZX EAX,AL                      ;  eax = K[2] ^ K[5] &amp; 0xFF</span><br><span class="line">013BDC8E   .  66:03C8   ADD CX,AX                         ;  cx = ( K[1] ^ K[7] &amp; 0xFF ) * 0x100 + K[2] ^ K[5] &amp; 0xFF</span><br><span class="line">013BDC91   .  0FB7F1    MOVZX ESI,CX                      ;  esi=( (K[1]^K[7]&amp;0xFF)*0x100+K[2]^K[5]&amp;0xFF )&amp;0xFFFF</span><br><span class="line">013BDC94   .  E8 AB9904&gt;CALL 010Edito.00407644            ;  AL = ( K[0]^K[6]^0x18 + 0x3D ) ^ 0xA7</span><br><span class="line">013BDC99   .  0FB6C0    MOVZX EAX,AL</span><br><span class="line">013BDC9C   .  56        PUSH ESI                          ;  010Edito.02E64618</span><br><span class="line">013BDC9D   .  8947 1C   MOV DWORD PTR DS:[EDI+0x1C],EAX   ;  [edi+0x1c] = eax</span><br><span class="line">013BDCA0   .  E8 23A704&gt;CALL 010Edito.004083C8            ;  计算后判断余数是否为0，若是则返回商，否则返回0</span><br><span class="line">013BDCA5   .  8B4F 1C   MOV ECX,DWORD PTR DS:[EDI+0x1C]   ;  ecx = [edi+0x1c] = ( K[0]^K[6]^0x18 + 0x3D ) ^ 0xA7</span><br><span class="line">013BDCA8   .  83C4 08   ADD ESP,0x8</span><br><span class="line">013BDCAB   .  0FB7C0    MOVZX EAX,AX                      ;  eax = (((esi^0x7892)+0x4D30)^0x3421)&amp;0xFFFF / 0xB 或 0</span><br><span class="line">013BDCAE   .  8947 20   MOV DWORD PTR DS:[EDI+0x20],EAX</span><br><span class="line">013BDCB1   .  85C9      TEST ECX,ECX</span><br><span class="line">013BDCB3   .  0F84 BC01&gt;JE 010Edito.013BDE75              ;  若 ecx=0，则 eax=0xE7 退出</span><br><span class="line">013BDCB9   .  85C0      TEST EAX,EAX</span><br><span class="line">013BDCBB   .  0F84 B401&gt;JE 010Edito.013BDE75              ;  若 eax=0，则 eax=0xE7 退出，故上个函数的返回值不能为0</span><br><span class="line">013BDCC1   .  3D E80300&gt;CMP EAX,0x3E8</span><br><span class="line">013BDCC6   .  0F87 A901&gt;JA 010Edito.013BDE75              ;  eax &lt;= 0x3E8 否则 eax=0xE7 退出</span><br><span class="line">013BDCCC   .  83F9 02   CMP ECX,0x2                       ;  判断 ecx</span><br><span class="line">013BDCCF   .  1BF6      SBB ESI,ESI                       ;  010Edito.02E64618</span><br><span class="line">013BDCD1   .  23F1      AND ESI,ECX                       ;  esi = 0</span><br><span class="line">013BDCD3   .  E9 B30000&gt;JMP 010Edito.013BDD8B</span><br></pre></td></tr></table></figure>
+
+<p>以下是值为 0xFC 的算法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">013BDCD8   &gt; \80FB FC       CMP BL,0xFC</span><br><span class="line">013BDCDB   .  75 1F         JNZ SHORT 010Edito.013BDCFC</span><br><span class="line">013BDCDD   .  C747 1C FF000&gt;MOV DWORD PTR DS:[EDI+0x1C],0xFF         ;  Case FC of switch 013BDC63</span><br><span class="line">013BDCE4   .  BE FF000000   MOV ESI,0xFF                             ;  esi = 0xFF</span><br><span class="line">013BDCE9   .  C747 20 01000&gt;MOV DWORD PTR DS:[EDI+0x20],0x1          ;  [edi+0x20] = 1</span><br><span class="line">013BDCF0   .  C747 30 01000&gt;MOV DWORD PTR DS:[EDI+0x30],0x1          ;  [edi+0x30] = 1</span><br><span class="line">013BDCF7   .  E9 8F000000   JMP 010Edito.013BDD8B</span><br></pre></td></tr></table></figure>
+
+<p>以下是值为 0xAC 的算法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">013BDCFC   &gt; \80FB AC       CMP BL,0xAC</span><br><span class="line">013BDCFF   .  0F85 70010000 JNZ 010Edito.013BDE75</span><br><span class="line">013BDD05   .  8A45 DD       MOV AL,BYTE PTR SS:[EBP-0x23]            ;  AL = K[1]; Case AC of switch 013BDC63</span><br><span class="line">013BDD08   .  3245 E3       XOR AL,BYTE PTR SS:[EBP-0x1D]            ;  AL = K[1] ^ K[7]</span><br><span class="line">013BDD0B   .  0FB6C8        MOVZX ECX,AL                             ;  ecx = AL &amp; 0xFFFF</span><br><span class="line">013BDD0E   .  B8 00010000   MOV EAX,0x100                            ;  eax = 0x100</span><br><span class="line">013BDD13   .  66:0FAFC8     IMUL CX,AX                               ;  cx = cx * ax</span><br><span class="line">013BDD17   .  8A45 DE       MOV AL,BYTE PTR SS:[EBP-0x22]            ;  AL = K[2]</span><br><span class="line">013BDD1A   .  32C7          XOR AL,BH                                ;  AL = AL ^ BH</span><br><span class="line">013BDD1C   .  C747 1C 02000&gt;MOV DWORD PTR DS:[EDI+0x1C],0x2          ;  [edi+0x1C] = 2</span><br><span class="line">013BDD23   .  0FB6C0        MOVZX EAX,AL                             ;  eax = AL &amp; 0xFFFF</span><br><span class="line">013BDD26   .  66:03C8       ADD CX,AX                                ;  cx = cx + ax</span><br><span class="line">013BDD29   .  0FB7C1        MOVZX EAX,CX                             ;  eax = cx &amp; 0xFFFF</span><br><span class="line">013BDD2C   .  50            PUSH EAX</span><br><span class="line">013BDD2D   .  E8 96A604FF   CALL 010Edito.004083C8                   ;  同 K[3]=0x9C 中的判断余数</span><br><span class="line">013BDD32   .  0FB7C0        MOVZX EAX,AX                             ;  eax = (((eax^0x7892)+0x4D30)^0x3421)&amp;0xFFFF / 0xB 或 0</span><br><span class="line">013BDD35   .  83C4 04       ADD ESP,0x4</span><br><span class="line">013BDD38   .  8947 20       MOV DWORD PTR DS:[EDI+0x20],EAX          ;  [edi+0x20] = eax</span><br><span class="line">013BDD3B   .  85C0          TEST EAX,EAX                             ;  eax != 0 故上个函数计算后的余数应为0</span><br><span class="line">013BDD3D   .  0F84 32010000 JE 010Edito.013BDE75</span><br><span class="line">013BDD43   .  3D E8030000   CMP EAX,0x3E8                            ;  且 eax &lt;= 0x3E8</span><br><span class="line">013BDD48   .  0F87 27010000 JA 010Edito.013BDE75</span><br><span class="line">013BDD4E   .  0FB655 E5     MOVZX EDX,BYTE PTR SS:[EBP-0x1B]         ;  edx = K[9] &amp; 0xFFFF</span><br><span class="line">013BDD52   .  0FB64D E0     MOVZX ECX,BYTE PTR SS:[EBP-0x20]         ;  ecx = K[4] &amp; 0xFFFF</span><br><span class="line">013BDD56   .  0FB6C7        MOVZX EAX,BH                             ;  eax = K[5] &amp; 0xFFFF</span><br><span class="line">013BDD59   .  33D0          XOR EDX,EAX                              ;  edx = edx ^ eax</span><br><span class="line">013BDD5B   .  0FB645 E4     MOVZX EAX,BYTE PTR SS:[EBP-0x1C]         ;  eax = K[8] &amp; 0xFFFF</span><br><span class="line">013BDD5F   .  33C8          XOR ECX,EAX                              ;  ecx = ecx ^ eax</span><br><span class="line">013BDD61   .  C1E2 08       SHL EDX,0x8                              ;  edx &lt;&lt; 8</span><br><span class="line">013BDD64   .  0FB645 E2     MOVZX EAX,BYTE PTR SS:[EBP-0x1E]         ;  eax = K[6] &amp; 0xFFFF</span><br><span class="line">013BDD68   .  03D1          ADD EDX,ECX                              ;  edx += ecx</span><br><span class="line">013BDD6A   .  0FB64D DC     MOVZX ECX,BYTE PTR SS:[EBP-0x24]         ;  ecx = K[0] &amp; 0xFFFF</span><br><span class="line">013BDD6E   .  C1E2 08       SHL EDX,0x8                              ;  edx &lt;&lt; 8</span><br><span class="line">013BDD71   .  33C8          XOR ECX,EAX                              ;  ecx = ecx ^ eax</span><br><span class="line">013BDD73   .  03D1          ADD EDX,ECX                              ;  edx += ecx</span><br><span class="line">013BDD75   .  68 278C5B00   PUSH 010Edito.005B8C27                   ;  CCCCCCCC......</span><br><span class="line">013BDD7A   .  52            PUSH EDX</span><br><span class="line">013BDD7B   .  E8 0BCA04FF   CALL 010Edito.0040A78B                   ;  同 K[3]=FC 的那个函数</span><br><span class="line">013BDD80   .  83C4 08       ADD ESP,0x8</span><br><span class="line">013BDD83   .  8945 F0       MOV DWORD PTR SS:[EBP-0x10],EAX</span><br><span class="line">013BDD86   .  8947 34       MOV DWORD PTR DS:[EDI+0x34],EAX</span><br><span class="line">013BDD89   .  8BF0          MOV ESI,EAX                              ;  [ebp-0x10] = [edi+0x34] = esi = eax</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>若以上算法成立，都会跳转到 0x13BDD8B，继续进行运算</p>
+<p><strong>对于 K[3] = 0x9C 来说</strong></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227094148222.png" alt="image-20191227094148222"></p>
+<p>先是将用户名转换为 ASCII 码，然后进行加密计算，加密函数有4个参数，第四个参数 <code>DS:[EDI+0x20]</code> 来自之前的运算结果</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227094651580.png" alt="image-20191227094651580"></p>
+<p>第三第二个参数默认为0和1，第一个参数是用户名字符串</p>
+<p>加密之后分别比较 K[4] / K[5] / K[6] / K[7] 与加密后再计算的值，最后比较 <code>[EDI+0x1C] &gt;= 9</code>，若成立就正确</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227100649518.png" alt="image-20191227100649518"></p>
+<p>其中 <code>[EDI+0x1C]</code> 也来自之前运算的结果</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227103649907.png" alt="image-20191227103649907"></p>
+</li>
+</ol>
+<p>若 <code>[edi+0x1C] &gt;= 9</code> 成立，就跳转，之后往下走成功</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227165840569.png" alt="image-20191227165840569"></p>
+<p><strong>对于 K[3] = 0xFC 来说</strong></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227155851506.png" alt="image-20191227155851506"></p>
+<p>传入的4个参数与上面不同，第四个参数 <code>DS:[EDI+0x20]</code> 恒为1</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227143126932.png" alt="image-20191227143126932"></p>
+<p>第三个参数恒为 0xFF，第二个参数恒为0，第一个参数是用户名字符串</p>
+<p>加密之后分别比较 K[4] / K[5] / K[6] / K[7] 与加密后再计算的值，与 0x9C 不同的是，比较完 K[7] 后，由于 BL = 0xFC，故需要跳转到下面进行运算</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227161224374.png" alt="image-20191227161224374"></p>
+<p>这个函数传入2个参数，一个是之前加密函数的运算结果，另一个是 K[2]K[1]K[0] 组成的字符，进入函数内部</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227162001694.png" alt="image-20191227162001694"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">eax = 0xF0F0F0F1</span><br><span class="line">ecx = ((ecx ^ edx ^ 0x22C078) - 0x2C175) ^ 0xFFE53167 &amp; 0xFFFFFF</span><br><span class="line">结果的低位 eax = eax * ecx &amp; 0xFFFF  </span><br><span class="line">结果的高位 edx = eax * ecx &amp; 0xFFFF0000 &gt;&gt; 32</span><br><span class="line">edx = edx &gt;&gt; 4</span><br><span class="line">eax = (edx &lt;&lt; 4) + edx</span><br><span class="line">ecx = ecx - eax</span><br><span class="line">eax = 0</span><br><span class="line">eax = edx (ZF = 1时才能移动)</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227163947265.png" alt="image-20191227163947265"></p>
+<p>若想实现 <code>eax = edx</code>，需 <code>ecx == eax</code>，即</p>
+<p><code>((ecx ^ edx ^ 0x22C078) - 0x2C175) ^ 0xFFE53167 &amp; 0xFFFFFF</code></p>
+<p><code>==</code></p>
+<p><code>(0xF0F0F0F1 * (((ecx ^ edx ^ 0x22C078) - 0x2C175) ^ 0xFFE53167 &amp; 0xFFFFFF) &amp; 0xFFFF0000 &gt;&gt; 32) &gt;&gt; 4</code></p>
+<p><code>+ 
+(0xF0F0F0F1 * (((ecx ^ edx ^ 0x22C078) - 0x2C175) ^ 0xFFE53167 &amp; 0xFFFFFF) &amp; 0xFFFF0000 &gt;&gt; 32)</code></p>
+<p>其中，参数1是 ecx，参数2是 edx</p>
+<p>那么 0x13BDE1F 不会跳转，接着往下走就会成功</p>
+<p><strong>对于 K[3] = 0xAC 来说</strong></p>
+<p>首先计算</p>
+<p><code>eax = (((K[1] ^ k[7] &amp; 0xFF) * 0x100) &amp; 0xFF + (k[2] ^ k[5] &amp; 0xFF)) &amp; 0xFFFF</code></p>
+<p><code>eax = (((eax ^ 0x7892) + 0x4D30) ^ 0x3421) &amp; 0xFFFF</code></p>
+<p>要求 <code>eax % 0xB == 0 &amp;&amp; eax / 0xB &lt;= 0x3E8</code> 成立</p>
+<p>然后计算</p>
+<p><code>edx = (((K[9] ^ K[5] &lt;&lt; 8) + (K[4] ^ K[8])) &lt;&lt; 8) + (K[0] ^ K[6])</code> 其中 <code>K[x] = K[x] &amp; 0xFFFF</code></p>
+<p>进入函数 0x0040A78B，第一个参数为 edx，第二个参数为 0x5B8C27</p>
+<p><code>((ecx ^ 0x5B8C27 ^ 0x22C078) - 0x2C175) ^ 0xFFE53167 &amp; 0xFFFFFF</code></p>
+<p><code>==</code></p>
+<p><code>(0xF0F0F0F1 * (((ecx ^ 0x5B8C27 ^ 0x22C078) - 0x2C175) ^ 0xFFE53167 &amp; 0xFFFFFF) &amp; 0xFFFF0000 &gt;&gt; 32) &gt;&gt; 4</code></p>
+<p><code>+ 
+(0xF0F0F0F1 * (((ecx ^ 0x5B8C27 ^ 0x22C078) - 0x2C175) ^ 0xFFE53167 &amp; 0xFFFFFF) &amp; 0xFFFF0000 &gt;&gt; 32)</code></p>
+<p>其中 <code>ecx = 参数1</code></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191228100134738.png" alt="image-20191228100134738"></p>
+<p>先是将用户名转换为 ASCII 码，然后进行加密计算，加密函数有4个参数，第四个参数 <code>DS:[EDI+0x20]</code> 来自之前的运算结果</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191228100251496.png" alt="image-20191228100251496"></p>
+<p>第三第二个参数默认为0和1，第一个参数是用户名字符串</p>
+<p>加密之后分别比较 K[4] / K[5] / K[6] / K[7] 与加密后再计算的值，与 0x9C 不同的是，比较完 K[7] 后，由于 BL = 0xAC，故需要跳过比较 0x9C 和 0xFC</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191228100621144.png" alt="image-20191228100621144"></p>
+<p>跳到这儿</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191228101441147.png" alt="image-20191228101441147"></p>
+<p>[ebp-0x10] 来自此函数，故需要函数的计算结果不为0，与 K[3] = 0xFC 中那个相同函数 0x0040A78B 一样</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191228100834068.png" alt="image-20191228100834068"></p>
+<p>0x4389 来自关键函数的第二个参数</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191228102022515.png" alt="image-20191228102022515"></p>
+<h2 id="注册机编写"><a href="#注册机编写" class="headerlink" title="注册机编写"></a>注册机编写</h2><p>以 K[3] = 0x9C 为例</p>
+<p>关键一点是对用户名字符串的加密函数，想要简单地编写函数，可以使用 IDA Pro，找到该函数入口地址 0x13BD120，按 F5 得到 C 代码，稍微修改一下就可用了</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227140442629.png" alt="image-20191227140442629"></p>
+<p>函数中用到的数组可以记下它的地址 0x2E64148</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227141232609.png" alt="image-20191227141232609"></p>
+<p>转到 OD 中进行拷贝，当然也可选择 Word 类型</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227141607434.png" alt="image-20191227141607434"></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// decode010.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"pch.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line">DWORD g_EcodeArray[] = &#123;</span><br><span class="line">	<span class="number">0x39cb44b8</span>, <span class="number">0x23754f67</span>, <span class="number">0x5f017211</span>, <span class="number">0x3ebb24da</span>, <span class="number">0x351707c6</span>, <span class="number">0x63f9774b</span>, <span class="number">0x17827288</span>, <span class="number">0x0fe74821</span>, <span class="number">0x5b5f670f</span>, <span class="number">0x48315ae8</span>, <span class="number">0x785b7769</span>, <span class="number">0x2b7a1547</span>, <span class="number">0x38d11292</span>, <span class="number">0x42a11b32</span>, <span class="number">0x35332244</span>, <span class="number">0x77437b60</span>,</span><br><span class="line">	<span class="number">0x1eab3b10</span>, <span class="number">0x53810000</span>, <span class="number">0x1d0212ae</span>, <span class="number">0x6f0377a8</span>, <span class="number">0x43c03092</span>, <span class="number">0x2d3c0a8e</span>, <span class="number">0x62950cbf</span>, <span class="number">0x30f06ffa</span>, <span class="number">0x34f710e0</span>, <span class="number">0x28f417fb</span>, <span class="number">0x350d2f95</span>, <span class="number">0x5a361d5a</span>, <span class="number">0x15cc060b</span>, <span class="number">0x0afd13cc</span>, <span class="number">0x28603bcf</span>, <span class="number">0x3371066b</span>,</span><br><span class="line">	<span class="number">0x30cd14e4</span>, <span class="number">0x175d3a67</span>, <span class="number">0x6dd66a13</span>, <span class="number">0x2d3409f9</span>, <span class="number">0x581e7b82</span>, <span class="number">0x76526b99</span>, <span class="number">0x5c8d5188</span>, <span class="number">0x2c857971</span>, <span class="number">0x15f51fc0</span>, <span class="number">0x68cc0d11</span>, <span class="number">0x49f55e5c</span>, <span class="number">0x275e4364</span>, <span class="number">0x2d1e0dbc</span>, <span class="number">0x4cee7ce3</span>, <span class="number">0x32555840</span>, <span class="number">0x112e2e08</span>,</span><br><span class="line">	<span class="number">0x6978065a</span>, <span class="number">0x72921406</span>, <span class="number">0x314578e7</span>, <span class="number">0x175621b7</span>, <span class="number">0x40771dbf</span>, <span class="number">0x3fc238d6</span>, <span class="number">0x4a31128a</span>, <span class="number">0x2dad036e</span>, <span class="number">0x41a069d6</span>, <span class="number">0x25400192</span>, <span class="number">0x00dd4667</span>, <span class="number">0x6afc1f4f</span>, <span class="number">0x571040ce</span>, <span class="number">0x62fe66df</span>, <span class="number">0x41db4b3e</span>, <span class="number">0x3582231f</span>,</span><br><span class="line">	<span class="number">0x55f6079a</span>, <span class="number">0x1ca70644</span>, <span class="number">0x1b1643d2</span>, <span class="number">0x3f7228c9</span>, <span class="number">0x5f141070</span>, <span class="number">0x3e1474ab</span>, <span class="number">0x444b256e</span>, <span class="number">0x537050d9</span>, <span class="number">0x0f42094b</span>, <span class="number">0x2fd820e6</span>, <span class="number">0x778b2e5e</span>, <span class="number">0x71176d02</span>, <span class="number">0x7fea7a69</span>, <span class="number">0x5bb54628</span>, <span class="number">0x19ba6c71</span>, <span class="number">0x39763a99</span>,</span><br><span class="line">	<span class="number">0x178d54cd</span>, <span class="number">0x01246e88</span>, <span class="number">0x3313537e</span>, <span class="number">0x2b8e2d17</span>, <span class="number">0x2a3d10be</span>, <span class="number">0x59d10582</span>, <span class="number">0x37a163db</span>, <span class="number">0x30d6489a</span>, <span class="number">0x6a215c46</span>, <span class="number">0x0e1c7a76</span>, <span class="number">0x1fc760e7</span>, <span class="number">0x79b80c65</span>, <span class="number">0x27f459b4</span>, <span class="number">0x799a7326</span>, <span class="number">0x50ba1782</span>, <span class="number">0x2a116d5c</span>,</span><br><span class="line">	<span class="number">0x63866e1b</span>, <span class="number">0x3f920e3c</span>, <span class="number">0x55023490</span>, <span class="number">0x55b56089</span>, <span class="number">0x2c391fd1</span>, <span class="number">0x2f8035c2</span>, <span class="number">0x64fd2b7a</span>, <span class="number">0x4ce8759a</span>, <span class="number">0x518504f0</span>, <span class="number">0x799501a8</span>, <span class="number">0x3f5b2cad</span>, <span class="number">0x38e60160</span>, <span class="number">0x637641d8</span>, <span class="number">0x33352a42</span>, <span class="number">0x51a22c19</span>, <span class="number">0x085c5851</span>,</span><br><span class="line">	<span class="number">0x032917ab</span>, <span class="number">0x2b770ac7</span>, <span class="number">0x30ac77b3</span>, <span class="number">0x2bec1907</span>, <span class="number">0x035202d0</span>, <span class="number">0x0fa933d3</span>, <span class="number">0x61255df3</span>, <span class="number">0x22ad06bf</span>, <span class="number">0x58b86971</span>, <span class="number">0x5fca0de5</span>, <span class="number">0x700d6456</span>, <span class="number">0x56a973db</span>, <span class="number">0x5ab759fd</span>, <span class="number">0x330e0be2</span>, <span class="number">0x5b3c0ddd</span>, <span class="number">0x495d3c60</span>,</span><br><span class="line">	<span class="number">0x53bd59a6</span>, <span class="number">0x4c5e6d91</span>, <span class="number">0x49d9318d</span>, <span class="number">0x103d5079</span>, <span class="number">0x61ce42e3</span>, <span class="number">0x7ed5121d</span>, <span class="number">0x14e160ed</span>, <span class="number">0x212d4ef2</span>, <span class="number">0x270133f0</span>, <span class="number">0x62435a96</span>, <span class="number">0x1fa75e8b</span>, <span class="number">0x6f092fbe</span>, <span class="number">0x4a000d49</span>, <span class="number">0x57ae1c70</span>, <span class="number">0x004e2477</span>, <span class="number">0x561e7e72</span>,</span><br><span class="line">	<span class="number">0x468c0033</span>, <span class="number">0x5dcc2402</span>, <span class="number">0x78507ac6</span>, <span class="number">0x58af24c7</span>, <span class="number">0x0df62d34</span>, <span class="number">0x358a4708</span>, <span class="number">0x3cfb1e11</span>, <span class="number">0x2b71451c</span>, <span class="number">0x77a75295</span>, <span class="number">0x56890721</span>, <span class="number">0x0fef75f3</span>, <span class="number">0x120f24f1</span>, <span class="number">0x01990ae7</span>, <span class="number">0x339c4452</span>, <span class="number">0x27a15b8e</span>, <span class="number">0x0ba7276d</span>,</span><br><span class="line">	<span class="number">0x60dc1b7b</span>, <span class="number">0x4f4b7f82</span>, <span class="number">0x67db7007</span>, <span class="number">0x4f4a57d9</span>, <span class="number">0x621252e8</span>, <span class="number">0x20532cfc</span>, <span class="number">0x6a390306</span>, <span class="number">0x18800423</span>, <span class="number">0x19f3778a</span>, <span class="number">0x462316f0</span>, <span class="number">0x56ae0937</span>, <span class="number">0x43c2675c</span>, <span class="number">0x65ca45fd</span>, <span class="number">0x0d604ff2</span>, <span class="number">0x0bfd22cb</span>, <span class="number">0x3afe643b</span>,</span><br><span class="line">	<span class="number">0x3bf67fa6</span>, <span class="number">0x44623579</span>, <span class="number">0x184031f8</span>, <span class="number">0x32174f97</span>, <span class="number">0x4c6a092a</span>, <span class="number">0x5fb50261</span>, <span class="number">0x01650174</span>, <span class="number">0x33634af1</span>, <span class="number">0x712d18f4</span>, <span class="number">0x6e997169</span>, <span class="number">0x5dab7afe</span>, <span class="number">0x7c2b2ee8</span>, <span class="number">0x6edb75b4</span>, <span class="number">0x5f836fb6</span>, <span class="number">0x3c2a6dd6</span>, <span class="number">0x292d05c2</span>,</span><br><span class="line">	<span class="number">0x052244db</span>, <span class="number">0x149a5f4f</span>, <span class="number">0x5d486540</span>, <span class="number">0x331d15ea</span>, <span class="number">0x4f456920</span>, <span class="number">0x483a699f</span>, <span class="number">0x3b450f05</span>, <span class="number">0x3b207c6c</span>, <span class="number">0x749d70fe</span>, <span class="number">0x417461f6</span>, <span class="number">0x62b031f1</span>, <span class="number">0x2750577b</span>, <span class="number">0x29131533</span>, <span class="number">0x588c3808</span>, <span class="number">0x1aef3456</span>, <span class="number">0x0f3c00ec</span>,</span><br><span class="line">	<span class="number">0x7da74742</span>, <span class="number">0x4b797a6c</span>, <span class="number">0x5ebb3287</span>, <span class="number">0x786558b8</span>, <span class="number">0x00ed4ff2</span>, <span class="number">0x6269691e</span>, <span class="number">0x24a2255f</span>, <span class="number">0x62c11f7e</span>, <span class="number">0x2f8a7dcd</span>, <span class="number">0x643b17fe</span>, <span class="number">0x778318b8</span>, <span class="number">0x253b60fe</span>, <span class="number">0x34bb63a3</span>, <span class="number">0x5b03214f</span>, <span class="number">0x5f1571f4</span>, <span class="number">0x1a316e9f</span>,</span><br><span class="line">	<span class="number">0x7acf2704</span>, <span class="number">0x28896838</span>, <span class="number">0x18614677</span>, <span class="number">0x1bf569eb</span>, <span class="number">0x0ba85ec9</span>, <span class="number">0x6aca6b46</span>, <span class="number">0x1e43422a</span>, <span class="number">0x514d5f0e</span>, <span class="number">0x413e018c</span>, <span class="number">0x307626e9</span>, <span class="number">0x01ed1dfa</span>, <span class="number">0x49f46f5a</span>, <span class="number">0x461b642b</span>, <span class="number">0x7d7007f2</span>, <span class="number">0x13652657</span>, <span class="number">0x6b160bc5</span>,</span><br><span class="line">	<span class="number">0x65e04849</span>, <span class="number">0x1f526e1c</span>, <span class="number">0x5a0251b6</span>, <span class="number">0x2bd73f69</span>, <span class="number">0x2dbf7acd</span>, <span class="number">0x51e63e80</span>, <span class="number">0x5cf2670f</span>, <span class="number">0x21cd0a03</span>, <span class="number">0x5cff0261</span>, <span class="number">0x33ae061e</span>, <span class="number">0x3bb6345f</span>, <span class="number">0x5d814a75</span>, <span class="number">0x257b5df4</span>, <span class="number">0x0a5c2c5b</span>, <span class="number">0x16a45527</span>, <span class="number">0x16f23945</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> __<span class="function">cdecl <span class="title">EncodeUsername</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pszUserName, <span class="keyword">int</span> a2, <span class="keyword">char</span> a3, <span class="keyword">unsigned</span> __int16 a4)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *v4; <span class="comment">// edx@1</span></span><br><span class="line">	<span class="keyword">signed</span> <span class="keyword">int</span> v5; <span class="comment">// esi@1</span></span><br><span class="line">	<span class="keyword">signed</span> <span class="keyword">int</span> v6; <span class="comment">// edi@1</span></span><br><span class="line">	<span class="keyword">unsigned</span> __int8 v7; <span class="comment">// bl@2</span></span><br><span class="line">	<span class="keyword">int</span> v8; <span class="comment">// eax@3</span></span><br><span class="line">	<span class="keyword">int</span> v9; <span class="comment">// ecx@3</span></span><br><span class="line">	<span class="keyword">int</span> v10; <span class="comment">// ecx@4</span></span><br><span class="line">	<span class="keyword">int</span> result; <span class="comment">// eax@4</span></span><br><span class="line">	<span class="keyword">int</span> v12; <span class="comment">// ecx@5</span></span><br><span class="line">	<span class="keyword">unsigned</span> __int8 v13; <span class="comment">// [sp+8h] [bp-10h]@2</span></span><br><span class="line">	<span class="keyword">unsigned</span> __int8 v14; <span class="comment">// [sp+Ch] [bp-Ch]@2</span></span><br><span class="line">	<span class="keyword">unsigned</span> __int8 v15; <span class="comment">// [sp+10h] [bp-8h]@2</span></span><br><span class="line">	<span class="keyword">int</span> v16; <span class="comment">// [sp+14h] [bp-4h]@1</span></span><br><span class="line">	v4 = pszUserName;</span><br><span class="line">	v16 = <span class="number">0</span>;</span><br><span class="line">	v5 = <span class="built_in">strlen</span>(pszUserName);</span><br><span class="line">	v6 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span> (v5 &lt;= <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		result = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		v13 = <span class="number">0</span>;</span><br><span class="line">		v14 = <span class="number">0</span>;</span><br><span class="line">		v7 = <span class="number">15</span> * a4;</span><br><span class="line">		v15 = <span class="number">17</span> * a3;</span><br><span class="line">		<span class="keyword">do</span></span><br><span class="line">		&#123;</span><br><span class="line">			v8 = <span class="built_in">toupper</span>(v4[v6]);</span><br><span class="line">			v9 = v16 + g_EcodeArray[v8];</span><br><span class="line">			<span class="keyword">if</span> (a2)</span><br><span class="line">			&#123;</span><br><span class="line">				v10 = g_EcodeArray[v7]</span><br><span class="line">					+ g_EcodeArray[v15]</span><br><span class="line">					+ g_EcodeArray[(<span class="keyword">unsigned</span> __int8)(v8 + <span class="number">47</span>)] * (g_EcodeArray[(<span class="keyword">unsigned</span> __int8)(v8 + <span class="number">13</span>)] ^ v9);</span><br><span class="line">				result = g_EcodeArray[v14] + v10;</span><br><span class="line">				v16 = g_EcodeArray[v14] + v10;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				v12 = g_EcodeArray[v7]</span><br><span class="line">					+ g_EcodeArray[v15]</span><br><span class="line">					+ g_EcodeArray[(<span class="keyword">unsigned</span> __int8)(v8 + <span class="number">23</span>)] * (g_EcodeArray[(<span class="keyword">unsigned</span> __int8)(v8 + <span class="number">63</span>)] ^ v9);</span><br><span class="line">				result = g_EcodeArray[v13] + v12;</span><br><span class="line">				v16 = g_EcodeArray[v13] + v12;</span><br><span class="line">			&#125;</span><br><span class="line">			v14 += <span class="number">19</span>;</span><br><span class="line">			++v6;</span><br><span class="line">			v15 += <span class="number">9</span>;</span><br><span class="line">			v7 += <span class="number">13</span>;</span><br><span class="line">			v13 += <span class="number">7</span>;</span><br><span class="line">			v4 = pszUserName;</span><br><span class="line">		&#125; <span class="keyword">while</span> (v6 &lt; v5);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	srand(time(<span class="literal">NULL</span>));</span><br><span class="line">	<span class="comment">//初始化随机密码</span></span><br><span class="line">	<span class="keyword">int</span> dwRet = rand() % <span class="number">0x3E8</span>;</span><br><span class="line">	byte K[<span class="number">10</span>] = &#123; <span class="number">0x11</span>, <span class="number">0x22</span>, <span class="number">0x33</span>, <span class="number">0x9C</span>, <span class="number">0x55</span>, <span class="number">0x66</span>, <span class="number">0x77</span>, <span class="number">0x88</span>, <span class="number">0x99</span>, <span class="number">0x00</span> &#125;;	</span><br><span class="line">	<span class="comment">//输入用户名</span></span><br><span class="line">	<span class="keyword">char</span> szName[<span class="number">100</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"please input name:"</span>, szName);</span><br><span class="line">	scanf_s(<span class="string">"%s"</span>, szName, <span class="number">100</span>);</span><br><span class="line">	<span class="comment">//将返回值赋给密码数组</span></span><br><span class="line">	DWORD dwKey = EncodeUsername(szName, <span class="number">1</span>, <span class="number">0</span>, dwRet);</span><br><span class="line">	<span class="comment">//cmp K[4], eax &amp; 0xFF == 0</span></span><br><span class="line">	<span class="comment">//cmp K[5], eax &gt;&gt;8 &amp; 0xFF == 0</span></span><br><span class="line">	<span class="comment">//cmp K[6], eax &gt;&gt; 16 &amp; 0xFF == 0</span></span><br><span class="line">	<span class="comment">//cmp K[7], eax &gt;&gt;24 &amp; 0xFF == 0</span></span><br><span class="line">	K[<span class="number">4</span>] = dwKey &amp; <span class="number">0xFF</span>;</span><br><span class="line">	K[<span class="number">5</span>] = dwKey &gt;&gt; <span class="number">8</span> &amp; <span class="number">0xFF</span>;</span><br><span class="line">	K[<span class="number">6</span>] = dwKey &gt;&gt; <span class="number">16</span> &amp; <span class="number">0xFF</span>;</span><br><span class="line">	K[<span class="number">7</span>] = dwKey &gt;&gt; <span class="number">24</span> &amp; <span class="number">0xFF</span>;</span><br><span class="line">	<span class="comment">//穷举剩余的字节</span></span><br><span class="line">	<span class="comment">//AL = ( K[0]^K[6]^0x18 + 0x3D ) ^ 0xA7</span></span><br><span class="line">	<span class="keyword">while</span> (TRUE) &#123;</span><br><span class="line">		byte k0 = rand() % <span class="number">0xFF</span>;</span><br><span class="line">		byte k6 = K[<span class="number">6</span>];</span><br><span class="line">		byte al = (k0 ^ k6 ^ <span class="number">0x18</span> + <span class="number">0x3D</span>) ^ <span class="number">0xA7</span>;</span><br><span class="line">		<span class="keyword">if</span> (al &gt;= <span class="number">9</span>) &#123;</span><br><span class="line">			K[<span class="number">0</span>] = k0;</span><br><span class="line">			K[<span class="number">6</span>] = k6;</span><br><span class="line">			<span class="keyword">break</span>; </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//esi = ((K[1] ^ K[7] &amp; 0xFF) * 0x100 + K[2] ^ K[5] &amp; 0xFF) &amp; 0xFFFF</span></span><br><span class="line">	<span class="comment">//eax = (((esi^0x7892)+0x4D30)^0x3421)&amp;0xFFFF / 0xB </span></span><br><span class="line">	<span class="comment">//计算后判断余数是否为0，若是则返回商，否则返回0</span></span><br><span class="line">	<span class="comment">//且商 &lt;= 0x3E8</span></span><br><span class="line">	<span class="keyword">while</span> (TRUE) &#123;</span><br><span class="line">		byte k1 = rand() % <span class="number">0xFF</span>;</span><br><span class="line">		byte k2 = rand() % <span class="number">0xFF</span>;</span><br><span class="line">		byte k5 = K[<span class="number">5</span>];</span><br><span class="line">		byte k7 = K[<span class="number">7</span>];</span><br><span class="line">		DWORD esi = ((k1 ^ k7 &amp; <span class="number">0xFF</span>) * <span class="number">0x100</span> + k2 ^ k5 &amp; <span class="number">0xFF</span>) &amp; <span class="number">0xFFFF</span>;</span><br><span class="line">		DWORD eax = (((esi ^ <span class="number">0x7892</span>) + <span class="number">0x4D30</span>) ^ <span class="number">0x3421</span>) &amp; <span class="number">0xFFFF</span>;</span><br><span class="line">		<span class="keyword">if</span> (eax % <span class="number">0xB</span> == <span class="number">0</span> &amp;&amp; eax / <span class="number">0xB</span> == dwRet) &#123;</span><br><span class="line">			K[<span class="number">1</span>] = k1;</span><br><span class="line">			K[<span class="number">2</span>] = k2;</span><br><span class="line">			K[<span class="number">5</span>] = k5;</span><br><span class="line">			K[<span class="number">7</span>] = k7;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;	</span><br><span class="line">	<span class="comment">//打印输出密码</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X"</span>,</span><br><span class="line">		K[<span class="number">0</span>], K[<span class="number">1</span>], K[<span class="number">2</span>], K[<span class="number">3</span>], K[<span class="number">4</span>], K[<span class="number">5</span>], K[<span class="number">6</span>], K[<span class="number">7</span>], K[<span class="number">8</span>], K[<span class="number">9</span>]);</span><br><span class="line">	getchar();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="算法总结"><a href="#算法总结" class="headerlink" title="算法总结"></a>算法总结</h2><p>针对 K[3] = 0x9C ：</p>
+<ol>
+<li><p>判断用户名密码是否为空</p>
+</li>
+<li><p>将密码字符串转为16进制字节数据</p>
+</li>
+<li><p>验证密码16进制数据</p>
+<ul>
+<li><p>AL = ( K[0] ^ K[6] ^ 0x18 + 0x3D ) ^ 0xA7 ！= 0</p>
+</li>
+<li><p>esi = ( ( K[1] ^ K[7] &amp; 0xFF ) * 0x100 + K[2] ^ K[5] &amp; 0xFF ) &amp; 0xFFFF</p>
+<p>eax = ((( esi ^ 0x7892 ) + 0x4D30 ) ^ 0x3421 ) &amp; 0xFFFF / 0xB </p>
+<p>且 ( eax % 0xB == 0 &amp;&amp; eax / 0xB &lt;= 0x3E8 )</p>
+</li>
+</ul>
+</li>
+<li><p>将用户名转为 ASCII 码</p>
+</li>
+<li><p>使用用户名计算出一个 key，进行一系列操作后要和密码 K[4] ~ K[7] 相等</p>
+<p>​    K[4] = key &amp; 0xFF;<br>​    K[5] = key &gt;&gt; 8 &amp; 0xFF;<br>​    K[6] = key &gt;&gt; 16 &amp; 0xFF;<br>​    K[7] = key &gt;&gt; 24 &amp; 0xFF;</p>
+</li>
+<li><p>判断参数 ( K[0]^K[6]^0x18 + 0x3D ) ^ 0xA7 &gt;= 9</p>
+</li>
+</ol>
+<h2 id="注册机总结"><a href="#注册机总结" class="headerlink" title="注册机总结"></a>注册机总结</h2><ol>
+<li>版本一<ul>
+<li>随机字节，穷举找出符合条件的值</li>
+</ul>
+</li>
+<li>版本二<ul>
+<li>指定用户名，调用加密函数求出 key</li>
+<li>将 key 拆分，指定到密码字节数组</li>
+</ul>
+</li>
+</ol>
+<h1 id="网络验证分析"><a href="#网络验证分析" class="headerlink" title="网络验证分析"></a>网络验证分析</h1><p>输入正确的用户名密码后会有网络验证</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227112813413.png" alt="image-20191227112813413"></p>
+<p>在关键函数后的网络验证函数中修改跳转 je 为 jmp</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227190653139.png" alt="image-20191227190653139"></p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227190448969.png" alt="image-20191227190448969"></p>
+<p>在下一个函数中修改编辑为就能过掉网络验证</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191227190710729.png" alt="image-20191227190710729"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/12/23/2019-12-23-扫雷外挂/">扫雷外挂</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
