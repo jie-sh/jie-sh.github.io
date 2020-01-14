@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>加壳脱壳 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">加壳脱壳</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 13, 2020&nbsp;&nbsp;21:21:35</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="一-回顾"><a href="#一-回顾" class="headerlink" title="一. 回顾"></a>一. 回顾</h1><ol>
+<li><p>PE 文件的 Magic code(魔数、幻数)是 MZ 头、PE 头</p>
+</li>
+<li><p>PE 文件中头文件的信息有运行平台、时间戳、PE 文件属性、区段数量、扩展头大小</p>
+</li>
+<li><p>PE 文件中的扩展头信息有 OEP 的 RVA、ImageBase(0x400000)、代码段、数据段起始地址、数据目录表、数据目录表项数、文件对齐粒度、内存对齐粒度、映像总大小</p>
+</li>
+<li><p>PE 文件区段信息有区段名、虚拟地址、虚拟大小、文件偏移、文件大小、区段属性(C0000020, 60000020等)</p>
+</li>
+<li><p>PE 文件中数据目录表有导入导出表、异常表、tls表、资源表、IAT、重定位表</p>
+</li>
+<li><p>一个进程三环下的数据结构有进程环境块(PEB)、线程环境块(TEB)、tls 结构</p>
+</li>
+<li><p>导入表结构体有5个字段，第一个 <code>OriginalFirstThunk</code>，指向 INT，第二个是时间戳，第三个是转发机制用到的 <code>ForWarderChain</code>，第四个是 <code>Name</code>，dll 名称字符，第五个是 <code>FirstThunk</code>，指向的是 IAT</p>
+<p>INT 和 IAT 在文件中存在是一样的，都指向名称字符串的 RVA 或一个序号</p>
+</li>
+</ol>
+<h1 id="二-手工加壳"><a href="#二-手工加壳" class="headerlink" title="二. 手工加壳"></a>二. 手工加壳</h1><p>目标：将代码段加密，防止 IDA 等静态工具分析</p>
+<p>步骤：</p>
+<ol>
+<li><p><strong>添加一个区段（文件大小、区段数量）</strong></p>
+<p>用 LoadPE 打开一个自己用 VS2017 编写的简单程序，添加区段，默认名为 NewSec</p>
+<p>![2020.1.13-1](D:\git png\2020.1.13-1.png)</p>
+<p>![2020.1.13-2](D:\git png\2020.1.13-2.png)</p>
+<p>添加完成后发现无法打开程序，因为添加的虚拟大小、文件大小都是空的</p>
+<p>![2020.1.13-3](D:\git png\2020.1.13-3.png)</p>
+<p>使用 LoadPE 编辑区段信息，添加虚拟大小和文件大小都是 0x200</p>
+<p><img src="C:%5CUsers%5C14622%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200113215632886.png" alt="image-20200113215632886"></p>
+<p>然后使用 010Editor 添加文件数据</p>
+<p>![2020.1.13-5](D:\git png\2020.1.13-5.png)</p>
+<p>![2020.1.13-6](D:\git png\2020.1.13-6.png)</p>
+<p>在文件末尾添加 200H 个字节，保存后再次打开程序，发现能够运行</p>
+</li>
+</ol>
+<ol start="2">
+<li><p><strong>修改 OEP，增加 OEP 代码</strong></p>
+<p>将程序的入口点改为新添加区段的 RVA，原区段入口点为 0x11343</p>
+<p>![2020.1.13-7](D:\git png\2020.1.13-7.png)</p>
+</li>
+</ol>
+<p>使用 OD 打开程序</p>
+<ol>
+<li><p>直接跳转到原来的 OEP 可以成功，因为 jmp 指令后面是相对偏移</p>
+<p>![2020.1.13-8](D:\git png\2020.1.13-8.png)</p>
+</li>
+<li><p>第二种方法，使用技巧获取基地址再跳转，<code>call</code> 指令后，将 0x100005 入栈，<code>pop eax</code> 即 <code>eax = 0x100005</code>，然后减去 0x20005 得到模块基址，基址加上原 OEP 即为原 OEP 的入口地址</p>
+<p>![2020.1.13-9](D:\git png\2020.1.13-9.png)</p>
+</li>
+<li><p>第三种方法，将上面的 <code>sub add</code> 合并计算出偏移，<code>入口点地址+5-(入口点地址-新OEP+原OEP)</code></p>
+<p>![2020.1.13-10](D:\git png\2020.1.13-10.png)</p>
+</li>
+</ol>
+<p>代码演化，去掉随机基址</p>
+<ol>
+<li><p>在新的 OEP 处直接跳转到原来的 OEP</p>
+<p>![2020.1.14-1](D:\git png\2020.1.14-1.png)</p>
+</li>
+<li><p>在新的 OEP 处定义出模块基址，然后加上原始 OEP，RVA</p>
+<p>![2020.1.14-2](D:\git png\2020.1.14-2.png)</p>
+</li>
+<li><p>在新的 OEP 处通过 <code>call pop</code> 组合获取当前指令地址，再减去偏移，计算出模块基地址</p>
+<p>![2020.1.14-3](D:\git png\2020.1.14-3.png)</p>
+</li>
+</ol>
+<ol start="3">
+<li><p><strong>加密代码段</strong></p>
+<p>代码段信息</p>
+<p>![2020.1.14-4](D:\git png\2020.1.14-4.png)</p>
+<p>在 010Editor 中操作代码段</p>
+<p>选中代码段</p>
+<p>![2020.1.14-8](D:\git png\2020.1.14-8.png)</p>
+<p>异或加密代码段</p>
+<p>![2020.1.14-6](D:\git png\2020.1.14-6.png)</p>
+</li>
+</ol>
+<p>![2020.1.14-7](D:\git png\2020.1.14-7.png)</p>
+<ol start="4">
+<li><p><strong>增加解密代码</strong></p>
+<p>由于代码本身有重定位信息，加密之后重定位会出现问题，故应去掉随机基址</p>
+<p>在 010Editor 中将 40 81 改为 00 81</p>
+<p>将 .text 段的标志设为可写入</p>
+<p>![2020.1.14-10](D:\git png\2020.1.14-10.png)</p>
+<p>在程序入口点编辑代码进行解密</p>
+<p>![2020.1.14-11](D:\git png\2020.1.14-11.png)</p>
+</li>
+</ol>
+<h1 id="脱壳"><a href="#脱壳" class="headerlink" title="脱壳"></a>脱壳</h1><p>脱壳目的：</p>
+<ol>
+<li>Cracker 脱壳、解密、破解</li>
+<li>杀毒引擎解密、查杀病毒、扫描特征</li>
+</ol>
+<p>脱壳步骤：</p>
+<ol>
+<li><p>找到原始 OEP</p>
+<p>一般来说，找到原始 OEP 或跟踪到原始 OEP 时，程序都会完成解密操作</p>
+</li>
+<li><p>dump 内存到文件</p>
+<p>当可执行文件在内存中完成解密后，将内存中代码数据转储(dump)到文件，就可以进一步分析</p>
+</li>
+<li><p>修复文件（常见于修复 IAT，重建导入表）</p>
+<p>从内存中转储的内存数据代码有一些与原文件中的内容不一致，比如 IAT 表，内存中 IAT 表会被初始化为函数地址表，而文件中 IAT 表与 INT 表内容一致，所以想要程序正常运行，一般都要修复 IAT，加壳后程序一般会自己处理导入表、IAT 及重定位等</p>
+</li>
+</ol>
+<p>导入表和 IAT、INT</p>
+<p>![2020.1.14-9](D:\git png\2020.1.14-9.png)</p>
+<p>IAT 在文件中保存的是一个 RVA 数组，每一项指向函数字符串结构，在内存中这个 RVA 数组被修改为函数地址，每个函数地址就是之前对应的函数字符串的函数，所以从内存中 dump 出的文件必须进行 IAT 修复或导入表修复</p>
+<p>![2020.1.14-12](D:\git png\2020.1.14-12.png)</p>
+<h1 id="脱自己的壳"><a href="#脱自己的壳" class="headerlink" title="脱自己的壳"></a>脱自己的壳</h1><ol>
+<li><p>找到原始 OEP</p>
+<p>单步跟踪，在 <code>POPAD</code> 附近寻找</p>
+</li>
+<li><p>dump 内存到文件</p>
+<p>在原始 OEP 处进行 dump 内存，因为这时内存未做太多的初始化，右击，选择 <code>用OllyDump脱壳调试进程</code></p>
+<p>![2020.1.14-13](D:\git png\2020.1.14-13.png)</p>
+<p>填入当前模块的起始地址和原来的 OEP，取消选择 <code>重建输入表</code>，脱壳</p>
+</li>
+<li><p>修复 IAT 或修复导入表</p>
+<p>使用 ImportREC 15pb专用版</p>
+<p>![2020.1.14-14](D:\git png\2020.1.14-14.png)</p>
+</li>
+</ol>
+<p>打开该工具，选择脱壳进程，设置 OEP，方便查找 IAT，点击 <code>自动查找IAT</code>，获取 IAT 信息，点击 <code>获取输入表</code>，获取输入表信息，若输入表函数有无效的，就需要修复，最后将输入表信息转储到文件，完成修复</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/01/2020-01-01-反调试与OD插件/">反调试与OD插件</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

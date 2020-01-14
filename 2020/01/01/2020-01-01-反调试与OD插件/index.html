@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>反调试与OD插件 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">jie-sh&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">jie-sh&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">反调试与OD插件</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">jie-sh</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 1, 2020&nbsp;&nbsp;18:31:02</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>[toc]</p>
+<h1 id="课堂复习"><a href="#课堂复习" class="headerlink" title="课堂复习"></a>课堂复习</h1><ol>
+<li><p>异常的分发共有几轮？</p>
+<p>两轮，<code>KiDispatchException</code> 函数的最后一个参数 <code>FirstChance</code> 表示当前是第几次进行异常分发，另一个函数 <code>RaiseException</code> 的最后一个参数也表示当前是第几次进行分发</p>
+</li>
+<li><p>通过什么可以区分当前所处的是 R0 还是 R3？</p>
+<p>windows 下，代码被分为 R3 和 R0 权限，CS 寄存器的最低2位表示当前所处的是3环（用户）还是0环（内核），可通过 <code>mov eax,cs  test eax,1</code> 来区分</p>
+</li>
+<li><p>异常产生方式有几种？</p>
+<ul>
+<li>CPU 满足特定条件后内部主动产生的异常，类似 int 3（IDT）</li>
+<li>用户通过 <code>RaiseException</code> 构建 <code>ExceptionRecord</code> 主动抛出异常（<code>KiDispatchException</code>）</li>
+</ul>
+</li>
+<li><p>编译器会为用户自定义的 <code>__try</code>，<code>__except</code> 添加怎样的异常处理函数？</p>
+<p>同一个函数内，无论用户编写多少个 SEH，编译器只会安装一个 <code>except_handler4</code></p>
+</li>
+<li><p>当用户模式下产生异常时，SEH 函数会在什么时候被调用？</p>
+<p>int 3 -&gt; idt[3] -&gt; _KiTrap03 -&gt; CommonDispatchException -&gt; KiDispatchException -&gt; KeUserExceptionDispatcher(3) -&gt; RtlDispatchException(3) -&gt; RtlpExcuteHandlerForException(3) -&gt; except_handler4 -&gt; except_handler4_common</p>
+</li>
+<li><p>在 R0 中异常是如何被传递给3环调试器的？</p>
+<p><code>DbgkForwardException</code> -&gt; <code>DbgkpSendApiMessage</code> -&gt; 3环调试器</p>
+</li>
+<li><p>R0 和 R3 的 <code>RtlDispatchException</code> 有什么区别？</p>
+<ul>
+<li><code>KiDispatchException</code>(0) -&gt; <code>RtlDispatchException</code>(0) -&gt; SEH</li>
+<li><code>KiUserExceptionDispatcher</code>(3) -&gt; <code>RtlDispatchException</code> (3) -&gt; VEH SEH UEH (VCH)</li>
+</ul>
+</li>
+</ol>
+<h1 id="反调试与反反调试"><a href="#反调试与反反调试" class="headerlink" title="反调试与反反调试"></a>反调试与反反调试</h1><h2 id="静态反调试"><a href="#静态反调试" class="headerlink" title="静态反调试"></a>静态反调试</h2><p>静态反调试一般在调试开始时阻拦调试者，调试者只需找到原因后可一次性突破</p>
+<h3 id="PEB"><a href="#PEB" class="headerlink" title="PEB"></a>PEB</h3><p>对于所有的用户层 PEB 静态反调试，可以在程序正式运行前先挂起用户程序，然后修改相应的字段为非调试状态，再继续执行</p>
+<p><code>kernel32!IsDebuggerPresent()</code> API 检测进程环境块（PEB）中的 <code>BeingDebugged</code> 标志，检查这个标志以确定进程是否正在被用户模式的调试器调试</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="comment">// 当程序被调试的时候， BeingDebugged 字段保存的是 1</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CheckBeingDebugged</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	__asm</span><br><span class="line">	&#123;</span><br><span class="line">		; 通过 FS:[<span class="number">0x30</span>] 获取到 PEB 结构体的地址</span><br><span class="line">		mov eax, dword ptr fs:[<span class="number">0x30</span>]</span><br><span class="line">	</span><br><span class="line">		; 通过 PEB 偏移为 <span class="number">0x02</span> 的地方获取到 BeingDebugged</span><br><span class="line">		movzx eax, byte ptr [eax + <span class="number">0x02</span>]</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (CheckBeingDebugged())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用 <code>IsDebuggerPresent</code> 字段，间接读 <code>BeingDebugged</code> 字段</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// IsDebuggerPresent 就是在检查 PEB.BeingDebugged 字段</span></span><br><span class="line">	<span class="keyword">if</span> (IsDebuggerPresent())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常程序未被调用时，PEB 另一个成员 <code>NtGlobalFlag</code>（偏移0x68）值为0，若进程被调试，通常值为0x70</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CheckNtGlobalFlag</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> NtGlobalFlag = <span class="number">0</span>;</span><br><span class="line">    __asm</span><br><span class="line">	&#123;</span><br><span class="line">		; 通过 TEB 偏移为 <span class="number">0x30</span> 找到 PEB 结构</span><br><span class="line">		mov eax, dword ptr fs : [<span class="number">0x30</span>]</span><br><span class="line"></span><br><span class="line">		; 通过 PEB 偏移为 <span class="number">0x68</span> 的地方找到 NtGlobalFlag</span><br><span class="line">		mov eax, dword ptr[eax + <span class="number">0x68</span>]</span><br><span class="line"></span><br><span class="line">		; 将结果保存到变量，目的是方便比较</span><br><span class="line">		mov NtGlobalFlag, eax</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> NtGlobalFlag == <span class="number">0x70</span> ? <span class="literal">true</span> : <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (CheckNtGlobalFlag())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line"></span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>_HEAP</code> 结构不是一个公开的结构体，不同版本的 nt 内核可能对这个结构体有不同的实现，所以兼容性不够强</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CheckProcessHeap</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> Flags = <span class="number">0</span>, ForceFlags = <span class="number">0</span>;</span><br><span class="line">    __asm</span><br><span class="line">	&#123;</span><br><span class="line">		; 通过 fs : [<span class="number">0x30</span>] 可以找到 PEB 的地址</span><br><span class="line">		mov eax, dword ptr fs:[<span class="number">0x30</span>]</span><br><span class="line"></span><br><span class="line">		; 通过 PEB 偏移为 <span class="number">0x18</span> 的位置找到 ProcessHeap(_HEAP)</span><br><span class="line">		mov eax, dword ptr [eax + <span class="number">0x18</span>]</span><br><span class="line"></span><br><span class="line">		; 通过 _HEAP 偏移为 <span class="number">0x40</span> 和 <span class="number">0x44</span> 的字段找到两个标志</span><br><span class="line">		mov ecx, dword ptr [eax + <span class="number">0x40</span>]</span><br><span class="line">		mov Flags, ecx</span><br><span class="line">		mov ecx, dword ptr [eax + <span class="number">0x44</span>]</span><br><span class="line">		mov ForceFlags, ecx</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%08X %08X\n"</span>, Flags, ForceFlags);</span><br><span class="line">	<span class="keyword">return</span> Flags != <span class="number">2</span> || ForceFlags != <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (CheckProcessHeap())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用原始API"><a href="#使用原始API" class="headerlink" title="使用原始API"></a>使用原始API</h3><p>对于所有使用函数进行反调试的情况，都可以使用 <code>ApiHook</code> 来进行反反调试，但是要注意 <code>NtQueryInformationProcess</code> 功能非常多，在函数内应该过滤和调试相关的枚举值进行操作，不应该影响到其它的查询信息</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;winternl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib,<span class="meta-string">"ntdll.lib"</span>)</span></span><br><span class="line"><span class="comment">// 如果进程处于被调试状态，那么函数接收的就是 -1</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CheckProcessDebugPort</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> nDebugPort = <span class="number">0</span>;</span><br><span class="line">	NtQueryInformationProcess(</span><br><span class="line">		GetCurrentProcess(),   <span class="comment">// 目标进程句柄</span></span><br><span class="line">		ProcessDebugPort,      <span class="comment">// 查询信息类型</span></span><br><span class="line">		&amp;nDebugPort,           <span class="comment">// 输出查询信息</span></span><br><span class="line">		<span class="keyword">sizeof</span>(nDebugPort),    <span class="comment">// 查询类型大小</span></span><br><span class="line">		<span class="literal">NULL</span>);                 <span class="comment">// 实际返回数据大小</span></span><br><span class="line">	<span class="keyword">return</span> nDebugPort == <span class="number">0xFFFFFFFF</span> ? <span class="literal">true</span> : <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (CheckProcessDebugPort())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果当前的程序被调试了，那么保存的就是非零值</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CheckProcessDebugObjectHandle</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HANDLE hProcessDebugObjectHandle = <span class="number">0</span>;</span><br><span class="line">	NtQueryInformationProcess(</span><br><span class="line">		GetCurrentProcess(),               <span class="comment">// 目标进程句柄</span></span><br><span class="line">		(PROCESSINFOCLASS)<span class="number">0x1E</span>,            <span class="comment">// 查询信息类型</span></span><br><span class="line">		&amp;hProcessDebugObjectHandle,        <span class="comment">// 输出查询信息</span></span><br><span class="line">		<span class="keyword">sizeof</span>(hProcessDebugObjectHandle), <span class="comment">// 查询类型大小</span></span><br><span class="line">		<span class="literal">NULL</span>);                             <span class="comment">// 实际返回大小</span></span><br><span class="line">	<span class="keyword">return</span> hProcessDebugObjectHandle ? <span class="literal">true</span> : <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (CheckProcessDebugObjectHandle())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果被调试了就是0，非则就是其它值</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CheckProcessDebugFlag</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	BOOL bProcessDebugFlag = <span class="number">0</span>;</span><br><span class="line">	NtQueryInformationProcess(</span><br><span class="line">		GetCurrentProcess(),       <span class="comment">// 目标进程句柄</span></span><br><span class="line">		(PROCESSINFOCLASS)<span class="number">0x1F</span>,    <span class="comment">// 查询信息类型</span></span><br><span class="line">		&amp;bProcessDebugFlag,        <span class="comment">// 输出查询信息</span></span><br><span class="line">		<span class="keyword">sizeof</span>(bProcessDebugFlag), <span class="comment">// 查询类型大小</span></span><br><span class="line">		<span class="literal">NULL</span>);                     <span class="comment">// 实际返回大小</span></span><br><span class="line">	<span class="keyword">return</span> bProcessDebugFlag ? <span class="literal">false</span> : <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (CheckProcessDebugFlag())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当一个普通的程序被双击打开时，实际是被资源管理器（Explorer）打开的，所以普通程序的父进程应该就是资源管理器，若检查到自己的父进程不是，就是被调试了</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CheckParentProcess</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">PROCESS_BASIC_INFORMATION</span> &#123;</span></span><br><span class="line">        ULONG ExitStatus;                   <span class="comment">// 进程返回码</span></span><br><span class="line">        PPEB  PebBaseAddress;               <span class="comment">// PEB地址</span></span><br><span class="line">        ULONG AffinityMask;                 <span class="comment">// CPU亲和性掩码</span></span><br><span class="line">        LONG  BasePriority;                 <span class="comment">// 基本优先级</span></span><br><span class="line">        ULONG UniqueProcessId;              <span class="comment">// 本进程PID</span></span><br><span class="line">        ULONG InheritedFromUniqueProcessId; <span class="comment">// 父进程PID</span></span><br><span class="line">    &#125;stcProcInfo;</span><br><span class="line">    <span class="comment">// 查询到进程相关的基本信息，需要提供一个结构体进行接收</span></span><br><span class="line">    NtQueryInformationProcess(GetCurrentProcess(), ProcessBasicInformation,</span><br><span class="line">        &amp;stcProcInfo, <span class="keyword">sizeof</span>(stcProcInfo), <span class="literal">NULL</span>);</span><br><span class="line">    DWORD ExplorerPID = <span class="number">0</span>;   </span><br><span class="line">    <span class="comment">//获取父进程ID</span></span><br><span class="line">    DWORD CurrentPID = stcProcInfo.InheritedFromUniqueProcessId;</span><br><span class="line">    <span class="comment">// 以资源管理器的类名查询到资源管理所在的进程PID</span></span><br><span class="line">    GetWindowThreadProcessId(FindWindow(<span class="string">L"Progman"</span>, <span class="literal">NULL</span>), &amp;ExplorerPID);</span><br><span class="line">    <span class="comment">// 如果相同就说明没有被调试</span></span><br><span class="line">    <span class="keyword">return</span> ExplorerPID == CurrentPID ? <span class="literal">false</span> : <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (CheckParentProcess())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查询当前系统的调试情况：<code>NtQuerySystemInformation</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">CheckSystemKernelDebuggerInformation</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 保存了和系统调试相关的属性</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> _<span class="title">SYSTEM_KERNEL_DEBUGGER_INFORMATION</span> </span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">        BOOLEAN KernelDebuggerEnabled;</span><br><span class="line">        BOOLEAN KernelDebuggerNotPresent;</span><br><span class="line">    &#125; DebuggerInfo = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">    <span class="comment">// 查询当前系统的调试情况</span></span><br><span class="line">    NtQuerySystemInformation(</span><br><span class="line">        (SYSTEM_INFORMATION_CLASS)<span class="number">0x23</span>,       <span class="comment">// 查询信息类型</span></span><br><span class="line">        &amp;DebuggerInfo,                        <span class="comment">// 输出查询信息</span></span><br><span class="line">        <span class="keyword">sizeof</span>(DebuggerInfo),                 <span class="comment">// 查询类型大小</span></span><br><span class="line">        <span class="literal">NULL</span>);                                <span class="comment">// 实际返回大小</span></span><br><span class="line">    <span class="keyword">return</span> DebuggerInfo.KernelDebuggerEnabled;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (CheckSystemKernelDebuggerInformation())</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[被]调试状态\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"当前处于[非]调试状态\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="动态反调试"><a href="#动态反调试" class="headerlink" title="动态反调试"></a>动态反调试</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> THREAD_INFO_CLASS &#123;</span><br><span class="line">    ThreadHideFromDebugger = <span class="number">17</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 一个未公开的函数，需要手动的使用 GetProcAddress 获取</span></span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">NTSTATUS</span><span class="params">(NTAPI* ZW_SET_INFORMATION_THREAD)</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    IN  HANDLE ThreadHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">    IN  THREAD_INFO_CLASS ThreadInformaitonClass,</span></span></span><br><span class="line"><span class="function"><span class="params">    IN  PVOID ThreadInformation,</span></span></span><br><span class="line"><span class="function"><span class="params">    IN  ULONG ThreadInformationLength)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ZSIT_DetachDebug</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ZW_SET_INFORMATION_THREAD Func = (ZW_SET_INFORMATION_THREAD)</span><br><span class="line">        <span class="comment">// 加载了 ntdll 模块，因为函数保存在这个模块中</span></span><br><span class="line">        GetProcAddress(LoadLibrary(<span class="string">L"ntdll.dll"</span>), </span><br><span class="line">        <span class="comment">// 函数的名称</span></span><br><span class="line">        <span class="string">"ZwSetInformationThread"</span>);</span><br><span class="line">    <span class="comment">// 对调试器隐藏当前的线程，原理上就是让 DbgkpSendApiMessage 函数</span></span><br><span class="line">    <span class="comment">//  不向建立了调试关系的调试器发送调试信息。</span></span><br><span class="line">    Func(GetCurrentThread(), ThreadHideFromDebugger, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ZSIT_DetachDebug();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"runnning...\n"</span>);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (FindWindow(<span class="string">L"OllyDbg"</span>, <span class="literal">NULL</span>))</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"存在调试器\n"</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"没检测到调试器\n"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="OD插件"><a href="#OD插件" class="headerlink" title="OD插件"></a>OD插件</h1><h2 id="插件加载的原理"><a href="#插件加载的原理" class="headerlink" title="插件加载的原理"></a>插件加载的原理</h2><ol>
+<li>应用程序如何找到自己的插件：所有支持插件的应用程序都会存在一个插件路径，用户提供的就应该放置在这个路径底下，应用程序通过遍历文件的方式来确保能够找到插件</li>
+<li>插件的存在形式：插件通常以 dll 文件形式存在，这些文件可以是任何后缀名结尾的，并不影响插件本身的功能</li>
+<li>应用程序如何识别插件路径下的模块是否是插件：一个合格的插件，应该能提供相应的导出函数说明当前插件的名称，版本及能够支持的应用程序</li>
+<li>插件如何提供功能：通过实现指定的导出函数可以提供相应的功能</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个函数指针的别名</span></span><br><span class="line"><span class="keyword">using</span> f_query = <span class="keyword">bool</span> (*)(<span class="keyword">int</span> v, <span class="keyword">char</span> name[<span class="number">20</span>], <span class="keyword">char</span> version[<span class="number">20</span>]);</span><br><span class="line"><span class="keyword">using</span> f_run = <span class="keyword">void</span> (*)();</span><br><span class="line"><span class="comment">// 用于保存插件信息的结构体</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">PLUGIN_INFO</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">char</span> name[<span class="number">20</span>];</span><br><span class="line">	<span class="keyword">char</span> version[<span class="number">20</span>];</span><br><span class="line">	HMODULE <span class="keyword">module</span>;</span><br><span class="line">&#125; PLUGIN_INFO, *PPLUGIN_INFO;</span><br><span class="line"><span class="comment">// 定义容器用于保存所有的插件</span></span><br><span class="line"><span class="built_in">vector</span>&lt;PLUGIN_INFO&gt; plugins;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 保存找到的文件的信息</span></span><br><span class="line">	WIN32_FIND_DATAA FileInfo = &#123; <span class="number">0</span> &#125;;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 1. 遍历当前的插件目录，搜索所有的模块</span></span><br><span class="line">	HANDLE FindHandle = FindFirstFileA(<span class="string">".\\plugin\\*.plugin"</span>, &amp;FileInfo);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2. 如果说第一个文件查找成功就继续查找下一个</span></span><br><span class="line">	<span class="keyword">if</span> (FindHandle != INVALID_HANDLE_VALUE)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">do</span> &#123;</span><br><span class="line">			<span class="comment">// 保存当前插件的信息</span></span><br><span class="line">			PLUGIN_INFO plugin_info = &#123; <span class="number">0</span> &#125;;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 模块文件的路径</span></span><br><span class="line">			<span class="built_in">string</span> path = <span class="built_in">string</span>(<span class="string">".\\plugin\\"</span>) + FileInfo.cFileName;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 尝试使用 LoadLibrary 加载模块</span></span><br><span class="line">			plugin_info.<span class="keyword">module</span> = LoadLibraryA(path.c_str());</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 判断一下这是不是一个有效的模块</span></span><br><span class="line">			<span class="keyword">if</span> (plugin_info.<span class="keyword">module</span> != <span class="literal">NULL</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">// 判断当前有没有导出指定函数</span></span><br><span class="line">				f_query f = (f_query)GetProcAddress(plugin_info.<span class="keyword">module</span>, <span class="string">"query"</span>);</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 如果函数获取成功，并且函数返回true就表示这是一个有效的插件</span></span><br><span class="line"></span><br><span class="line">				<span class="keyword">if</span> (f != <span class="literal">nullptr</span> &amp;&amp; f(<span class="number">1</span>, plugin_info.name, plugin_info.version))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="built_in">printf</span>(<span class="string">"插件: [%s %s] 已经被加载了\n"</span>, </span><br><span class="line">						plugin_info.name, plugin_info.version);</span><br><span class="line"></span><br><span class="line">					plugins.push_back(plugin_info);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">while</span> (FindNextFileA(FindHandle, &amp;FileInfo));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 运行期间的函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 可以遍历插件列表，调用其中约定好的函数</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span>&amp; p : plugins)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 获取函数，这个函数可以不提供</span></span><br><span class="line">		f_run f = (f_run)GetProcAddress(p.<span class="keyword">module</span>, <span class="string">"run"</span>);</span><br><span class="line">		<span class="keyword">if</span> (f) f();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 清理资源的函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">release</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 一般会在 release 调用插件的清理函数</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span>&amp; p : plugins)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 获取函数，这个函数可以不提供</span></span><br><span class="line">		f_run f = (f_run)GetProcAddress(p.<span class="keyword">module</span>, <span class="string">"release"</span>);</span><br><span class="line">		<span class="keyword">if</span> (f) f();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结束进程前调用的函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">my_exit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 程序结束前应该卸载插件</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; plugins.size(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 将插件进行卸载(从内存空间移除)</span></span><br><span class="line">		<span class="comment">// 卸载插件必须卸载所有可能调用插件函数的之后</span></span><br><span class="line">		FreeLibrary(plugins[i].<span class="keyword">module</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 通产在程序运行的时候加载插件</span></span><br><span class="line">	init();</span><br><span class="line">	run();</span><br><span class="line">	release();</span><br><span class="line">	my_exit();</span><br><span class="line"> 	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提供的插件：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="comment">// 插件导出一个约定好的函数，函数告诉了应用程序自己的名称版本等信息</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> __declspec(dllexport) <span class="function"><span class="keyword">bool</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> v, <span class="keyword">char</span> name[<span class="number">20</span>], <span class="keyword">char</span> version[<span class="number">20</span>])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 参数一： 传入的参数，告诉插件自己的版本信息</span></span><br><span class="line">	<span class="comment">// 参数二： 传出的参数，告诉应用程序自己的名称</span></span><br><span class="line">	<span class="comment">// 参数三： 传出的参数，告诉应用程序自己的版本</span></span><br><span class="line">	<span class="comment">// 如果目标应用不是 1.0 版本，该插件就不支持</span></span><br><span class="line">	<span class="keyword">if</span> (v != <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	<span class="built_in">memcpy</span>(name, <span class="string">"plugin2"</span>, <span class="number">8</span>);</span><br><span class="line">	<span class="built_in">memcpy</span>(version, <span class="string">"2.0"</span>, <span class="number">4</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> __declspec(dllexport) <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"这是插件提供的功能"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/01/13/2020-01-13-加壳与脱壳/">加壳脱壳</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/30/2019-12-30-调试与异常/">调试与异常</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© jie-sh | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
